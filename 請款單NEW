@@ -311,13 +311,14 @@
     <div class="container mx-auto px-4 py-8 max-w-5xl" id="invoice-container">
         <div class="bg-white rounded-lg shadow-lg overflow-hidden">
             <!-- Header -->
-   <div class="flex justify-between items-start mb-4" style="margin-top: 1.2em;">
-  <div class="text-left ml-[1.2em]">
-    <div class="text-[26px] font-bold text-gray-800 leading-tight">
-      LUMASONIX x PROFESSIONAL
-    </div>
-    <p class="text-[26px] font-bold text-gray-800">專業技術支援 x 人力媒合平台</p>
+<div class="mb-4 md:mb-2" style="margin-left: 1.2em; margin-top: 1.2em;">
+  <div class="text-left text-[24px] font-bold text-gray-800 mb-1">
+    LUMASONIX x PROFESSIONAL
   </div>
+  <p class="text-left text-[26px] font-bold text-gray-800">
+    專業技術支援 x 人力媒合平台
+  </p>
+</div>
 
   <div class="mb-4 md:mb-2" style="margin-right: 1.2em; margin-top: -3.5em;">
   <div class="text-right text-[24px] font-bold text-gray-800 mb-1">
