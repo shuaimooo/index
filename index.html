@@ -1,834 +1,531 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
+<html lang="zh-TW"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LUMASONIX 技術人員請款單</title>
+    <title>LUMASONIX - 技術支援請款單</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
-        
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
         body {
             font-family: 'Noto Sans TC', sans-serif;
             background-color: #f5f7fa;
         }
-        
-        .invoice-header {
-            background: linear-gradient(135deg, #2c3e50 0%, #1a2533 100%);
+        .form-container {
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        
-        .form-row {
-            display: flex;
-            align-items: center;
-            margin-bottom: 12px;
+        table {
+            width: 100%;
+            border-collapse: collapse;
         }
-        
-        .form-label {
-            width: 80px;
-            text-align: right;
-            padding-right: 12px;
-            font-weight: 500;
+        th, td {
+            border: 1px solid #e2e8f0;
+            padding: 8px;
         }
-        
-        .form-input {
-            flex: 1;
-            border: 1px solid #ccc;
+        input, select {
+            width: 100%;
+            padding: 6px;
+            border: 1px solid #e2e8f0;
             border-radius: 4px;
-            padding: 6px 10px;
         }
-        
-        .form-input:focus {
+        input:focus, select:focus {
             outline: none;
-            border-color: #2c3e50;
-            box-shadow: 0 0 0 2px rgba(44, 62, 80, 0.2);
+            border-color: #4f46e5;
+            ring: 2px;
+            ring-color: #4f46e5;
         }
-        
-        .invoice-table {
-            width: 100%;
-            border-collapse: collapse;
+        .btn {
+            transition: all 0.2s;
         }
-        
-        .invoice-table th {
-            background-color: #f1f5f9;
-            padding: 10px;
-            text-align: left;
-            font-weight: 600;
-            border: 1px solid #e2e8f0;
+        .btn:hover {
+            transform: translateY(-1px);
         }
-        
-        .invoice-table td {
-            padding: 8px 10px;
-            border: 1px solid #e2e8f0;
-        }
-        
-        .invoice-table input {
-            width: 100%;
-            border: none;
-            background: transparent;
-            outline: none;
-        }
-        
-        .invoice-table tr:nth-child(even) {
-            background-color: #f8fafc;
-        }
-        
-        .invoice-table .subtotal-row {
-            background-color: #f1f5f9;
-            font-weight: 600;
-        }
-        
-        .invoice-table .total-row {
-            background-color: #e2e8f0;
-            font-weight: 700;
-        }
-        
-        .description-row td {
-            padding-left: 30px;
-            color: #4b5563;
-            font-size: 0.9em;
-        }
-        
-        .activity-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .activity-table th {
-            background-color: #f1f5f9;
-            padding: 10px 6px;
+        .date-field {
+            display: inline-block;
+            width: 2em;
             text-align: center;
-            font-weight: 600;
-            border: 1px solid #e2e8f0;
-            font-size: 0.9em;
+            border-bottom: 1px solid black;
         }
-        
-        .activity-table td {
-            padding: 8px 6px;
-            border: 1px solid #e2e8f0;
+        .time-input {
+            width: 3em;
             text-align: center;
-        }
-        
-        .activity-table input {
-            width: 100%;
-            border: none;
-            background: transparent;
-            outline: none;
-            text-align: center;
-        }
-        
-        .activity-table input[type="time"] {
-            font-size: 0.9em;
-        }
-        
-        .activity-table input[type="checkbox"] {
-            width: auto;
-            margin: 0 auto;
-            display: block;
-        }
-        
-        .section-title {
-            font-size: 1.2em;
-            font-weight: 600;
-            margin: 20px 0 10px 0;
-            padding-bottom: 5px;
-            border-bottom: 2px solid #e2e8f0;
-        }
-        
-        /* Specific styling for payment amount field */
-        .activity-amount {
-            min-width: 90px;
-            font-family: monospace;
-            font-size: 1.05em;
-            text-align: right !important;
-            padding-right: 8px !important;
-        }
-        
-        /* Make sure the payment column is wide enough */
-        .payment-column {
-            min-width: 120px;
-        }
-        
-        /* Payment info section */
-        .payment-info {
-            margin-top: 30px;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 15px;
-            background-color: #f8fafc;
-        }
-        
-        .payment-info-title {
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: #2c3e50;
-            border-bottom: 1px solid #e2e8f0;
-            padding-bottom: 5px;
-        }
-        
-        .payment-info-row {
-            display: flex;
-            margin-bottom: 8px;
-        }
-        
-        .payment-info-label {
-            width: 100px;
-            font-weight: 500;
-        }
-        
-        .payment-info-value {
-            flex: 1;
-        }
-        
-        /* Terms section */
-        .terms-section {
-            margin-top: 30px;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 15px;
-            background-color: #f8fafc;
-        }
-        
-        .terms-title {
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: #2c3e50;
-            border-bottom: 1px solid #e2e8f0;
-            padding-bottom: 5px;
-        }
-        
-        .terms-list {
-            padding-left: 20px;
-        }
-        
-        .terms-item {
-            margin-bottom: 12px;
-            line-height: 1.5;
-        }
-        
-        .signature-section {
-            margin-top: 30px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        
-        .signature-item {
-            flex: 1;
-            min-width: 200px;
-        }
-        
-        .signature-label {
-            font-weight: 500;
-            margin-right: 10px;
-        }
-        
-        .signature-value {
-            border-bottom: 1px solid #ccc;
-            padding: 0 5px;
-            min-width: 150px;
+            border-bottom: 1px solid black;
             display: inline-block;
         }
-        
-        /* Action buttons */
-        .action-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-            margin-top: 40px;
-            margin-bottom: 20px;
-        }
-        
-        .action-button {
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 140px;
-        }
-        
-        .action-button svg {
-            margin-right: 8px;
-        }
-        
-        .date-button {
-            background-color: #3498db;
-            color: white;
-        }
-        
-        .date-button:hover {
-            background-color: #2980b9;
-        }
-        
-        .pdf-button {
-            background-color: #e74c3c;
-            color: white;
-        }
-        
-        .pdf-button:hover {
-            background-color: #c0392b;
-        }
-        
-        .reset-button {
-            background-color: #7f8c8d;
-            color: white;
-        }
-        
-        .reset-button:hover {
-            background-color: #636e72;
-        }
-        
         @media print {
+            .no-print {
+                display: none;
+            }
             body {
                 background-color: white;
             }
-            
-            .container {
-                padding: 0;
-                max-width: 100%;
-            }
-            
-            .bg-white {
+            .form-container {
                 box-shadow: none;
-                border-radius: 0;
-            }
-            
-            .action-buttons {
-                display: none;
-            }
-            
-            #add-activity-row {
-                display: none;
+                margin: 0;
+                padding: 0;
             }
         }
     </style>
-</head>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.relative{position:relative}.-left-\[3cm\]{left:-3cm}.-top-\[3cm\]{top:-3cm}.-top-\[2cm\]{top:-2cm}.-top-\[1cm\]{top:-1cm}.-top-\[1\.5cm\]{top:-1.5cm}.-left-\[2cm\]{left:-2cm}.-top-\[0cm\]{top:-0cm}.-left-\[-3cm\]{left:3cm}.-left-\[-1cm\]{left:1cm}.-top-\[-2cm\]{top:2cm}.-top-\[-3cm\]{top:3cm}.-left-\[-0cm\]{left:0cm}.-left-\[0cm\]{left:-0cm}.-top-\[-4cm\]{top:4cm}.-left-\[-4cm\]{left:4cm}.-left-\[4cm\]{left:-4cm}.-left-\[-8cm\]{left:8cm}.-left-\[-15cm\]{left:15cm}.-left-\[-12cm\]{left:12cm}.-top-\[3\.5cm\]{top:-3.5cm}.-left-\[-14cm\]{left:14cm}.-left-\[1cm\]{left:-1cm}.-left-\[1\.5cm\]{left:-1.5cm}.-left-\[1\.1cm\]{left:-1.1cm}.-left-\[0\.8cm\]{left:-0.8cm}.-left-\[0\.5cm\]{left:-0.5cm}.-left-\[0\.55cm\]{left:-0.55cm}.-left-\[0\.6cm\]{left:-0.6cm}.-top-\[0\.5cm\]{top:-0.5cm}.-top-\[0\.6cm\]{top:-0.6cm}.-top-\[-20cm\]{top:20cm}.-top-\[10cm\]{top:-10cm}.-top-\[5cm\]{top:-5cm}.-left-\[-5cm\]{left:5cm}.-left-\[-30cm\]{left:30cm}.-left-\[-20cm\]{left:20cm}.-top-\[4cm\]{top:-4cm}.-top-\[4\.5cm\]{top:-4.5cm}.-top-\[4\.8cm\]{top:-4.8cm}.-top-\[4\.7cm\]{top:-4.7cm}.-top-\[4\.6cm\]{top:-4.6cm}.-top-\[4\.63cm\]{top:-4.63cm}.-left-\[1\.6cm\]{left:-1.6cm}.-left-\[-1\.6cm\]{left:1.6cm}.-top-\[-0\.6cm\]{top:0.6cm}.-top-\[1\.6cm\]{top:-1.6cm}.-top-\[2\.63cm\]{top:-2.63cm}.-top-\[3\.6cm\]{top:-3.6cm}.-top-\[4\.3cm\]{top:-4.3cm}.-top-\[4\.1cm\]{top:-4.1cm}.-left-\[-10cm\]{left:10cm}.-left-\[-2cm\]{left:2cm}.-left-\[-2\.1cm\]{left:2.1cm}.-left-\[-2\.3cm\]{left:2.3cm}.-left-\[-2\.2cm\]{left:2.2cm}.-left-\[-2\.15cm\]{left:2.15cm}.-left-\[-1\.15cm\]{left:1.15cm}.-left-\[-0\.15cm\]{left:0.15cm}.-left-\[2\.15cm\]{left:-2.15cm}.-left-\[0\.15cm\]{left:-0.15cm}.-left-\[1\.15cm\]{left:-1.15cm}.-left-\[0\.65cm\]{left:-0.65cm}.-top-\[0\.8cm\]{top:-0.8cm}.-top-\[4\.2cm\]{top:-4.2cm}.-top-\[1\.2cm\]{top:-1.2cm}.-left-\[-16cm\]{left:16cm}.-left-\[5cm\]{left:-5cm}.-top-\[-1cm\]{top:1cm}.-top-\[-0cm\]{top:0cm}.-left-\[6cm\]{left:-6cm}.-left-\[5\.6cm\]{left:-5.6cm}.col-span-5{grid-column:span 5 / span 5}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-2{margin-bottom:0.5rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.ml-2{margin-left:0.5rem}.mt-8{margin-top:2rem}.mt-\[5cm\]{margin-top:5cm}.mb-8{margin-bottom:2rem}.block{display:block}.flex{display:flex}.grid{display:grid}.h-8{height:2rem}.h-\[80px\]{height:80px}.h-\[120px\]{height:120px}.h-\[150px\]{height:150px}.h-\[130px\]{height:130px}.h-\[100px\]{height:100px}.h-\[99px\]{height:99px}.h-\[101px\]{height:101px}.h-\[102px\]{height:102px}.h-\[103px\]{height:103px}.h-\[99\.5px\]{height:99.5px}.min-h-\[140px\]{min-height:140px}.min-h-\[180px\]{min-height:180px}.min-h-\[120px\]{min-height:120px}.min-h-screen{min-height:100vh}.w-1\/2{width:50%}.w-1\/3{width:33.333333%}.w-full{width:100%}.w-\[8ch\]{width:8ch}.w-\[20ch\]{width:20ch}.w-\[40ch\]{width:40ch}.w-\[40px\]{width:40px}.w-\[80px\]{width:80px}.w-\[60px\]{width:60px}.w-\[50px\]{width:50px}.w-\[45ch\]{width:45ch}.w-\[47ch\]{width:47ch}.w-\[30ch\]{width:30ch}.w-\[25ch\]{width:25ch}.w-\[21ch\]{width:21ch}.w-\[24ch\]{width:24ch}.w-\[1000ch\]{width:1000ch}.w-\[1300ch\]{width:1300ch}.w-\[130ch\]{width:130ch}.w-\[100ch\]{width:100ch}.w-\[104ch\]{width:104ch}.w-\[120ch\]{width:120ch}.w-\[98ch\]{width:98ch}.w-\[103ch\]{width:103ch}.w-\[102ch\]{width:102ch}.w-\[102\.3ch\]{width:102.3ch}.w-\[99ch\]{width:99ch}.w-\[101\.3ch\]{width:101.3ch}.w-\[103\.3ch\]{width:103.3ch}.w-1{width:0.25rem}.w-1\/4{width:25%}.max-w-5xl{max-width:64rem}.max-w-\[120px\]{max-width:120px}.max-w-\[200px\]{max-width:200px}.max-w-\[1000px\]{max-width:1000px}.max-w-\[1300px\]{max-width:1300px}.max-w-\[2300px\]{max-width:2300px}.grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.grid-cols-6{grid-template-columns:repeat(6, minmax(0, 1fr))}.flex-col{flex-direction:column}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-4{gap:1rem}.gap-8{gap:2rem}.gap-1{gap:0.25rem}.gap-2{gap:0.5rem}.space-x-5 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1.25rem * var(--tw-space-x-reverse));margin-left:calc(1.25rem * calc(1 - var(--tw-space-x-reverse)))}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.rounded{border-radius:0.25rem}.border{border-width:1px}.border-none{border-style:none}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219 / var(--tw-border-opacity, 1))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity, 1))}.bg-gray-600{--tw-bg-opacity:1;background-color:rgb(75 85 99 / var(--tw-bg-opacity, 1))}.bg-green-600{--tw-bg-opacity:1;background-color:rgb(22 163 74 / var(--tw-bg-opacity, 1))}.bg-blue-900{--tw-bg-opacity:1;background-color:rgb(30 58 138 / var(--tw-bg-opacity, 1))}.bg-blue-800{--tw-bg-opacity:1;background-color:rgb(30 64 175 / var(--tw-bg-opacity, 1))}.bg-gray-300{--tw-bg-opacity:1;background-color:rgb(209 213 219 / var(--tw-bg-opacity, 1))}.bg-blue-500{--tw-bg-opacity:1;background-color:rgb(59 130 246 / var(--tw-bg-opacity, 1))}.bg-gray-500{--tw-bg-opacity:1;background-color:rgb(107 114 128 / var(--tw-bg-opacity, 1))}.bg-gray-900{--tw-bg-opacity:1;background-color:rgb(17 24 39 / var(--tw-bg-opacity, 1))}.bg-gray-700{--tw-bg-opacity:1;background-color:rgb(55 65 81 / var(--tw-bg-opacity, 1))}.p-4{padding:1rem}.p-6{padding:1.5rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-8{padding-top:2rem;padding-bottom:2rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.px-1{padding-left:0.25rem;padding-right:0.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.pl-4{padding-left:1rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.text-2xl{font-size:1.5rem;line-height:2rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.opacity-80{opacity:0.8}.hover\:bg-blue-600:hover{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.hover\:bg-gray-600:hover{--tw-bg-opacity:1;background-color:rgb(75 85 99 / var(--tw-bg-opacity, 1))}.hover\:bg-green-600:hover{--tw-bg-opacity:1;background-color:rgb(22 163 74 / var(--tw-bg-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.focus\:ring-0:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(0px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.focus\:ring-blue-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(59 130 246 / var(--tw-ring-opacity, 1))}</style></head>
 <body>
-    <div class="container mx-auto px-4 py-8 max-w-5xl" id="invoice-container">
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-            <!-- Header -->
-    <div class="flex flex-col md:flex-row justify-between items-center mb-6">
-            <div class="mb-4 md:mb-0">
-                <h1 class="text-2xl font-bold text-gray-800">LUMASONIX x PROFESSIONAL<!--1-->
-                <p class="text-gray-600">專業技術支援 x 人力媒合平台</p>
-                </h1></div>
-            <div class="bg-gray-800 text-white py-2 px-4 rounded">
-               <h2 class="text-xl font-bold">技術人員請款單</h2>
-            </div>
-        </div>
-
+    <div class="container mx-auto px-4 py-8 max-w-5xl">
+        <div id="invoice-form" class="form-container p-6 rounded-1g" style="
+    height: 1992px;
+">
             
-           <!-- Invoice Content -->
-            <div class="p-6">
-                <!-- Basic Info Section -->
-              <div class="p-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">請款日期</label>
-            <input type="date" id="invoice-date" class="w-full px-4 py-2 border border-gray-300 rounded-md">
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">請款編號</label>
-            <input type="text" id="invoice-number" placeholder="LX-" class="w-full px-4 py-2 border border-gray-300 rounded-md">
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">請款月份</label>
-            <input type="month" id="invoice-month" class="w-full px-4 py-2 border border-gray-300 rounded-md">
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">負責人</label>
-            <input type="text" id="responsible-person" placeholder="蘇裕庭" class="w-full px-4 py-2 border border-gray-300 rounded-md">
-          </div>
-        </div>
-                
-                <!-- Activity Support Details Table -->
-                <h3 class="section-title">活動支援明細</h3>
-                <div class="overflow-x-auto">
-                    <table class="activity-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 10%">日期</th>
-                                <th style="width: 22%">活動名稱／地點</th>
-                                <th style="width: 6%">人數</th>
-                                <th style="width: 9%">上班</th>
-                                <th style="width: 9%">下班</th>
-                                <th style="width: 6%">高空</th>
-                                <th style="width: 7%">控/追光</th>
-                                <th style="width: 6%">加班</th>
-                                <th style="width: 10%">備註</th>
-                                <th class="payment-column" style="width: 15%">請款金額</th>
-                            </tr>
-                        </thead>
-                        <tbody id="activity-details">
-                            <!-- Row 1 -->
-                            <tr>
-                                <td><input type="date"></td>
-                                <td><input type="text"></td>
-                                <td><input type="number" min="0"></td>
-                                <td><input type="time"></td>
-                                <td><input type="time"></td>
-                                <td><input type="checkbox"></td>
-                                <td><input type="checkbox"></td>
-                                <td><input type="number" min="0.0" placeholder="  "></td>
-                                <td><input type="text"></td>
-                                <td><input type="text" class="activity-amount" placeholder="  "></td>
-                            </tr>
-                            <!-- Row 2 -->
-                            <tr>
-                                <td><input type="date"></td>
-                                <td><input type="text"></td>
-                                <td><input type="number" min="0"></td>
-                                <td><input type="time"></td>
-                                <td><input type="time"></td>
-                                <td><input type="checkbox"></td>
-                                <td><input type="checkbox"></td>
-                                <td><input type="number" min="0.0" placeholder="  "></td>
-                                <td><input type="text"></td>
-                                <td><input type="text" class="activity-amount" placeholder="  "></td>
-                            </tr>
-                            <!-- Row 3 -->
-                            <tr>
-                                <td><input type="date"></td>
-                                <td><input type="text"></td>
-                                <td><input type="number" min="0"></td>
-                                <td><input type="time"></td>
-                                <td><input type="time"></td>
-                                <td><input type="checkbox"></td>
-                                <td><input type="checkbox"></td>
-                                <td><input type="number" min="0.0" placeholder="  "></td>
-                                <td><input type="text"></td>
-                                <td><input type="text" class="activity-amount" placeholder="  "></td>
-                            </tr>
-                            <!-- Row 4 -->
-                            <tr>
-                                <td><input type="date"></td>
-                                <td><input type="text"></td>
-                                <td><input type="number" min="0"></td>
-                                <td><input type="time"></td>
-                                <td><input type="time"></td>
-                                <td><input type="checkbox"></td>
-                                <td><input type="checkbox"></td>
-                                <td><input type="number" min="0.0" placeholder="  "></td>
-                                <td><input type="text"></td>
-                                <td><input type="text" class="activity-amount" placeholder="  "></td>
-                            </tr>
-                            <!-- Row 5 -->
-                            <tr>
-                                <td><input type="date"></td>
-                                <td><input type="text"></td>
-                                <td><input type="number" min="0"></td>
-                                <td><input type="time"></td>
-                                <td><input type="time"></td>
-                                <td><input type="checkbox"></td>
-                                <td><input type="checkbox"></td>
-                                <td><input type="number" min="0.0" placeholder=" "></td>
-                                <td><input type="text"></td>
-                                <td><input type="text" class="activity-amount" placeholder="  "></td>
-                            </tr>
-</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <button id="add-activity-row" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors">
-                    + 新增活動
-                </button>
-                
-                <!-- Service Items Table -->
-                <h3 class="section-title mt-8">費用明細</h3>
-                <div class="overflow-x-auto">
-                    <table class="invoice-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 20%">品項</th>
-                                <th style="width: 10%">數量</th>
-                                <th style="width: 15%">單價</th>
-                                <th style="width: 40%">工作內容</th>
-                                <th style="width: 15%">小計 (NT$)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- 人事支援 -->
-                            <tr>
-                                <td>人事支援</td>
-                                <td><input type="number" value="0" id="qty-staff" onchange="calculateTotal()"></td>
-                                <td>2,500</td>
-                                <td>進場、演出、撤場</td>
-                                <td id="subtotal-staff">2,500</td>
-                            </tr>
-                            
-                            <!-- 燈/音/視控 -->
-                            <tr>
-                                <td>燈/音/視控</td>
-                                <td><input type="number" value="0" id="qty-control" onchange="calculateTotal()"></td>
-                                <td>1,000</td>
-                                <td>演出前一日彩排，將視為一場演出，彩排與演出同日進行，僅收取一次演出費用。</td>
-                                <td id="subtotal-control">0</td>
-                                                  
-                            <!-- 追光燈操作 -->
-                            <tr>
-                                <td>追光燈操作</td>
-                                <td><input type="number" value="0" id="qty-spotlight" onchange="calculateTotal()"></td>
-                                <td>1,000</td>
-                                <td>演出前一日彩排，將視為一場演出，彩排與演出同日進行，僅收取一次演出費用。</td>
-                                <td id="subtotal-spotlight">0</td>
-                                                       
-                            <!-- 高空作業 -->
-                            <tr>
-                                <td>高空作業</td>
-                                <td><input type="number" value="0" id="qty-height" onchange="calculateTotal()"></td>
-                                <td>1,000</td>
-                                <td>作業高度達layher第 6 格以上(約9米)</td>
-                                <td id="subtotal-height">0</td>
-                            </tr>
-                            
-                            <!-- 加班費用 -->
-                            <tr>
-                                <td>加班費用</td>
-                                <td><input type="number" value="0.0" id="qty-overtime" onchange="calculateTotal()"></td>
-                                <td>350</td>
-                                <td>依實際加班時數計算</td>
-                                <td id="subtotal-overtime">0</td>
-                            </tr>
-                            
-                            <!-- 跨縣市 -->
-                            <tr>
-                                <td>跨縣市</td>
-                                <td><input type="number" value="0" id="qty-travel" onchange="calculateTotal()"></td>
-                                <td>300</td>
-                                <td>交通費</td>
-                                <td id="subtotal-travel">0</td>
-                            </tr>
-                            
-                            <!-- 行政執行費 -->
-                            <tr>
-                                <td>行政執行費</td>
-                                <td>一式</td>
-                                <td>10%</td>
-                                <td>人數 * 10% * 2500(單價) </td>
-                                <td id="subtotal-admin">325</td>
-                            </tr>
-                            
-                            <!-- 其他 -->
-                            <tr>
-                                <td>其他</td>
-                                <td>一式</td>
-                                <td><input type="number" value="0" id="price-other" onchange="calculateTotal()"></td>
-                                <td><input type="text" placeholder="請輸入說明"></td>
-                                <td id="subtotal-other">0</td>
-                            </tr>
-                            
-                            <!-- 未稅金額 -->
-                            <tr class="subtotal-row">
-                                <td colspan="4" class="text-right pr-4">(未稅金額)</td>
-                                <td id="total-before-tax">2,825</td>
-                            </tr>
-                            
-                            <!-- 總計 -->
-                            <tr class="total-row">
-                                <td colspan="4" class="text-right pr-4">總計</td>
-                                <td id="grand-total">2,825</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <!-- Total Amount in Words -->
-                <div class="mt-6 text-right">
-                    <p class="font-medium">合計金額（未稅）：<span id="total-in-words">貳仟捌佰貳拾伍</span> 元</p>
-                </div>
-                
-                <!-- Payment Information -->
-                <div class="payment-info mt-8">
-                    <h3 class="payment-info-title">【匯款資訊】</h3>
-                    <div class="payment-info-row">
-                        <div class="payment-info-label">帳號戶名：</div>
-                        <div class="payment-info-value">蘇裕庭</div>
-                    </div>
-                    <div class="payment-info-row">
-                        <div class="payment-info-label">匯款代碼：</div>
-                        <div class="payment-info-value">808(玉山銀行中路特區分行)</div>
-                    </div>
-                    <div class="payment-info-row">
-                        <div class="payment-info-label">匯款帳號：</div>
-                         <div class="payment-info-value">0842-979-176643</div>
+            
+             <!-- Header -->
+            <div>
 
+</div>
+<div class="relative -left-[0cm] -top-[-2cm]">
+  <!-- 左側：廠商名稱、活動地點 -->
+  <div class="flex flex-col gap-4 justify-center">
+    <div>
+      <label class="block text-X3 font-medium text-gray-700 mb-1">廠商名稱</label>
+      <input type="text" placeholder="請輸入廠商名稱" class="w-[40ch] h-8 px-1 py-1 border border-gray-300 rounded-md text-X3"></div></div>
+ <div>
+     <div>
+     <label class="block text-sm font-medium text-gray-700 mb-1">活動地點:</label>
+      <input type="text" placeholder="請輸入活動地點" class="w-[40ch] h-8 px-1 py-1 border border-gray-300 rounded-md text-X3">
+    </div>
+      <div>
+      <div class="relative -left-[-16cm] -top-[3cm]">
+  <div class="flex flex-col gap-2">
+    <!-- 以下保留你原本的時間欄位區塊 -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700">進場時間:</label>
+      <div class="flex items-center gap-1">
+        <input type="text" class="w-[50px] h-8 px-1 py-1 border border-gray-300 rounded text-center" placeholder="">年
+        <input type="text" class="w-[40px] h-8 px-1 py-1 border border-gray-300 rounded text-center" placeholder="">月
+        <input type="text" class="w-[40px] h-8 px-1 py-1 border border-gray-300 rounded text-center" placeholder="">日
+        <input type="text" class="w-[40px] h-8 px-1 py-1 border border-gray-300 rounded text-center" placeholder="">時
+        <input type="text" class="w-[40px] h-8 px-1 py-1 border border-gray-300 rounded text-center" placeholder="">分
+      </div>
+    </div>
+
+    <!-- 彩排時間 -->
+    <div class="mb-2">
+      <label class="block text-sm font-medium text-gray-700">彩排時間:</label>
+      <div class="flex items-center gap-1">
+        <input type="text" class="w-[50px] h-8 px-1 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">年
+        <input type="text" class="w-[40px] h-8 px-1 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">月
+        <input type="text" class="w-[40px] h-8 px-1 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">日
+        <input type="text" class="w-[40px] h-8 px-1 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">時
+        <input type="text" class="w-[40px] h-8 px-1 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">分
+      </div>
+    </div>
+
+    <!-- 演出時間 -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700">演出時間:</label>
+      <div class="flex items-center gap-1">
+        <input type="text" class="w-[50px] h-8 px-1 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">年
+        <input type="text" class="w-[40px] h-8 px-1 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">月
+        <input type="text" class="w-[40px] h-8 px-1 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">日
+        <input type="text" class="w-[40px] h-8 px-1 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">時
+        <input type="text" class="w-[40px] h-8 px-1 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">分
+      </div>
+    </div>
+  </div>
+</div></div></div></div>
+            
+            
+            
+            <h2 class="text-X3 font-bold mb-4 relative -top-[1cm]">活動支援明細</h2>
+            <table class="mb-6 relative -top-[1cm]">
+                <thead>
+                    <tr class="bg-gray-500 text-white ">
+                        <th class="text-left">品項</th>
+                        <th class="text-center">數量</th>
+                        <th class="text-center">單價</th>
+                        <th class="text-left">工作內容</th>
+                        <th class="text-right">小計 (NT$)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>人事支援</td>
+                        <td class="text-center">
+                            <input type="number" id="staff-qty" class="text-center" value="0" min="0">
+                        </td>
+                        <td class="text-center">2500</td>
+                        <td>進場、演出、撤場</td>
+                        <td class="text-right"><span id="staff-subtotal">0</span></td>
+                    </tr>
+                    <tr>
+                        <td>(燈控/音控)</td>
+                        <td class="text-center">
+                            <input type="number" id="tech-qty" class="text-center" value="0" min="0">
+                        </td>
+                        <td class="text-center">1000</td>
+                        <td>演出前一日彩排，將視為一場演出，另行計費。<br>彩排與演出同日進行，僅收取一次演出費用。</td>
+                        <td class="text-right"><span id="tech-subtotal">0</span></td>
+                    </tr>
+                    <tr>
+                        <td>追光燈操作</td>
+                        <td class="text-center">
+                            <input type="number" id="spotlight-qty" class="text-center" value="0" min="0">
+                        </td>
+                        <td class="text-center">1000</td>
+                        <td>演出前一日彩排，將視為一場演出，另行計費。<br>彩排與演出同日進行，僅收取一次演出費用。</td>
+                        <td class="text-right"><span id="spotlight-subtotal">0</span></td>
+                    </tr>
+                    <tr>
+                        <td>高空作業</td>
+                        <td class="text-center">
+                            <input type="number" id="height-qty" class="text-center" value="0" min="0">
+                        </td>
+                        <td class="text-center">1000</td>
+                        <td>作業高度達layher第 6 格以上(約9米)</td>
+                        <td class="text-right"><span id="height-subtotal">0</span></td>
+                    </tr>
+                    <tr>
+                        <td>加班費用</td>
+                        <td class="text-center">
+                            <input type="number" id="overtime-qty" class="text-center" value="0" min="0">
+                        </td>
+                        <td class="text-center">350</td>
+                        <td>依實際加班時數計算</td>
+                        <td class="text-right"><span id="overtime-subtotal">0</span></td>
+                    </tr>
+                    <tr>
+                        <td>補貼其他費用</td>
+                        <td class="text-center">
+                            <input type="number" id="other-qty" class="text-center" value="0" min="0">
+                        </td>
+                        <td class="text-center">
+                            <input type="number" id="other-price" class="text-center" value="0" min="0">
+                        </td>
+                        <td>交通費、餐費等須先支付，於請款時附上發票</td>
+                        <td class="text-right"><span id="other-subtotal">0</span></td>
+                    </tr>
+                    <tr>
+                        <td>行政執行費用</td>
+                        <td class="text-center">一式</td>
+                        <td class="text-center">10%</td>
+                        <td>人事支援 x 10% x 2500</td>
+                        <td class="text-right"><span id="admin-subtotal">0</span></td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="bg-gray-500 text-white font-bold relative -top[5cm]">
+                        <td colspan="4" class="text-right ">合計金額（未稅）：</td>
+                        <td class="text-right"><span id="total-amount">0</span> 元</td>
+                    </tr>
+                </tfoot>
+            </table>
+            
+            <h2 class="text-x3 font-bold mb-4 relative -top-[1cm]">勞報資料檢附</h2>
+            <div class="mb-6 relative -top-[1cm] ">
+                <div class="border p-4 rounded-lg mb-4">
+                    <div class="grid grid-cols-4 gap-4 mb-2">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">人員姓名</label>
+                            <input type="text" class="labor-name">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">出生年月日</label>
+                            <input type="text" class="labor-birth">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">身分證字號</label>
+                            <input type="text" class="labor-id">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">連絡電話</label>
+                            <input type="text" class="labor-phone">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-6 gap-4">
+                        <div class="col-span-5">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">戶籍地址</label>
+                            <input type="text" class="labor-address">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">勞報金額</label>
+                            <div class="flex items-center">
+                                <input type="number" class="labor-amount" min="0" value="0">
+                                <span class="ml-2">元</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
-                <!-- Terms and Conditions -->
-                <div class="terms-section">
-                    <h3 class="terms-title">【請款條款聲明】</h3>
-                    <ol class="terms-list list-decimal">
-                        <li class="terms-item">
-                            本請款單所列各項係依事前報價單內容所執行，若人員實際到場執行即視為同意並接受報價條款。
-                        </li>
-                        <li class="terms-item">
-                            各日所派遣人員之上下班時間、加班時數、高空或控場作業皆已如實記錄於本單，請於付款前確認。
-                        </li>
-                        <li class="terms-item">
-                            本人為協力統籌角色，僅協助媒合人力與協調執行，非承攬責任。技術人員並非本人僱用，相關執行風險與損失由現場人員或主辦方依實情處理。
-                        </li>
-                        <li class="terms-item">
-                            維持作業品質與人員安排效率包含人員排程統整、資料彙整確認、作業溝通、進退場提醒、異動回報、明細核對等相關行政作業，凡協助媒合與統籌之專案，將酌收行政執行費用，已併入請款明細列示。
-                        </li>
-                    </ol>
-                </div>
-                
-                <!-- Signature Section -->
-                <div class="signature-section">
-                    <div class="signature-item">
-                        <span class="signature-label">負 責 人：</span>
-                        <span class="signature-value">蘇裕庭</span>
+                <div class="border p-4 rounded-lg">
+                    <div class="grid grid-cols-4 gap-4 mb-2">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">人員姓名</label>
+                            <input type="text" class="labor-name">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">出生年月日</label>
+                            <input type="text" class="labor-birth">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">身分證字號</label>
+                            <input type="text" class="labor-id">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">連絡電話</label>
+                            <input type="text" class="labor-phone">
+                        </div>
                     </div>
-                    <div class="signature-item">
-                        <span class="signature-label">聯絡電話：</span>
-                        <span class="signature-value">0926169899</span>
-                    </div>
-                    <div class="signature-item">
-                        <span class="signature-label">日期：</span>
-                        <span class="signature-value">
-                            <input type="number" min="114" max="999" id="year-input" style="width: 50px; border-bottom: 1px solid #ccc; text-align: center" placeholder="114"> 年 
-                            <input type="number" min="1" max="12" id="month-input" style="width: 50px; border-bottom: 1px solid #ccc; text-align: center;" placeholder="月"> 月
-                            <input type="number" min="1" max="31" id="day-input" style="width: 50px; border-bottom: 1px solid #ccc; text-align: center;" placeholder="日"> 日
-                        </span>
+                    <div class="grid grid-cols-6 gap-4">
+                        <div class="col-span-5">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">戶籍地址</label>
+                            <input type="text" class="labor-address">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">勞報金額</label>
+                            <div class="flex items-center">
+                                <input type="number" class="labor-amount" min="0" value="0">
+                                <span class="ml-2">元</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- Action Buttons -->
-        <div class="action-buttons">
-            <button id="set-date-button" class="action-button date-button">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
-                </svg>
-                設置今天日期
-            </button>
-            <button id="generate-pdf-button" class="action-button pdf-button">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
-                    <path d="M4.603 14.087a.81.81 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.68 7.68 0 0 1 1.482-.645 19.697 19.697 0 0 0 1.062-2.227 7.269 7.269 0 0 1-.43-1.295c-.086-.4-.119-.796-.046-1.136.075-.354.274-.672.65-.823.192-.077.4-.12.602-.077a.7.7 0 0 1 .477.365c.088.164.12.356.127.538.007.188-.012.396-.047.614-.084.51-.27 1.134-.52 1.794a10.954 10.954 0 0 0 .98 1.686 5.753 5.753 0 0 1 1.334.05c.364.066.734.195.96.465.12.144.193.32.2.518.007.192-.047.382-.138.563a1.04 1.04 0 0 1-.354.416.856.856 0 0 1-.51.138c-.331-.014-.654-.196-.933-.417a5.712 5.712 0 0 1-.911-.95 11.651 11.651 0 0 0-1.997.406 11.307 11.307 0 0 1-1.02 1.51c-.292.35-.609.656-.927.787a.793.793 0 0 1-.58.029zm1.379-1.901c-.166.076-.32.156-.459.238-.328.194-.541.383-.647.547-.094.145-.096.25-.04.361.01.022.02.036.026.044a.266.266 0 0 0 .035-.012c.137-.056.355-.235.635-.572a8.18 8.18 0 0 0 .45-.606zm1.64-1.33a12.71 12.71 0 0 1 1.01-.193 11.744 11.744 0 0 1-.51-.858 20.801 20.801 0 0 1-.5 1.05zm2.446.45c.15.163.296.3.435.41.24.19.407.253.498.256a.107.107 0 0 0 .07-.015.307.307 0 0 0 .094-.125.436.436 0 0 0 .059-.2.095.095 0 0 0-.026-.063c-.052-.062-.2-.152-.518-.209a3.876 3.876 0 0 0-.612-.053zM8.078 7.8a6.7 6.7 0 0 0 .2-.828c.031-.188.043-.343.038-.465a.613.613 0 0 0-.032-.198.517.517 0 0 0-.145.04c-.087.035-.158.106-.196.283-.04.192-.03.469.046.822.024.111.054.227.09.346z"/>
-                </svg>
-                生成PDF檔
-            </button>
-            <button id="reset-form-button" class="action-button reset-button">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
-                    <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
-                </svg>
-                重置表單
-            </button>
+            
+            <div class="mb-6 border p-4 rounded-lg relative -top-[1cm]">
+                <h2 class="text-lg font-bold mb-2">【匯款資訊】</h2>
+                <p class="mb-1">帳號戶名 : 蘇裕庭</p>
+                <p class="mb-1">匯款代碼 : 808(玉山銀行中路特區分行)</p>
+                <p>匯款帳號 : 0842-979-176643</p>
+            </div>
+            
+            <div class="mb-6 border p-4 rounded-lg relative -top-[1cm]">
+                <h2 class="text-lg font-bold mb-2">【請款條款聲明】</h2>
+                <p class="mb-2">一、本請款單所列各項係依事前報價單內容所執行，若人員實際到場執行即視為同意並接受報價條款。</p>
+                <p class="mb-2">二、各日所派遣人員之上下班時間、加班時數、高空或控場作業皆已如實記錄於本單，請於付款前確認。</p>
+                <p class="mb-2">三、本人為協力統籌角色，僅協助媒合人力與協調執行，非承攬責任。技術人員並非本人僱用，相關執行風險與損失由現場人員或主辦方依實情處理。</p>
+                <p class="mb-2">四、維持作業品質與人員安排效率包含人員排程統整、資料彙整確認、作業溝通、進退場提醒、異動回報、明細核對等相關行政作業,凡協助媒合與統籌之專案，將酌收行政執行費用。</p>
+            </div>
+            
+            <div class="flex justify-end mb-6 relative -top-[1cm]">
+                <div class="relative -left-[5.6cm] -top-[-0cm]">
+                    <p>負 責 人 : 蘇裕庭</p>
+                    <p>聯絡電話: 0926169899</p>
+                    <p>填寫日期:
+                        </p><div class="flex items-center">
+                            <input type="text" class="time-input rehearsal-year" maxlength="3" placeholder="">年
+                            <input type="text" class="time-input rehearsal-month" maxlength="2" placeholder="">月
+                            <input type="text" class="time-input rehearsal-day" maxlength="2" placeholder="">日
+                            <input type="text" class="time-input rehearsal-hour" maxlength="2" placeholder="">時
+                            <input type="text" class="time-input rehearsal-minute" maxlength="2" placeholder="">分
+       
+                </div>
+            </div>
+            
+            <div class="flex justify-center space-x-5 no-print mt-8">
+                <button id="add-labor" class="bg-green-600 hover:bg-green-600 text-white font-bold py-1 px-5 rounded-lg btn">
+                    新增勞報人員
+                </button>
+                <button id="download-pdf" class="bg-blue-600 hover:bg-blue-600 text-white font-bold py-1 px-5 rounded-lg btn">
+                    下載 PDF
+                </button>
+                <button id="reset-form" class="bg-gray-600 hover:bg-gray-600 text-white font-bold py-1 px-5 rounded-lg btn">
+                    重置請款單
+                </button>
+            </div>
         </div>
     </div>
 
     <script>
-        // Add new activity row
-        document.getElementById('add-activity-row').addEventListener('click', function() {
-            const tbody = document.getElementById('activity-details');
-            const newRow = document.createElement('tr');
-            newRow.innerHTML = `
-    <td><input type="date"></td>
-    <td><input type="text"></td>
-    <td><input type="number" min="0"></td>
-    <td><input type="time"></td>
-    <td><input type="time"></td>
-    <td><input type="checkbox"></td>
-    <td><input type="checkbox"></td>
-    <td><input type="number" min="0" placeholder="時數"></td>
-    <td><input type="text"></td>
-    <td><input type="text" class="activity-amount" placeholder="00000"></td>
-            `;
-            tbody.appendChild(newRow);
-            
-            // Add event listeners to the new row's activity amount input
-            const newAmountInput = newRow.querySelector('.activity-amount');
-            newAmountInput.addEventListener('input', function() {
-                formatNumberInput(this);
-            });
-            newAmountInput.addEventListener('change', function() {
-                calculateActivityTotal();
-            });
-        });
-        
-        // Format number inputs with commas
-        function formatNumberInput(input) {
-            // Remove non-numeric characters
-            let value = input.value.replace(/[^\d]/g, '');
-            
-            // Format with commas
-            if (value.length > 0) {
-                value = parseInt(value).toLocaleString();
-            }
-            
-            input.value = value;
-        }
-        
-        // Add event listeners to all activity amount inputs
-        document.querySelectorAll('.activity-amount').forEach(input => {
-            input.addEventListener('input', function() {
-                formatNumberInput(this);
-            });
-            input.addEventListener('change', function() {
-                calculateActivityTotal();
-            });
-        });
-        
-        // Calculate total from activity table
-        function calculateActivityTotal() {
-            let total = 0;
-            document.querySelectorAll('.activity-amount').forEach(input => {
-                // Remove commas and convert to number
-                const value = parseInt(input.value.replace(/,/g, '')) || 0;
-                total += value;
-            });
-            
-            // You could update a summary field here if needed
-            console.log("Activity total:", total);
-        }
-        
-        function calculateTotal() {
-            // Get quantities and calculate subtotals
-            const qtyStaff = parseInt(document.getElementById('qty-staff').value) || 0;
-            const qtyControl = parseInt(document.getElementById('qty-control').value) || 0;
-            const qtySpotlight = parseInt(document.getElementById('qty-spotlight').value) || 0;
-            const qtyHeight = parseInt(document.getElementById('qty-height').value) || 0;
-            const qtyOvertime = parseInt(document.getElementById('qty-overtime').value) || 0;
-            const qtyTravel = parseInt(document.getElementById('qty-travel').value) || 0;
-            const priceOther = parseInt(document.getElementById('price-other').value) || 0;
-            
-            // Calculate subtotals
-            const subtotalStaff = qtyStaff * 2500;
-            const subtotalControl = qtyControl * 1000;
-            const subtotalSpotlight = qtySpotlight * 1000;
-            const subtotalHeight = qtyHeight * 1000;
-            const subtotalOvertime = qtyOvertime * 350;
-            const subtotalTravel = qtyTravel * 300;
-            const subtotalAdmin = subtotalStaff * 0.1;
-            const subtotalOther = priceOther;
-            
-            // Update subtotal displays
-            document.getElementById('subtotal-staff').textContent = subtotalStaff.toLocaleString();
-            document.getElementById('subtotal-control').textContent = subtotalControl.toLocaleString();
-            document.getElementById('subtotal-spotlight').textContent = subtotalSpotlight.toLocaleString();
-            document.getElementById('subtotal-height').textContent = subtotalHeight.toLocaleString();
-            document.getElementById('subtotal-overtime').textContent = subtotalOvertime.toLocaleString();
-            document.getElementById('subtotal-travel').textContent = subtotalTravel.toLocaleString();
-            document.getElementById('subtotal-admin').textContent = subtotalAdmin.toLocaleString();
-            document.getElementById('subtotal-other').textContent = subtotalOther.toLocaleString();
-            
-            // Calculate total
-            const totalBeforeTax = subtotalStaff + subtotalControl + subtotalSpotlight + 
-                                  subtotalHeight + subtotalOvertime + subtotalTravel + 
-                                  subtotalAdmin + subtotalOther;
-            
-            // Update totals
-            document.getElementById('total-before-tax').textContent = totalBeforeTax.toLocaleString();
-            document.getElementById('grand-total').textContent = totalBeforeTax.toLocaleString();
-            
-            // Update total in words (simplified version)
-            document.getElementById('total-in-words').textContent = numberToChineseAmount(totalBeforeTax);
-        }
-        
-        // Simple Chinese number conversion (simplified version)
-        function numberToChineseAmount(num) {
-            if (num === 0) return '零';
-            
-            const digits = ['零', '壹', '貳', '參', '肆', '伍', '陸', '柒', '捌', '玖'];
-            const units = ['', '拾', '佰', '仟', '萬', '拾萬', '佰萬', '仟萬', '億'];
-            
-            let result = '';
-            const numStr = num.toString();
-            
-            for (let i = 0; i < numStr.length; i++) {
-                const digit = parseInt(numStr[i]);
-                const position = numStr.length - i - 1;
+        document.addEventListener('DOMContentLoaded', function() {
+            // Calculate subtotals and total
+            function calculateTotals() {
+                const staffQty = parseInt(document.getElementById('staff-qty').value) || 0;
+                const techQty = parseInt(document.getElementById('tech-qty').value) || 0;
+                const spotlightQty = parseInt(document.getElementById('spotlight-qty').value) || 0;
+                const heightQty = parseInt(document.getElementById('height-qty').value) || 0;
+                const overtimeQty = parseInt(document.getElementById('overtime-qty').value) || 0;
+                const otherQty = parseInt(document.getElementById('other-qty').value) || 0;
+                const otherPrice = parseInt(document.getElementById('other-price').value) || 0;
                 
-                if (digit !== 0) {
-                    result += digits[digit] + units[position];
-                } else {
-                    // Skip consecutive zeros
-                    if (i > 0 && parseInt(numStr[i-1]) !== 0) {
-                        result += digits[0];
-                    }
-                }
+                const staffSubtotal = staffQty * 2500;
+                const techSubtotal = techQty * 1000;
+                const spotlightSubtotal = spotlightQty * 1000;
+                const heightSubtotal = heightQty * 1000;
+                const overtimeSubtotal = overtimeQty * 350;
+                const otherSubtotal = otherQty * otherPrice;
+                
+                // 行政執行費用 = 人事支援 * 10%
+                const adminSubtotal = Math.round(staffQty * 0.10 * 2500);
+                
+                const total = staffSubtotal + techSubtotal + spotlightSubtotal + heightSubtotal + 
+                              overtimeSubtotal + otherSubtotal + adminSubtotal;
+                
+                document.getElementById('staff-subtotal').textContent = staffSubtotal.toLocaleString();
+                document.getElementById('tech-subtotal').textContent = techSubtotal.toLocaleString();
+                document.getElementById('spotlight-subtotal').textContent = spotlightSubtotal.toLocaleString();
+                document.getElementById('height-subtotal').textContent = heightSubtotal.toLocaleString();
+                document.getElementById('overtime-subtotal').textContent = overtimeSubtotal.toLocaleString();
+                document.getElementById('other-subtotal').textContent = otherSubtotal.toLocaleString();
+                document.getElementById('admin-subtotal').textContent = adminSubtotal.toLocaleString();
+                document.getElementById('total-amount').textContent = total.toLocaleString();
             }
             
-            return result;
-        }
-        
-        // Set today's date in the signature section
-        function setTodayDate() {
+            // Add event listeners to all input fields that affect calculations
+            const calculationInputs = [
+                'staff-qty', 'tech-qty', 'spotlight-qty', 'height-qty', 'overtime-qty', 'other-qty', 'other-price'
+            ];
+            
+            calculationInputs.forEach(id => {
+                document.getElementById(id).addEventListener('input', calculateTotals);
+            });
+            
+            // Add new labor reporting section
+            document.getElementById('add-labor').addEventListener('click', function() {
+                const laborContainer = document.querySelector('.mb-6:nth-of-type(3)');
+                const laborTemplate = `
+                <div class="border p-4 rounded-lg mt-4">
+                    <div class="grid grid-cols-4 gap-4 mb-2">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">人員姓名</label>
+                            <input type="text" class="labor-name">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">出生年月日</label>
+                            <input type="text" class="labor-birth">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">身分證字號</label>
+                            <input type="text" class="labor-id">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">連絡電話</label>
+                            <input type="text" class="labor-phone">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-6 gap-4">
+                        <div class="col-span-5">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">戶籍地址</label>
+                            <input type="text" class="labor-address">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">勞報金額</label>
+                            <div class="flex items-center">
+                                <input type="number" class="labor-amount" min="0" value="0">
+                                <span class="ml-2">元</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+                
+                laborContainer.insertAdjacentHTML('beforeend', laborTemplate);
+            });
+            
+            // Initialize calculations
+            calculateTotals();
+            
+            // Set today's date in the signature date fields
             const today = new Date();
-            document.getElementById('year-input').value = today.getFullYear();
-            document.getElementById('month-input').value = today.getMonth() + 1;
-            document.getElementById('day-input').value = today.getDate();
-        }
-        
-        // Generate PDF
-        function generatePDF() {
-            // Hide action buttons before generating PDF
-            const actionButtons = document.querySelector('.action-buttons');
-            const addRowButton = document.getElementById('add-activity-row');
+            const yearDigits = today.getFullYear().toString();
+            const month = (today.getMonth() + 1).toString().padStart(2, '0');
+            const day = today.getDate().toString().padStart(2, '0');
             
-            actionButtons.style.display = 'none';
-            addRowButton.style.display = 'none';
-            
-            // Generate PDF
-            const element = document.getElementById('invoice-container');
-            const opt = {
-                margin: 10,
-                filename: 'LUMASONIX技術人員請款單.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-            
-            html2pdf().set(opt).from(element).save().then(() => {
-                // Show buttons again after PDF is generated
-                actionButtons.style.display = 'flex';
-                addRowButton.style.display = 'block';
-            });
-        }
-        
-        // Reset form
-        function resetForm() {
-            if (confirm('確定要重置表單嗎？所有已填寫的資料將被清除。')) {
-                // Reset all input fields
-                document.querySelectorAll('input[type="text"], input[type="number"], input[type="date"], input[type="time"]').forEach(input => {
-                    input.value = '';
-                });
-                
-                // Reset checkboxes
-                document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-                    checkbox.checked = false;
-                });
-                
-                // Reset default values
-                document.getElementById('qty-staff').value = 1;
-                
-                // Recalculate totals
-                calculateTotal();
+            const dateFields = document.querySelectorAll('.date-field');
+            if (dateFields.length >= 6) {
+                dateFields[0].textContent = yearDigits[0];
+                dateFields[1].textContent = yearDigits[1];
+                dateFields[2].textContent = month[0];
+                dateFields[3].textContent = month[1];
+                dateFields[4].textContent = day[0];
+                dateFields[5].textContent = day[1];
             }
-        }
-        
-        // Add event listeners to buttons
-        document.getElementById('set-date-button').addEventListener('click', setTodayDate);
-        document.getElementById('generate-pdf-button').addEventListener('click', generatePDF);
-        document.getElementById('reset-form-button').addEventListener('click', resetForm);
-        
-        // Initialize calculations
-        calculateTotal();
-        
-        // Auto-fill today's date on page load
-        setTodayDate();
+            
+            // Set default values for rehearsal and performance time
+            document.querySelector('.rehearsal-year').value = today.getFullYear();
+            document.querySelector('.rehearsal-month').value = today.getMonth() + 1;
+            document.querySelector('.rehearsal-day').value = today.getDate();
+            
+            document.querySelector('.performance-year').value = today.getFullYear();
+            document.querySelector('.performance-month').value = today.getMonth() + 1;
+            document.querySelector('.performance-day').value = today.getDate();
+            
+            // Reset form
+            document.getElementById('reset-form').addEventListener('click', function() {
+                if (confirm('確定要重置請款單嗎？所有填寫的資料將會清除。')) {
+                    const inputs = document.querySelectorAll('input[type="text"], input[type="number"]');
+                    inputs.forEach(input => {
+                        if (input.type === 'number') {
+                            input.value = 0;
+                        } else {
+                            input.value = '';
+                        }
+                    });
+                    
+                    // Reset rehearsal and performance time to today
+                    document.querySelector('.rehearsal-year').value = today.getFullYear();
+                    document.querySelector('.rehearsal-month').value = today.getMonth() + 1;
+                    document.querySelector('.rehearsal-day').value = today.getDate();
+                    
+                    document.querySelector('.performance-year').value = today.getFullYear();
+                    document.querySelector('.performance-month').value = today.getMonth() + 1;
+                    document.querySelector('.performance-day').value = today.getDate();
+                    
+                    // Recalculate totals
+                    calculateTotals();
+                }
+            });
+            
+            // Download PDF
+            document.getElementById('download-pdf').addEventListener('click', function() {
+                // Hide download buttons temporarily
+                const buttons = document.querySelectorAll('.no-print');
+                buttons.forEach(button => {
+                    button.style.display = 'none';
+                });
+                
+                const { jsPDF } = window.jspdf;
+                
+                html2canvas(document.getElementById('invoice-form'), {
+                    scale: 1.5,
+                    useCORS: true,
+                    logging: false
+                }).then(canvas => {
+                    const imgData = canvas.toDataURL('image/jpeg', 1.0);
+                    const pdf = new jsPDF('p', 'mm', 'a4');
+                    const pdfWidth = pdf.internal.pageSize.getWidth();
+                    const pdfHeight = pdf.internal.pageSize.getHeight();
+                    const imgWidth = canvas.width;
+                    const imgHeight = canvas.height;
+                    const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+                    const imgX = (pdfWidth - imgWidth * ratio) / 2;
+                    
+                    let heightLeft = imgHeight;
+                    let position = 0;
+                    
+                    pdf.addImage(imgData, 'JPEG', imgX, position, imgWidth * ratio, imgHeight * ratio);
+                    heightLeft -= pdfHeight;
+                    
+                    while (heightLeft >= 0) {
+                        position = heightLeft - imgHeight;
+                        pdf.addPage();
+                        pdf.addImage(imgData, 'JPEG', imgX, position, imgWidth * ratio, imgHeight * ratio);
+                        heightLeft -= pdfHeight;
+                    }
+                    
+                    pdf.save('LUMASONIX_技術支援請款單.pdf');
+                    
+                    // Show buttons again
+                    buttons.forEach(button => {
+                        button.style.display = '';
+                    });
+                });
+            });
+            
+            // Restrict input to numbers only for time fields
+            const timeInputs = document.querySelectorAll('.time-input');
+            timeInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    this.value = this.value.replace(/[^0-9]/g, '');
+                });
+            });
+        });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93fb2c13c62af07f',t:'MTc0NzIzMzg1NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
-</html>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93e9ba14d511f06b',t:'MTc0NzA1MDkyNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+</div><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;"></iframe></body></html>
