@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUMASONIX 技術人員請款單</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
+        
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f5f7fa;
+        }
+        
+        .invoice-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #1a2533 100%);
+        }
+        
+        .form-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .form-label {
+            width: 80px;
+            text-align: right;
+            padding-right: 12px;
+            font-weight: 500;
+        }
+        
+        .form-input {
+            flex: 1;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 6px 10px;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #2c3e50;
+            box-shadow: 0 0 0 2px rgba(44, 62, 80, 0.2);
+        }
+        
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .invoice-table th {
+            background-color: #f1f5f9;
+            padding: 10px;
+            text-align: left;
+            font-weight: 600;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .invoice-table td {
+            padding: 8px 10px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .invoice-table input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            outline: none;
+        }
+        
+        .invoice-table tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        
+        .invoice-table .subtotal-row {
+            background-color: #f1f5f9;
+            font-weight: 600;
+        }
+        
+        .invoice-table .total-row {
+            background-color: #e2e8f0;
+            font-weight: 700;
+        }
+        
+        .description-row td {
+            padding-left: 30px;
+            color: #4b5563;
+            font-size: 0.9em;
+        }
+        
+        .activity-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .activity-table th {
+            background-color: #f1f5f9;
+            padding: 10px 6px;
+            text-align: center;
+            font-weight: 600;
+            border: 1px solid #e2e8f0;
+            font-size: 0.9em;
+        }
+        
+        .activity-table td {
+            padding: 8px 6px;
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+        
+        .activity-table input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            outline: none;
+            text-align: center;
+        }
+        
+        .activity-table input[type="time"] {
+            font-size: 0.9em;
+        }
+        
+        .activity-table input[type="checkbox"] {
+            width: auto;
+            margin: 0 auto;
+            display: block;
+        }
+        
+        .section-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin: 20px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        /* Specific styling for payment amount field */
+        .activity-amount {
+            min-width: 90px;
+            font-family: monospace;
+            font-size: 1.05em;
+            text-align: right !important;
+            padding-right: 8px !important;
+        }
+        
+        /* Make sure the payment column is wide enough */
+        .payment-column {
+            min-width: 120px;
+        }
+        
+        /* Payment info section */
+        .payment-info {
+            margin-top: 30px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            background-color: #f8fafc;
+        }
+        
+        .payment-info-title {
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 5px;
+        }
+        
+        .payment-info-row {
+            display: flex;
+            margin-bottom: 8px;
+        }
+        
+        .payment-info-label {
+            width: 100px;
+            font-weight: 500;
+        }
+        
+        .payment-info-value {
+            flex: 1;
+        }
+        
+        /* Terms section */
+        .terms-section {
+            margin-top: 30px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            background-color: #f8fafc;
+        }
+        
+        .terms-title {
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 5px;
+        }
+        
+        .terms-list {
+            padding-left: 20px;
+        }
+        
+        .terms-item {
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+        
+        .signature-section {
+            margin-top: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .signature-item {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .signature-label {
+            font-weight: 500;
+            margin-right: 10px;
+        }
+        
+        .signature-value {
+            border-bottom: 1px solid #ccc;
+            padding: 0 5px;
+            min-width: 150px;
+            display: inline-block;
+        }
+        
+        /* Action buttons */
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+        
+        .action-button {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 140px;
+        }
+        
+        .action-button svg {
+            margin-right: 8px;
+        }
+        
+        .date-button {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .date-button:hover {
+            background-color: #2980b9;
+        }
+        
+        .pdf-button {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .pdf-button:hover {
+            background-color: #c0392b;
+        }
+        
+        .reset-button {
+            background-color: #7f8c8d;
+            color: white;
+        }
+        
+        .reset-button:hover {
+            background-color: #636e72;
+        }
+        
+        @media print {
+            body {
+                background-color: white;
+            }
+            
+            .container {
+                padding: 0;
+                max-width: 100%;
+            }
+            
+            .bg-white {
+                box-shadow: none;
+                border-radius: 0;
+            }
+            
+            .action-buttons {
+                display: none;
+            }
+            
+            #add-activity-row {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto px-4 py-8 max-w-5xl" id="invoice-container">
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <!-- Header -->
+            <div class="invoice-header text-white p-6">
+                <div class="text-center mb-2">
+                    <h1 class="text-2xl font-bold tracking-wider">LUMASONIX x PROFESSIONAL</h1>
+                </div>
+                <div class="text-center mb-4">
+                    <p class="text-lg tracking-wide">專業技術支援 x 人力媒合平台</p>
+                </div>
+                <div class="text-center">
+                    <h2 class="text-xl font-bold">技術人員請款單</h2>
+                </div>
+            </div>
+            
+           <!-- Invoice Content -->
+            <div class="p-6">
+                <!-- Basic Info Section -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="form-field">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">請款日期</label>        
+						<input type="text" value="" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div class="form-field">
+					    <label class="block text-sm font-medium text-gray-700 mb-1">請款編號</label>
+						<input type="text" placeholder="LX-" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div class="form-field">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">請款月份</label>
+                        <input type="month" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div class="form-field">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">負責人</label>
+						<input type="text" placeholder="蘇裕庭" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div class="form-field">
+					    <label class="block text-sm font-medium text-gray-700 mb-1">廠商名稱</label>					  
+						<input type="text" placeholder="請輸入廠商名稱" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div class="form-field">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">連絡電話</label>
+                        <input type="tel" value="0926169899" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+						
+                    </div>
+                </div>
+                
+                <!-- Activity Support Details Table -->
+                <h3 class="section-title">活動支援明細</h3>
+                <div class="overflow-x-auto">
+                    <table class="activity-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 10%">日期</th>
+                                <th style="width: 22%">活動名稱／地點</th>
+                                <th style="width: 6%">人數</th>
+                                <th style="width: 9%">上班</th>
+                                <th style="width: 9%">下班</th>
+                                <th style="width: 6%">高空</th>
+                                <th style="width: 7%">控/追光</th>
+                                <th style="width: 6%">加班</th>
+                                <th style="width: 10%">備註</th>
+                                <th class="payment-column" style="width: 15%">請款金額</th>
+                            </tr>
+                        </thead>
+                        <tbody id="activity-details">
+                            <!-- Row 1 -->
+                            <tr>
+                                <td><input type="date"></td>
+                                <td><input type="text"></td>
+                                <td><input type="number" min="0"></td>
+                                <td><input type="time"></td>
+                                <td><input type="time"></td>
+                                <td><input type="checkbox"></td>
+                                <td><input type="checkbox"></td>
+                                <td><input type="number" min="0" placeholder="  "></td>
+                                <td><input type="text"></td>
+                                <td><input type="text" class="activity-amount" placeholder="  "></td>
+                            </tr>
+                            <!-- Row 2 -->
+                            <tr>
+                                <td><input type="date"></td>
+                                <td><input type="text"></td>
+                                <td><input type="number" min="0"></td>
+                                <td><input type="time"></td>
+                                <td><input type="time"></td>
+                                <td><input type="checkbox"></td>
+                                <td><input type="checkbox"></td>
+                                <td><input type="number" min="0" placeholder="  "></td>
+                                <td><input type="text"></td>
+                                <td><input type="text" class="activity-amount" placeholder="  "></td>
+                            </tr>
+                            <!-- Row 3 -->
+                            <tr>
+                                <td><input type="date"></td>
+                                <td><input type="text"></td>
+                                <td><input type="number" min="0"></td>
+                                <td><input type="time"></td>
+                                <td><input type="time"></td>
+                                <td><input type="checkbox"></td>
+                                <td><input type="checkbox"></td>
+                                <td><input type="number" min="0" placeholder="  "></td>
+                                <td><input type="text"></td>
+                                <td><input type="text" class="activity-amount" placeholder="  "></td>
+                            </tr>
+                            <!-- Row 4 -->
+                            <tr>
+                                <td><input type="date"></td>
+                                <td><input type="text"></td>
+                                <td><input type="number" min="0"></td>
+                                <td><input type="time"></td>
+                                <td><input type="time"></td>
+                                <td><input type="checkbox"></td>
+                                <td><input type="checkbox"></td>
+                                <td><input type="number" min="0" placeholder="  "></td>
+                                <td><input type="text"></td>
+                                <td><input type="text" class="activity-amount" placeholder="  "></td>
+                            </tr>
+                            <!-- Row 5 -->
+                            <tr>
+                                <td><input type="date"></td>
+                                <td><input type="text"></td>
+                                <td><input type="number" min="0"></td>
+                                <td><input type="time"></td>
+                                <td><input type="time"></td>
+                                <td><input type="checkbox"></td>
+                                <td><input type="checkbox"></td>
+                                <td><input type="number" min="0" placeholder=" "></td>
+                                <td><input type="text"></td>
+                                <td><input type="text" class="activity-amount" placeholder="  "></td>
+                            </tr>
+</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <button id="add-activity-row" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors">
+                    + 新增活動
+                </button>
+                
+                <!-- Service Items Table -->
+                <h3 class="section-title mt-8">費用明細</h3>
+                <div class="overflow-x-auto">
+                    <table class="invoice-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 20%">品項</th>
+                                <th style="width: 10%">數量</th>
+                                <th style="width: 15%">單價</th>
+                                <th style="width: 40%">工作內容</th>
+                                <th style="width: 15%">小計 (NT$)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 人事支援 -->
+                            <tr>
+                                <td>人事支援</td>
+                                <td><input type="number" value="0" id="qty-staff" onchange="calculateTotal()"></td>
+                                <td>2,500</td>
+                                <td>進場、演出、撤場</td>
+                                <td id="subtotal-staff">2,500</td>
+                            </tr>
+                            
+                            <!-- 燈/音/視控 -->
+                            <tr>
+                                <td>燈/音/視控</td>
+                                <td><input type="number" value="0" id="qty-control" onchange="calculateTotal()"></td>
+                                <td>1,000</td>
+                                <td>演出前一日彩排，將視為一場演出，彩排與演出同日進行，僅收取一次演出費用。</td>
+                                <td id="subtotal-control">0</td>
+                                                  
+                            <!-- 追光燈操作 -->
+                            <tr>
+                                <td>追光燈操作</td>
+                                <td><input type="number" value="0" id="qty-spotlight" onchange="calculateTotal()"></td>
+                                <td>1,000</td>
+                                <td>演出前一日彩排，將視為一場演出，彩排與演出同日進行，僅收取一次演出費用。</td>
+                                <td id="subtotal-spotlight">0</td>
+                                                       
+                            <!-- 高空作業 -->
+                            <tr>
+                                <td>高空作業</td>
+                                <td><input type="number" value="0" id="qty-height" onchange="calculateTotal()"></td>
+                                <td>1,000</td>
+                                <td>作業高度達layher第 6 格以上(約9米)</td>
+                                <td id="subtotal-height">0</td>
+                            </tr>
+                            
+                            <!-- 加班費用 -->
+                            <tr>
+                                <td>加班費用</td>
+                                <td><input type="number" value="0" id="qty-overtime" onchange="calculateTotal()"></td>
+                                <td>350</td>
+                                <td>依實際加班時數計算</td>
+                                <td id="subtotal-overtime">0</td>
+                            </tr>
+                            
+                            <!-- 跨縣市 -->
+                            <tr>
+                                <td>跨縣市</td>
+                                <td><input type="number" value="0" id="qty-travel" onchange="calculateTotal()"></td>
+                                <td>300</td>
+                                <td>交通費</td>
+                                <td id="subtotal-travel">0</td>
+                            </tr>
+                            
+                            <!-- 行政執行費 -->
+                            <tr>
+                                <td>行政執行費</td>
+                                <td>一式</td>
+                                <td>10%</td>
+                                <td>人數 * 10% * 2500(單價) </td>
+                                <td id="subtotal-admin">325</td>
+                            </tr>
+                            
+                            <!-- 其他 -->
+                            <tr>
+                                <td>其他</td>
+                                <td>一式</td>
+                                <td><input type="number" value="0" id="price-other" onchange="calculateTotal()"></td>
+                                <td><input type="text" placeholder="請輸入說明"></td>
+                                <td id="subtotal-other">0</td>
+                            </tr>
+                            
+                            <!-- 未稅金額 -->
+                            <tr class="subtotal-row">
+                                <td colspan="4" class="text-right pr-4">(未稅金額)</td>
+                                <td id="total-before-tax">2,825</td>
+                            </tr>
+                            
+                            <!-- 總計 -->
+                            <tr class="total-row">
+                                <td colspan="4" class="text-right pr-4">總計</td>
+                                <td id="grand-total">2,825</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Total Amount in Words -->
+                <div class="mt-6 text-right">
+                    <p class="font-medium">合計金額（未稅）：<span id="total-in-words">貳仟捌佰貳拾伍</span> 元</p>
+                </div>
+                
+                <!-- Payment Information -->
+                <div class="payment-info mt-8">
+                    <h3 class="payment-info-title">【匯款資訊】</h3>
+                    <div class="payment-info-row">
+                        <div class="payment-info-label">帳號戶名：</div>
+                        <div class="payment-info-value">蘇裕庭</div>
+                    </div>
+                    <div class="payment-info-row">
+                        <div class="payment-info-label">匯款代碼：</div>
+                        <div class="payment-info-value">808(玉山銀行中路特區分行)</div>
+                    </div>
+                    <div class="payment-info-row">
+                        <div class="payment-info-label">匯款帳號：</div>
+                         <div class="payment-info-value">0842-979-176643</div>
+
+                    </div>
+                </div>
+                
+                <!-- Terms and Conditions -->
+                <div class="terms-section">
+                    <h3 class="terms-title">【請款條款聲明】</h3>
+                    <ol class="terms-list list-decimal">
+                        <li class="terms-item">
+                            本請款單所列各項係依事前報價單內容所執行，若人員實際到場執行即視為同意並接受報價條款。
+                        </li>
+                        <li class="terms-item">
+                            各日所派遣人員之上下班時間、加班時數、高空或控場作業皆已如實記錄於本單，請於付款前確認。
+                        </li>
+                        <li class="terms-item">
+                            本人為協力統籌角色，僅協助媒合人力與協調執行，非承攬責任。技術人員並非本人僱用，相關執行風險與損失由現場人員或主辦方依實情處理。
+                        </li>
+                        <li class="terms-item">
+                            維持作業品質與人員安排效率包含人員排程統整、資料彙整確認、作業溝通、進退場提醒、異動回報、明細核對等相關行政作業，凡協助媒合與統籌之專案，將酌收行政執行費用，已併入請款明細列示。
+                        </li>
+                    </ol>
+                </div>
+                
+                <!-- Signature Section -->
+                <div class="signature-section">
+                    <div class="signature-item">
+                        <span class="signature-label">負 責 人：</span>
+                        <span class="signature-value">蘇裕庭</span>
+                    </div>
+                    <div class="signature-item">
+                        <span class="signature-label">聯絡電話：</span>
+                        <span class="signature-value">0926169899</span>
+                    </div>
+                    <div class="signature-item">
+                        <span class="signature-label">日期：</span>
+                        <span class="signature-value">
+                            <input type="number" min="114" max="999" id="year-input" style="width: 50px; border-bottom: 1px solid #ccc; text-align: center" placeholder="114"> 年 
+                            <input type="number" min="1" max="12" id="month-input" style="width: 50px; border-bottom: 1px solid #ccc; text-align: center;" placeholder="月"> 月
+                            <input type="number" min="1" max="31" id="day-input" style="width: 50px; border-bottom: 1px solid #ccc; text-align: center;" placeholder="日"> 日
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button id="set-date-button" class="action-button date-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+                </svg>
+                設置今天日期
+            </button>
+            <button id="generate-pdf-button" class="action-button pdf-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
+                    <path d="M4.603 14.087a.81.81 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.68 7.68 0 0 1 1.482-.645 19.697 19.697 0 0 0 1.062-2.227 7.269 7.269 0 0 1-.43-1.295c-.086-.4-.119-.796-.046-1.136.075-.354.274-.672.65-.823.192-.077.4-.12.602-.077a.7.7 0 0 1 .477.365c.088.164.12.356.127.538.007.188-.012.396-.047.614-.084.51-.27 1.134-.52 1.794a10.954 10.954 0 0 0 .98 1.686 5.753 5.753 0 0 1 1.334.05c.364.066.734.195.96.465.12.144.193.32.2.518.007.192-.047.382-.138.563a1.04 1.04 0 0 1-.354.416.856.856 0 0 1-.51.138c-.331-.014-.654-.196-.933-.417a5.712 5.712 0 0 1-.911-.95 11.651 11.651 0 0 0-1.997.406 11.307 11.307 0 0 1-1.02 1.51c-.292.35-.609.656-.927.787a.793.793 0 0 1-.58.029zm1.379-1.901c-.166.076-.32.156-.459.238-.328.194-.541.383-.647.547-.094.145-.096.25-.04.361.01.022.02.036.026.044a.266.266 0 0 0 .035-.012c.137-.056.355-.235.635-.572a8.18 8.18 0 0 0 .45-.606zm1.64-1.33a12.71 12.71 0 0 1 1.01-.193 11.744 11.744 0 0 1-.51-.858 20.801 20.801 0 0 1-.5 1.05zm2.446.45c.15.163.296.3.435.41.24.19.407.253.498.256a.107.107 0 0 0 .07-.015.307.307 0 0 0 .094-.125.436.436 0 0 0 .059-.2.095.095 0 0 0-.026-.063c-.052-.062-.2-.152-.518-.209a3.876 3.876 0 0 0-.612-.053zM8.078 7.8a6.7 6.7 0 0 0 .2-.828c.031-.188.043-.343.038-.465a.613.613 0 0 0-.032-.198.517.517 0 0 0-.145.04c-.087.035-.158.106-.196.283-.04.192-.03.469.046.822.024.111.054.227.09.346z"/>
+                </svg>
+                生成PDF檔
+            </button>
+            <button id="reset-form-button" class="action-button reset-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                    <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                </svg>
+                重置表單
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Add new activity row
+        document.getElementById('add-activity-row').addEventListener('click', function() {
+            const tbody = document.getElementById('activity-details');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+    <td><input type="date"></td>
+    <td><input type="text"></td>
+    <td><input type="number" min="0"></td>
+    <td><input type="time"></td>
+    <td><input type="time"></td>
+    <td><input type="checkbox"></td>
+    <td><input type="checkbox"></td>
+    <td><input type="number" min="0" placeholder="時數"></td>
+    <td><input type="text"></td>
+    <td><input type="text" class="activity-amount" placeholder="00000"></td>
+            `;
+            tbody.appendChild(newRow);
+            
+            // Add event listeners to the new row's activity amount input
+            const newAmountInput = newRow.querySelector('.activity-amount');
+            newAmountInput.addEventListener('input', function() {
+                formatNumberInput(this);
+            });
+            newAmountInput.addEventListener('change', function() {
+                calculateActivityTotal();
+            });
+        });
+        
+        // Format number inputs with commas
+        function formatNumberInput(input) {
+            // Remove non-numeric characters
+            let value = input.value.replace(/[^\d]/g, '');
+            
+            // Format with commas
+            if (value.length > 0) {
+                value = parseInt(value).toLocaleString();
+            }
+            
+            input.value = value;
+        }
+        
+        // Add event listeners to all activity amount inputs
+        document.querySelectorAll('.activity-amount').forEach(input => {
+            input.addEventListener('input', function() {
+                formatNumberInput(this);
+            });
+            input.addEventListener('change', function() {
+                calculateActivityTotal();
+            });
+        });
+        
+        // Calculate total from activity table
+        function calculateActivityTotal() {
+            let total = 0;
+            document.querySelectorAll('.activity-amount').forEach(input => {
+                // Remove commas and convert to number
+                const value = parseInt(input.value.replace(/,/g, '')) || 0;
+                total += value;
+            });
+            
+            // You could update a summary field here if needed
+            console.log("Activity total:", total);
+        }
+        
+        function calculateTotal() {
+            // Get quantities and calculate subtotals
+            const qtyStaff = parseInt(document.getElementById('qty-staff').value) || 0;
+            const qtyControl = parseInt(document.getElementById('qty-control').value) || 0;
+            const qtySpotlight = parseInt(document.getElementById('qty-spotlight').value) || 0;
+            const qtyHeight = parseInt(document.getElementById('qty-height').value) || 0;
+            const qtyOvertime = parseInt(document.getElementById('qty-overtime').value) || 0;
+            const qtyTravel = parseInt(document.getElementById('qty-travel').value) || 0;
+            const priceOther = parseInt(document.getElementById('price-other').value) || 0;
+            
+            // Calculate subtotals
+            const subtotalStaff = qtyStaff * 2500;
+            const subtotalControl = qtyControl * 1000;
+            const subtotalSpotlight = qtySpotlight * 1000;
+            const subtotalHeight = qtyHeight * 1000;
+            const subtotalOvertime = qtyOvertime * 350;
+            const subtotalTravel = qtyTravel * 300;
+            const subtotalAdmin = subtotalStaff * 0.1;
+            const subtotalOther = priceOther;
+            
+            // Update subtotal displays
+            document.getElementById('subtotal-staff').textContent = subtotalStaff.toLocaleString();
+            document.getElementById('subtotal-control').textContent = subtotalControl.toLocaleString();
+            document.getElementById('subtotal-spotlight').textContent = subtotalSpotlight.toLocaleString();
+            document.getElementById('subtotal-height').textContent = subtotalHeight.toLocaleString();
+            document.getElementById('subtotal-overtime').textContent = subtotalOvertime.toLocaleString();
+            document.getElementById('subtotal-travel').textContent = subtotalTravel.toLocaleString();
+            document.getElementById('subtotal-admin').textContent = subtotalAdmin.toLocaleString();
+            document.getElementById('subtotal-other').textContent = subtotalOther.toLocaleString();
+            
+            // Calculate total
+            const totalBeforeTax = subtotalStaff + subtotalControl + subtotalSpotlight + 
+                                  subtotalHeight + subtotalOvertime + subtotalTravel + 
+                                  subtotalAdmin + subtotalOther;
+            
+            // Update totals
+            document.getElementById('total-before-tax').textContent = totalBeforeTax.toLocaleString();
+            document.getElementById('grand-total').textContent = totalBeforeTax.toLocaleString();
+            
+            // Update total in words (simplified version)
+            document.getElementById('total-in-words').textContent = numberToChineseAmount(totalBeforeTax);
+        }
+        
+        // Simple Chinese number conversion (simplified version)
+        function numberToChineseAmount(num) {
+            if (num === 0) return '零';
+            
+            const digits = ['零', '壹', '貳', '參', '肆', '伍', '陸', '柒', '捌', '玖'];
+            const units = ['', '拾', '佰', '仟', '萬', '拾萬', '佰萬', '仟萬', '億'];
+            
+            let result = '';
+            const numStr = num.toString();
+            
+            for (let i = 0; i < numStr.length; i++) {
+                const digit = parseInt(numStr[i]);
+                const position = numStr.length - i - 1;
+                
+                if (digit !== 0) {
+                    result += digits[digit] + units[position];
+                } else {
+                    // Skip consecutive zeros
+                    if (i > 0 && parseInt(numStr[i-1]) !== 0) {
+                        result += digits[0];
+                    }
+                }
+            }
+            
+            return result;
+        }
+        
+        // Set today's date in the signature section
+        function setTodayDate() {
+            const today = new Date();
+            document.getElementById('year-input').value = today.getFullYear();
+            document.getElementById('month-input').value = today.getMonth() + 1;
+            document.getElementById('day-input').value = today.getDate();
+        }
+        
+        // Generate PDF
+        function generatePDF() {
+            // Hide action buttons before generating PDF
+            const actionButtons = document.querySelector('.action-buttons');
+            const addRowButton = document.getElementById('add-activity-row');
+            
+            actionButtons.style.display = 'none';
+            addRowButton.style.display = 'none';
+            
+            // Generate PDF
+            const element = document.getElementById('invoice-container');
+            const opt = {
+                margin: 10,
+                filename: 'LUMASONIX技術人員請款單.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            
+            html2pdf().set(opt).from(element).save().then(() => {
+                // Show buttons again after PDF is generated
+                actionButtons.style.display = 'flex';
+                addRowButton.style.display = 'block';
+            });
+        }
+        
+        // Reset form
+        function resetForm() {
+            if (confirm('確定要重置表單嗎？所有已填寫的資料將被清除。')) {
+                // Reset all input fields
+                document.querySelectorAll('input[type="text"], input[type="number"], input[type="date"], input[type="time"]').forEach(input => {
+                    input.value = '';
+                });
+                
+                // Reset checkboxes
+                document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                
+                // Reset default values
+                document.getElementById('qty-staff').value = 1;
+                
+                // Recalculate totals
+                calculateTotal();
+            }
+        }
+        
+        // Add event listeners to buttons
+        document.getElementById('set-date-button').addEventListener('click', setTodayDate);
+        document.getElementById('generate-pdf-button').addEventListener('click', generatePDF);
+        document.getElementById('reset-form-button').addEventListener('click', resetForm);
+        
+        // Initialize calculations
+        calculateTotal();
+        
+        // Auto-fill today's date on page load
+        setTodayDate();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93fb2c13c62af07f',t:'MTc0NzIzMzg1NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
