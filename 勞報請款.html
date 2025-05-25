@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LUMASONIX 技術人員報價單</title>
+    <title>技術人員請款單</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Add html2pdf library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
         
         body {
             font-family: 'Noto Sans TC', sans-serif;
@@ -17,260 +15,262 @@
         
         .invoice-container {
             background-color: white;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
         
-        .invoice-header {
-            background-color: #1a3a5f;
-            color: white;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            border: 1px solid #e2e8f0;
+            padding: 8px;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+        
+        th {
+            background-color: #f8fafc;
+            font-weight: 600;
+        }
+        
+        .input-group input {
+            transition: border-color 0.2s ease;
+        }
+        
+        .input-group input:focus {
+            border-color: #3b82f6;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+        
+        .labor-name, .labor-birth, .labor-id, .labor-phone, .labor-address, .labor-amount {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.375rem;
+        }
+        
+        .labor-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background-color: #ffffff;
+        }
+        
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #1f2937;
         }
         
         .form-input {
-            border: 1px solid #e2e8f0;
-            padding: 0.5rem;
-            border-radius: 0.25rem;
             width: 100%;
+            padding: 0.375rem 0.75rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
         }
         
-        .table-header {
-            background-color: #1a3a5f;
-            color: white;
-        }
-        
-        .table-row:nth-child(even) {
-            background-color: #f8fafc;
-        }
-        
-        .table-row:hover {
-            background-color: #edf2f7;
-        }
-        
-        .terms-section {
-            background-color: #f8fafc;
-            border-left: 4px solid #1a3a5f;
-        }
-        
-        @media print {
-            body {
-                background-color: white;
-            }
-            
-            .invoice-container {
-                box-shadow: none;
-            }
-            
-            .no-print {
-                display: none;
-            }
+        .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
         }
     </style>
 </head>
 <body class="p-4 md:p-8">
     <div id="invoice-content" class="invoice-container max-w-5xl mx-auto p-6 rounded-lg">
         <!-- Header -->
-        <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+        <div class="flex flex-col md:flex-row justify-between items-center mb-8">
             <div class="mb-4 md:mb-0">
-                <h1 class="text-2xl font-bold text-gray-800">LUMASONIX x PROFESSIONAL</1>
+                <h1 class="text-2xl font-bold text-gray-800">LUMASONIX x PROFESSIONAL</h1>
                 <p class="text-gray-600">專業技術支援 x 人力媒合行銷</p>
             </div>
             <div class="bg-gray-800 text-white py-2 px-4 rounded">
-                <h2 class="text-xl font-bold">技術人員報價單</h2>
-</div>
-<div class="relative -left-[0cm] -top-[-2cm]">
-  <!-- 左側：廠商名稱、活動地點 -->
-  <div class="flex flex-col gap-4 justify-center">
-    <div>
-      <label class="block text-X3 font-medium text-gray-700 mb-1">廠商名稱</label>
-      <input type="text" placeholder="請輸入廠商名稱" class="w-[40ch] h-8 px-1 py-1 border border-gray-300 rounded-md text-X3"></div></div>
- <div>
-     <div>
-     <label class="block text-sm font-medium text-gray-700 mb-1">活動地點:</label>
-      <input type="text" placeholder="請輸入活動地點" class="w-[40ch] h-8 px-1 py-1 border border-gray-300 rounded-md text-X3">
-    </div>
-      <div>
-      <div class="relative -left-[-16cm] -top-[3cm]">
-  <div class="flex flex-col gap-2">
-    <!-- 以下保留你原本的時間欄位區塊 -->
-    <div>
-      <label class="block text-sm font-medium text-gray-700">進場時間:</label>
-      <div class="flex items-center gap-1">
-        <input type="text" class="w-[50px] h-8 px-1 py-1 border border-gray-300 rounded text-center" placeholder="">年
-        <input type="text" class="w-[40px] h-8 px-1 py-1 border border-gray-300 rounded text-center" placeholder="">月
-        <input type="text" class="w-[40px] h-8 px-1 py-1 border border-gray-300 rounded text-center" placeholder="">日
-        <input type="text" class="w-[40px] h-8 px-1 py-1 border border-gray-300 rounded text-center" placeholder="">時
-        <input type="text" class="w-[40px] h-8 px-1 py-1 border border-gray-300 rounded text-center" placeholder="">分
-      </div>
-    </div>
+                <h2 class="text-xl font-bold">技術人員請款單</h2>
+            </div>
+        </div>
 
-    <!-- 彩排時間 -->
-    <div class="mb-2">
-      <label class="block text-sm font-medium text-gray-700">彩排時間:</label>
-      <div class="flex items-center gap-1">
-        <input type="text" class="w-[50px] h-8 px-1 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">年
-        <input type="text" class="w-[40px] h-8 px-1 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">月
-        <input type="text" class="w-[40px] h-8 px-1 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">日
-        <input type="text" class="w-[40px] h-8 px-1 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">時
-        <input type="text" class="w-[40px] h-8 px-1 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">分
-      </div>
-    </div>
+        <!-- Client and Event Information -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <!-- Left Column: Client Info -->
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">廠商名稱</label>
+                    <input type="text" placeholder="請輸入廠商名稱" class="w-full h-10 px-3 py-2 border border-gray-300 rounded-md text-base">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">活動地點</label>
+                    <input type="text" placeholder="請輸入活動地點" class="w-full h-10 px-3 py-2 border border-gray-300 rounded-md text-base">
+                </div>
+            </div>
 
-    <!-- 演出時間 -->
-    <div>
-      <label class="block text-sm font-medium text-gray-700">演出時間:</label>
-      <div class="flex items-center gap-1">
-        <input type="text" class="w-[50px] h-8 px-1 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">年
-        <input type="text" class="w-[40px] h-8 px-1 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">月
-        <input type="text" class="w-[40px] h-8 px-1 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">日
-        <input type="text" class="w-[40px] h-8 px-1 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">時
-        <input type="text" class="w-[40px] h-8 px-1 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">分
-      </div>
-    </div>
-  </div>
-</div></div></div></div>
-            <h2 class="text-X3 font-bold mb-4 relative -top-[1cm]">活動支援明細</h2>
-            <table class="mb-6 relative -top-[1cm]">
-                <thead>
-                   <tr>
-                                <th style="width: 20%">品項</th>
-                                <th style="width: 10%">數量</th>
-                                <th style="width: 10%">單價</th>
-                                <th style="width: 40%">工作內容</th>
-                                <th style="width: 15%">小計 (NT$)</th>
-                            </tr>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>人事支援</td>
-                        <td class="text-center">
-                            <input type="number" id="staff-qty" class="text-center" value="0" min="0">
-                        </td>
-                        <td class="text-center">2500</td>
-                        <td>進場、演出、撤場</td>
-                        <td class="text-right"><span id="staff-subtotal">0</span></td>
-                    </tr>
-                    <tr>
-                        <td>(燈控/音控)</td>
-                        <td class="text-center">
-                            <input type="number" id="tech-qty" class="text-center" value="0" min="0">
-                        </td>
-                        <td class="text-center">1000</td>
-                        <td>演出前一日彩排，將視為一場演出，另行計費。<br>彩排與演出同日進行，僅收取一次演出費用。</td>
-                        <td class="text-right"><span id="tech-subtotal">0</span></td>
-                    </tr>
-                    <tr>
-                        <td>追光燈操作</td>
-                        <td class="text-center">
-                            <input type="number" id="spotlight-qty" class="text-center" value="0" min="0">
-                        </td>
-                        <td class="text-center">1000</td>
-                        <td>演出前一日彩排，將視為一場演出，另行計費。<br>彩排與演出同日進行，僅收取一次演出費用。</td>
-                        <td class="text-right"><span id="spotlight-subtotal">0</span></td>
-                    </tr>
-                    <tr>
-                        <td>高空作業</td>
-                        <td class="text-center">
-                            <input type="number" id="height-qty" class="text-center" value="0" min="0">
-                        </td>
-                        <td class="text-center">1000</td>
-                        <td>作業高度達layher第 6 格以上(約9米)</td>
-                        <td class="text-right"><span id="height-subtotal">0</span></td>
-                    </tr>
-                    <tr>
-                        <td>加班費用</td>
-                        <td class="text-center">
-                            <input type="number" id="overtime-qty" class="text-center" value="0" min="0">
-                        </td>
-                        <td class="text-center">350</td>
-                        <td>依實際加班時數計算</td>
-                        <td class="text-right"><span id="overtime-subtotal">0</span></td>
-                    </tr>
-                    <tr>
-                        <td>補貼其他費用</td>
-                        <td class="text-center">
-                            <input type="number" id="other-qty" class="text-center" value="0" min="0">
-                        </td>
-                        <td class="text-center">
-                            <input type="number" id="other-price" class="text-center" value="0" min="0">
-                        </td>
-                        <td>交通費、餐費等須先支付，於請款時附上發票</td>
-                        <td class="text-right"><span id="other-subtotal">0</span></td>
-                    </tr>
-                    <tr>
-                        <td>行政執行費用</td>
-                        <td class="text-center">一式</td>
-                        <td class="text-center">10%</td>
-                        <td>人事支援 x 10% x 2500</td>
-                        <td class="text-right"><span id="admin-subtotal">0</span></td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr class="bg-gray-500 text-white font-bold relative -top[5cm]">
-                        <td colspan="4" class="text-right ">合計金額（未稅）：</td>
-                        <td class="text-right"><span id="total-amount">0</span> 元</td>
-                    </tr>
-                </tfoot>
-            </table>
-            
-            <h2 class="text-x3 font-bold mb-4 relative -top-[1cm]">勞報資料檢附</h2>
-            <div class="mb-6 relative -top-[1cm] ">
-                <div class="border p-4 rounded-lg mb-4">
-                    <div class="grid grid-cols-4 gap-4 mb-2">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">人員姓名</label>
-                            <input type="text" class="labor-name">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">出生年月日</label>
-                            <input type="text" class="labor-birth">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">身分證字號</label>
-                            <input type="text" class="labor-id">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">連絡電話</label>
-                            <input type="text" class="labor-phone">
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-6 gap-4">
-                        <div class="col-span-5">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">戶籍地址</label>
-                            <input type="text" class="labor-address">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">勞報金額</label>
-                            <div class="flex items-center">
-                                <input type="number" class="labor-amount" min="0" value="0">
-                                <span class="ml-2">元</span>
-                            </div>
-                        </div>
+            <!-- Right Column: Time Info -->
+            <div class="space-y-4">
+                <!-- 進場時間 -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">進場時間</label>
+                    <div class="flex items-center gap-1">
+                        <input type="text" class="w-16 h-10 px-2 py-1 border border-gray-300 rounded text-center" maxlength="4" placeholder="">年
+                        <input type="text" class="w-12 h-10 px-2 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">月
+                        <input type="text" class="w-12 h-10 px-2 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">日
+                        <input type="text" class="w-12 h-10 px-2 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">時
+                        <input type="text" class="w-12 h-10 px-2 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">分
                     </div>
                 </div>
-                
-                <div class="border p-4 rounded-lg">
-                    <div class="grid grid-cols-4 gap-4 mb-2">
+
+                <!-- 彩排時間 -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">彩排時間</label>
+                    <div class="flex items-center gap-1">
+                        <input type="text" class="w-16 h-10 px-2 py-1 border border-gray-300 rounded text-center" maxlength="4" placeholder="">年
+                        <input type="text" class="w-12 h-10 px-2 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">月
+                        <input type="text" class="w-12 h-10 px-2 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">日
+                        <input type="text" class="w-12 h-10 px-2 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">時
+                        <input type="text" class="w-12 h-10 px-2 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">分
+                    </div>
+                </div>
+
+                <!-- 演出時間 -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">演出時間</label>
+                    <div class="flex items-center gap-1">
+                      <input type="text" class="w-16 h-10 px-2 py-1 border border-gray-300 rounded text-center" maxlength="4" placeholder="">年
+                        <input type="text" class="w-12 h-10 px-2 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">月
+                        <input type="text" class="w-12 h-10 px-2 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">日
+                        <input type="text" class="w-12 h-10 px-2 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">時
+                        <input type="text" class="w-12 h-10 px-2 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">分
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity Support Details -->
+        <div class="mb-8">
+            <h3 class="section-title">活動支援明細</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th style="width: 120px; padding: 0 8px;" class="py-2 px-4 text-left">品項</th>
+                            <th style="width: 80px; padding: 0 8px;" class="py-2 px-4 text-center">數量</th>
+                            <th class="py-2 px-4 text-center">單價 (NT$)</th>
+                            <th class="py-2 px-4 text-left">工作內容</th>
+                            <th class="py-2 px-4 text-right">小計 (NT$)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="table-row border-b">
+                            <td class="py-2 px-4">人事支援</td>
+                            <td class="py-2 px-4">
+                                <input type="number" min="0" class="form-input text-center" id="staff-qty" value="0">
+                            </td>
+                            <td class="py-2 px-4 text-center">2,500</td>
+                            <td class="py-2 px-4">進場、演出、撤場</td>
+                            <td class="py-2 px-4 text-right" id="staff-total">0</td>
+                        </tr>
+                        <tr class="table-row border-b">
+                            <td class="py-2 px-4">燈/音/視控</td>
+                            <td class="py-2 px-4">
+                                <input type="number" min="0" class="form-input text-center" id="control-qty" value="0">
+                            </td>
+                            <td class="py-2 px-4 text-center">1,000</td>
+                            <td class="py-2 px-4">演出前一日彩排，將視為一場演出，另行計費。</td>
+                            <td class="py-2 px-4 text-right" id="control-total">0</td>
+                        </tr>
+                        <tr class="table-row border-b">
+                            <td class="py-2 px-4">追光燈操作</td>
+                            <td class="py-2 px-4">
+                                <input type="number" min="0" class="form-input text-center" id="spotlight-qty" value="0">
+                            </td>
+                            <td class="py-2 px-4 text-center">1,000</td>
+                            <td class="py-2 px-4">演出前一日彩排，將視為一場演出，另行計費。</td>
+                            <td class="py-2 px-4 text-right" id="spotlight-total">0</td>
+                        </tr>
+                        <tr class="table-row border-b">
+                            <td class="py-2 px-4">高空作業</td>
+                            <td class="py-2 px-4">
+                                <input type="number" min="0" class="form-input text-center" id="height-qty" value="0">
+                            </td>
+                            <td class="py-2 px-4 text-center">1,000</td>
+                            <td class="py-2 px-4">作業高度達layher第 6 格以上(約9米)</td>
+                            <td class="py-2 px-4 text-right" id="height-total">0</td>
+                        </tr>
+                        <tr class="table-row border-b">
+                            <td class="py-2 px-4">加班費用</td>
+                            <td class="py-2 px-4">
+                                <input type="number" min="0" class="form-input text-center" id="overtime-qty" value="0">
+                            </td>
+                            <td class="py-2 px-4 text-center">350</td>
+                            <td class="py-2 px-4">依實際加班時數計算</td>
+                            <td class="py-2 px-4 text-right" id="overtime-total">0</td>
+                        </tr>
+                        <tr class="table-row border-b">
+                            <td class="py-2 px-4">行政執行費</td>
+                            <td class="py-2 px-4 text-center">一式</td>
+                            <td class="py-2 px-4 text-center">10%</td>
+                            <td class="py-2 px-4">人事支援 x 10%</td>
+                            <td class="py-2 px-4 text-right" id="admin-total">0</td>
+                        </tr>
+                        <tr class="table-row border-b">
+                            <td class="py-2 px-4">其他</td>
+                            <td class="py-2 px-4 text-center">一式</td>
+                            <td class="py-2 px-4 text-center">
+                                <input type="number" min="0" class="form-input text-center" id="other-price" value="0">
+                            </td>
+                            <td class="py-2 px-4">
+                                <input type="text" class="form-input" id="other-desc" placeholder="其他項目描述">
+                            </td>
+                            <td class="py-2 px-4 text-right" id="other-total">0</td>
+                        </tr>
+                        <tr class="bg-gray-100">
+                            <td colspan="4" class="py-2 px-4 text-right font-bold">未稅金額:</td>
+                            <td class="py-2 px-4 text-right font-bold" id="subtotal">NT$0</td>
+                        </tr>
+                        <tr class="bg-gray-100">
+                            <td colspan="4" class="py-2 px-4 text-right font-bold">稅金 (5%):</td>
+                            <td class="py-2 px-4 text-right font-bold" id="tax">NT$0</td>
+                        </tr>
+                        <tr class="bg-gray-100">
+                            <td colspan="4" class="py-2 px-4 text-right font-bold">總計金額:</td>
+                            <td class="py-2 px-4 text-right font-bold" id="total">NT$0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Labor Reporting Section -->
+        <div class="mb-8">
+            <h2 class="section-title">勞報資料檢附</h2>
+            <div id="labor-cards">
+                <div class="labor-card">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-2">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">人員姓名</label>
-                            <input type="text" class="labor-name">
+                            <input type="text" class="labor-name" placeholder="請輸入姓名">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">出生年月日</label>
-                            <input type="text" class="labor-birth">
+                            <input type="text" class="labor-birth" placeholder="例：1990/01/01">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">身分證字號</label>
-                            <input type="text" class="labor-id">
+                            <input type="text" class="labor-id" placeholder="請輸入身分證字號">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">連絡電話</label>
-                            <input type="text" class="labor-phone">
+                            <input type="text" class="labor-phone" placeholder="請輸入電話">
                         </div>
                     </div>
-                    <div class="grid grid-cols-6 gap-4">
-                        <div class="col-span-5">
+                    <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
+                        <div class="col-span-1 md:col-span-5">
                             <label class="block text-sm font-medium text-gray-700 mb-1">戶籍地址</label>
-                            <input type="text" class="labor-address">
+                            <input type="text" class="labor-address" placeholder="請輸入完整戶籍地址">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">勞報金額</label>
@@ -282,122 +282,146 @@
                     </div>
                 </div>
             </div>
-            
-            <div class="mb-6 border p-4 rounded-lg relative -top-[1cm]">
-                <h2 class="text-lg font-bold mb-2">【匯款資訊】</h2>
-                <p class="mb-1">帳號戶名 : 蘇裕庭</p>
-                <p class="mb-1">匯款代碼 : 808(玉山銀行中路特區分行)</p>
-                <p>匯款帳號 : 0842-979-176643</p>
-            </div>
-            
-            <div class="mb-6 border p-4 rounded-lg relative -top-[1cm]">
-                <h2 class="text-lg font-bold mb-2">【請款條款聲明】</h2>
-                <p class="mb-2">一、本請款單所列各項係依事前報價單內容所執行，若人員實際到場執行即視為同意並接受報價條款。</p>
-                <p class="mb-2">二、各日所派遣人員之上下班時間、加班時數、高空或控場作業皆已如實記錄於本單，請於付款前確認。</p>
-                <p class="mb-2">三、本人為協力統籌角色，僅協助媒合人力與協調執行，非承攬責任。技術人員並非本人僱用，相關執行風險與損失由現場人員或主辦方依實情處理。</p>
-                <p class="mb-2">四、維持作業品質與人員安排效率包含人員排程統整、資料彙整確認、作業溝通、進退場提醒、異動回報、明細核對等相關行政作業,凡協助媒合與統籌之專案，將酌收行政執行費用。</p>
-            </div>
-            
-            <div class="flex justify-end mb-6 relative -top-[1cm]">
-                <div class="relative -left-[5.6cm] -top-[-0cm]">
-                    <p>負 責 人 : 蘇裕庭</p>
-                    <p>聯絡電話: 0926169899</p>
-                    <p>填寫日期:
-                        </p><div class="flex items-center">
-                            <input type="text" class="time-input rehearsal-year" maxlength="3" placeholder="">年
-                            <input type="text" class="time-input rehearsal-month" maxlength="2" placeholder="">月
-                            <input type="text" class="time-input rehearsal-day" maxlength="2" placeholder="">日
-                            <input type="text" class="time-input rehearsal-hour" maxlength="2" placeholder="">時
-                            <input type="text" class="time-input rehearsal-minute" maxlength="2" placeholder="">分
-       
+            <button id="add-labor" class="mt-4 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">+ 新增人員</button>
+        </div>
+
+        <!-- Notes -->
+        <div class="mb-8">
+            <h2 class="section-title">備註</h2>
+            <textarea class="w-full h-32 p-3 border border-gray-300 rounded-md" placeholder="請輸入備註事項..."></textarea>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="border-t pt-6 mt-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="font-bold mb-2">聯絡資訊</h3>
+                    <p>電話: 02-XXXX-XXXX</p>
+                    <p>Email: contact@lumasonix.com</p>
                 </div>
-            </div>
-            
-            <div class="flex justify-center space-x-5 no-print mt-8">
-                <button id="add-labor" class="bg-green-600 hover:bg-green-600 text-white font-bold py-1 px-5 rounded-lg btn">
-                    新增勞報人員
-                </button>
-                <button id="download-pdf" class="bg-blue-600 hover:bg-blue-600 text-white font-bold py-1 px-5 rounded-lg btn">
-                    下載 PDF
-                </button>
-                <button id="reset-form" class="bg-gray-600 hover:bg-gray-600 text-white font-bold py-1 px-5 rounded-lg btn">
-                    重置請款單
-                </button>
+                <div class="text-right">
+                    <button id="save-invoice" class="px-6 py-3 bg-gray-800 text-white rounded hover:bg-gray-700 transition">儲存報價單</button>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Calculate subtotals and total
+            // Fixed prices
+            const PRICES = {
+                staff: 2500,
+                control: 1000,
+                spotlight: 1000,
+                height: 1000,
+                overtime: 350
+            };
+            
+            // Format number as currency
+            function formatCurrency(number) {
+                return new Intl.NumberFormat('zh-TW', {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                }).format(number);
+            }
+            
+            // Calculate all totals
             function calculateTotals() {
+                // Calculate individual line totals
                 const staffQty = parseInt(document.getElementById('staff-qty').value) || 0;
-                const techQty = parseInt(document.getElementById('tech-qty').value) || 0;
+                const controlQty = parseInt(document.getElementById('control-qty').value) || 0;
                 const spotlightQty = parseInt(document.getElementById('spotlight-qty').value) || 0;
                 const heightQty = parseInt(document.getElementById('height-qty').value) || 0;
                 const overtimeQty = parseInt(document.getElementById('overtime-qty').value) || 0;
-                const otherQty = parseInt(document.getElementById('other-qty').value) || 0;
                 const otherPrice = parseInt(document.getElementById('other-price').value) || 0;
                 
-                const staffSubtotal = staffQty * 2500;
-                const techSubtotal = techQty * 1000;
-                const spotlightSubtotal = spotlightQty * 1000;
-                const heightSubtotal = heightQty * 1000;
-                const overtimeSubtotal = overtimeQty * 350;
-                const otherSubtotal = otherQty * otherPrice;
+                const staffTotal = staffQty * PRICES.staff;
+                const controlTotal = controlQty * PRICES.control;
+                const spotlightTotal = spotlightQty * PRICES.spotlight;
+                const heightTotal = heightQty * PRICES.height;
+                const overtimeTotal = overtimeQty * PRICES.overtime;
+                const adminTotal = Math.round(staffTotal * 0.1); // 10% of staff total
+                const otherTotal = otherPrice;
                 
-                // 行政執行費用 = 人事支援 * 10%
-                const adminSubtotal = Math.round(staffQty * 0.10 * 2500);
+                // Update line totals in the UI
+                document.getElementById('staff-total').textContent = formatCurrency(staffTotal);
+                document.getElementById('control-total').textContent = formatCurrency(controlTotal);
+                document.getElementById('spotlight-total').textContent = formatCurrency(spotlightTotal);
+                document.getElementById('height-total').textContent = formatCurrency(heightTotal);
+                document.getElementById('overtime-total').textContent = formatCurrency(overtimeTotal);
+                document.getElementById('admin-total').textContent = formatCurrency(adminTotal);
+                document.getElementById('other-total').textContent = formatCurrency(otherTotal);
                 
-                const total = staffSubtotal + techSubtotal + spotlightSubtotal + heightSubtotal + 
-                              overtimeSubtotal + otherSubtotal + adminSubtotal;
+                // Calculate subtotal, tax, and total
+                const subtotal = staffTotal + controlTotal + spotlightTotal + heightTotal + overtimeTotal + adminTotal + otherTotal;
+                const tax = Math.round(subtotal * 0.05); // 5% tax
+                const total = subtotal + tax;
                 
-                document.getElementById('staff-subtotal').textContent = staffSubtotal.toLocaleString();
-                document.getElementById('tech-subtotal').textContent = techSubtotal.toLocaleString();
-                document.getElementById('spotlight-subtotal').textContent = spotlightSubtotal.toLocaleString();
-                document.getElementById('height-subtotal').textContent = heightSubtotal.toLocaleString();
-                document.getElementById('overtime-subtotal').textContent = overtimeSubtotal.toLocaleString();
-                document.getElementById('other-subtotal').textContent = otherSubtotal.toLocaleString();
-                document.getElementById('admin-subtotal').textContent = adminSubtotal.toLocaleString();
-                document.getElementById('total-amount').textContent = total.toLocaleString();
+                // Update totals in the UI
+                document.getElementById('subtotal').textContent = 'NT$' + formatCurrency(subtotal);
+                document.getElementById('tax').textContent = 'NT$' + formatCurrency(tax);
+                document.getElementById('total').textContent = 'NT$' + formatCurrency(total);
+                
+                return {
+                    subtotal,
+                    tax,
+                    total
+                };
             }
             
-            // Add event listeners to all input fields that affect calculations
-            const calculationInputs = [
-                'staff-qty', 'tech-qty', 'spotlight-qty', 'height-qty', 'overtime-qty', 'other-qty', 'other-price'
-            ];
+            // Add event listeners to all quantity inputs
+            document.getElementById('staff-qty').addEventListener('input', calculateTotals);
+            document.getElementById('control-qty').addEventListener('input', calculateTotals);
+            document.getElementById('spotlight-qty').addEventListener('input', calculateTotals);
+            document.getElementById('height-qty').addEventListener('input', calculateTotals);
+            document.getElementById('overtime-qty').addEventListener('input', calculateTotals);
+            document.getElementById('other-price').addEventListener('input', calculateTotals);
             
-            calculationInputs.forEach(id => {
-                document.getElementById(id).addEventListener('input', calculateTotals);
-            });
+            // Calculate labor total
+            function calculateLaborTotal() {
+                let laborTotal = 0;
+                document.querySelectorAll('.labor-amount').forEach(input => {
+                    laborTotal += parseFloat(input.value) || 0;
+                });
+                return laborTotal;
+            }
             
-            // Add new labor reporting section
+            // Add new labor personnel button
             document.getElementById('add-labor').addEventListener('click', function() {
-                const laborContainer = document.querySelector('.mb-6:nth-of-type(3)');
-                const laborTemplate = `
-                <div class="border p-4 rounded-lg mt-4">
-                    <div class="grid grid-cols-4 gap-4 mb-2">
+                const newLaborCard = document.createElement('div');
+                newLaborCard.className = 'labor-card';
+                
+                newLaborCard.innerHTML = `
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="font-medium text-gray-800">人員資料</h3>
+                        <button class="remove-labor text-red-500 hover:text-red-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-2">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">人員姓名</label>
-                            <input type="text" class="labor-name">
+                            <input type="text" class="labor-name" placeholder="請輸入姓名">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">出生年月日</label>
-                            <input type="text" class="labor-birth">
+                            <input type="text" class="labor-birth" placeholder="例：1990/01/01">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">身分證字號</label>
-                            <input type="text" class="labor-id">
+                            <input type="text" class="labor-id" placeholder="請輸入身分證字號">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">連絡電話</label>
-                            <input type="text" class="labor-phone">
+                            <input type="text" class="labor-phone" placeholder="請輸入電話">
                         </div>
                     </div>
-                    <div class="grid grid-cols-6 gap-4">
-                        <div class="col-span-5">
+                    <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
+                        <div class="col-span-1 md:col-span-5">
                             <label class="block text-sm font-medium text-gray-700 mb-1">戶籍地址</label>
-                            <input type="text" class="labor-address">
+                            <input type="text" class="labor-address" placeholder="請輸入完整戶籍地址">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">勞報金額</label>
@@ -407,120 +431,27 @@
                             </div>
                         </div>
                     </div>
-                </div>
                 `;
                 
-                laborContainer.insertAdjacentHTML('beforeend', laborTemplate);
+                document.getElementById('labor-cards').appendChild(newLaborCard);
+                
+                // Add event listener to remove button
+                newLaborCard.querySelector('.remove-labor').addEventListener('click', function() {
+                    newLaborCard.remove();
+                });
+            });
+            
+            // Save invoice button
+            document.getElementById('save-invoice').addEventListener('click', function() {
+                const totals = calculateTotals();
+                const laborTotal = calculateLaborTotal();
+                
+                alert(`報價單已儲存！\n未稅金額: NT$${formatCurrency(totals.subtotal)}\n稅金 (5%): NT$${formatCurrency(totals.tax)}\n總計金額: NT$${formatCurrency(totals.total)}\n勞報總金額: NT$${formatCurrency(laborTotal)}`);
             });
             
             // Initialize calculations
             calculateTotals();
-            
-            // Set today's date in the signature date fields
-            const today = new Date();
-            const yearDigits = today.getFullYear().toString();
-            const month = (today.getMonth() + 1).toString().padStart(2, '0');
-            const day = today.getDate().toString().padStart(2, '0');
-            
-            const dateFields = document.querySelectorAll('.date-field');
-            if (dateFields.length >= 6) {
-                dateFields[0].textContent = yearDigits[0];
-                dateFields[1].textContent = yearDigits[1];
-                dateFields[2].textContent = month[0];
-                dateFields[3].textContent = month[1];
-                dateFields[4].textContent = day[0];
-                dateFields[5].textContent = day[1];
-            }
-            
-            // Set default values for rehearsal and performance time
-            document.querySelector('.rehearsal-year').value = today.getFullYear();
-            document.querySelector('.rehearsal-month').value = today.getMonth() + 1;
-            document.querySelector('.rehearsal-day').value = today.getDate();
-            
-            document.querySelector('.performance-year').value = today.getFullYear();
-            document.querySelector('.performance-month').value = today.getMonth() + 1;
-            document.querySelector('.performance-day').value = today.getDate();
-            
-            // Reset form
-            document.getElementById('reset-form').addEventListener('click', function() {
-                if (confirm('確定要重置請款單嗎？所有填寫的資料將會清除。')) {
-                    const inputs = document.querySelectorAll('input[type="text"], input[type="number"]');
-                    inputs.forEach(input => {
-                        if (input.type === 'number') {
-                            input.value = 0;
-                        } else {
-                            input.value = '';
-                        }
-                    });
-                    
-                    // Reset rehearsal and performance time to today
-                    document.querySelector('.rehearsal-year').value = today.getFullYear();
-                    document.querySelector('.rehearsal-month').value = today.getMonth() + 1;
-                    document.querySelector('.rehearsal-day').value = today.getDate();
-                    
-                    document.querySelector('.performance-year').value = today.getFullYear();
-                    document.querySelector('.performance-month').value = today.getMonth() + 1;
-                    document.querySelector('.performance-day').value = today.getDate();
-                    
-                    // Recalculate totals
-                    calculateTotals();
-                }
-            });
-            
-            // Download PDF
-            document.getElementById('download-pdf').addEventListener('click', function() {
-                // Hide download buttons temporarily
-                const buttons = document.querySelectorAll('.no-print');
-                buttons.forEach(button => {
-                    button.style.display = 'none';
-                });
-                
-                const { jsPDF } = window.jspdf;
-                
-                html2canvas(document.getElementById('invoice-form'), {
-                    scale: 1.5,
-                    useCORS: true,
-                    logging: false
-                }).then(canvas => {
-                    const imgData = canvas.toDataURL('image/jpeg', 1.0);
-                    const pdf = new jsPDF('p', 'mm', 'a4');
-                    const pdfWidth = pdf.internal.pageSize.getWidth();
-                    const pdfHeight = pdf.internal.pageSize.getHeight();
-                    const imgWidth = canvas.width;
-                    const imgHeight = canvas.height;
-                    const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-                    const imgX = (pdfWidth - imgWidth * ratio) / 2;
-                    
-                    let heightLeft = imgHeight;
-                    let position = 0;
-                    
-                    pdf.addImage(imgData, 'JPEG', imgX, position, imgWidth * ratio, imgHeight * ratio);
-                    heightLeft -= pdfHeight;
-                    
-                    while (heightLeft >= 0) {
-                        position = heightLeft - imgHeight;
-                        pdf.addPage();
-                        pdf.addImage(imgData, 'JPEG', imgX, position, imgWidth * ratio, imgHeight * ratio);
-                        heightLeft -= pdfHeight;
-                    }
-                    
-                    pdf.save('LUMASONIX_技術支援請款單.pdf');
-                    
-                    // Show buttons again
-                    buttons.forEach(button => {
-                        button.style.display = '';
-                    });
-                });
-            });
-            
-            // Restrict input to numbers only for time fields
-            const timeInputs = document.querySelectorAll('.time-input');
-            timeInputs.forEach(input => {
-                input.addEventListener('input', function() {
-                    this.value = this.value.replace(/[^0-9]/g, '');
-                });
-            });
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93e9ba14d511f06b',t:'MTc0NzA1MDkyNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
-</div><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;"></iframe></body></html>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9458cb218101f087',t:'MTc0ODIxNTU0Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
