@@ -230,10 +230,7 @@
                         <tr class="bg-gray-100">
                             <td colspan="4" class="py-2 px-4 text-right font-bold">未稅金額:</td>
                             <td class="py-2 px-4 text-right font-bold" id="subtotal">NT$0</td>
-                        </tr>
-                        <tr class="bg-gray-100">
-                            <td colspan="4" class="py-2 px-4 text-right font-bold">稅金 (5%):</td>
-                            <td class="py-2 px-4 text-right font-bold" id="tax">NT$0</td>
+                        
                         </tr>
                         <tr class="bg-gray-100">
                             <td colspan="4" class="py-2 px-4 text-right font-bold">總計金額:</td>
@@ -242,8 +239,23 @@
                     </tbody>
                 </table>
             </div>
+        </div> <!-- Payment Information -->
+        <div class="mb-8 bg-blue-50 p-4 rounded-lg">
+            <h3 class="payment-info-title">【匯款資訊】</h3>
+            <div class="payment-info-row">
+                <div class="payment-info-label">帳號戶名：</div>
+                <div class="payment-info-value">蘇裕庭</div>
+            </div>
+            <div class="payment-info-row">
+                <div class="payment-info-label">匯款代碼：</div>
+                <div class="payment-info-value">808(玉山銀行中路特區分行)</div>
+            </div>
+            <div class="payment-info-row">
+                <div class="payment-info-label">匯款帳號：</div>
+                <div class="payment-info-value">0842-979-176643
+                </div>
+            </div>
         </div>
-
         <!-- Labor Reporting Section -->
         <div class="mb-8">
             <h2 class="section-title">勞報資料檢附</h2>
@@ -296,8 +308,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <h3 class="font-bold mb-2">聯絡資訊</h3>
-                    <p>電話: 02-XXXX-XXXX</p>
-                    <p>Email: contact@lumasonix.com</p>
+                    <p>電話:0926169899 </p>
                 </div>
                 <div class="text-right">
                     <button id="save-invoice" class="px-6 py-3 bg-gray-800 text-white rounded hover:bg-gray-700 transition">儲存報價單</button>
@@ -446,7 +457,7 @@
                 const totals = calculateTotals();
                 const laborTotal = calculateLaborTotal();
                 
-                alert(`報價單已儲存！\n未稅金額: NT$${formatCurrency(totals.subtotal)}\n稅金 (5%): NT$${formatCurrency(totals.tax)}\n總計金額: NT$${formatCurrency(totals.total)}\n勞報總金額: NT$${formatCurrency(laborTotal)}`);
+                alert(`報價單已儲存！\n未稅金額: NT$${formatCurrency(totals.subtotal)}\n總計金額: NT$${formatCurrency(totals.total)}\n勞報總金額: NT$${formatCurrency(laborTotal)}`);
             });
             
             // Initialize calculations
