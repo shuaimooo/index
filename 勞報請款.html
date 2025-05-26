@@ -318,7 +318,11 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+         document.addEventListener('DOMContentLoaded', function() {
+            // Set today's date as default for signature date
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('signature-date').value = today;
+            
             // Fixed prices
             const PRICES = {
                 staff: 2500,
@@ -363,19 +367,13 @@
                 document.getElementById('admin-total').textContent = formatCurrency(adminTotal);
                 document.getElementById('other-total').textContent = formatCurrency(otherTotal);
                 
-                // Calculate subtotal, tax, and total
-                const subtotal = staffTotal + controlTotal + spotlightTotal + heightTotal + overtimeTotal + adminTotal + otherTotal;
-                const tax = Math.round(subtotal * 0.05); // 5% tax
-                const total = subtotal + tax;
+                // Calculate total (without tax)
+                const total = staffTotal + controlTotal + spotlightTotal + heightTotal + overtimeTotal + adminTotal + otherTotal;
                 
-                // Update totals in the UI
-                document.getElementById('subtotal').textContent = 'NT$' + formatCurrency(subtotal);
-                document.getElementById('tax').textContent = 'NT$' + formatCurrency(tax);
+                // Update total in the UI
                 document.getElementById('total').textContent = 'NT$' + formatCurrency(total);
                 
                 return {
-                    subtotal,
-                    tax,
                     total
                 };
             }
