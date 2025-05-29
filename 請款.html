@@ -564,6 +564,33 @@
         function formatNumber(number) {
             return number.toLocaleString('en-US');
         }
+
+        <!-- ✅ 按鈕 -->
+  <div class="mt-4 flex justify-end space-x-4">
+    <button id="save-invoice" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">儲存請款單</button>
+  </div>
+
+  <!-- ✅ JavaScript 放這邊（尾端） -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <script>
+
+        document.getElementById("save-invoice").addEventListener("click", async function () {
+      const { jsPDF } = window.jspdf;
+      const invoice = document.getElementById("invoice");
+
+      const canvas = await html2canvas(invoice);
+      const imgData = canvas.toDataURL("image/png");
+
+      const pdf = new jsPDF("p", "mm", "a4");
+      const width = pdf.internal.pageSize.getWidth();
+      const height = (canvas.height * width) / canvas.width;
+      pdf.addImage(imgData, "PNG", 0, 0, width, height);
+
+      pdf.save("請款單.pdf");
+  });
+
     </script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9470048cf1c36a93',t:'MTc0ODQ1OTA2Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
