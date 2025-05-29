@@ -6,346 +6,290 @@
     <title>LUMASONIX 技術人員報價單</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
         
         body {
             font-family: 'Noto Sans TC', sans-serif;
             background-color: #f5f7fa;
         }
         
-        .form-input {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.375rem;
-            background-color: #fff;
+        .quote-form {
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         
-        .form-input:focus {
+        .logo-text {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .header-gradient {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+        }
+        
+        table th, table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        input:focus, textarea:focus {
             outline: none;
-            border-color: #4f46e5;
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-        }
-        
-        .table-header {
-            background-color: #1e293b;
-            color: white;
-        }
-        
-        .table-row:nth-child(even) {
-            background-color: #f8fafc;
-        }
-        
-        .table-row:hover {
-            background-color: #f1f5f9;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
         }
         
         @media print {
-            body {
-                background-color: white;
-            }
-            
             .no-print {
                 display: none;
             }
-            
-            .print-container {
+            body {
+                background-color: white;
+            }
+            .quote-form {
                 box-shadow: none;
-                margin: 0;
-                padding: 0;
+            }
+            .print-button-container {
+                display: none;
             }
         }
     </style>
 </head>
-<body>
-    <div class="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden print-container">
-            <!-- Header -->
-            <div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <h1 class="text-2xl font-bold">LUMASONIX x PROFESSIONAL</h1>
-                        <p class="text-gray-100">專業技術支援 x 人力媒合行銷</p>
-                    </div>
-                    <div class="text-right">
-                        <h2 class="text-xl font-bold bg-gray-800 inline-block py-2 px-4 rounded">技術人員報價單</h2>
-                    </div>
-                </div>
+<body class="p-4 md:p-8">
+    <div class="quote-form max-w-5xl mx-auto p-6 md:p-8 rounded-lg">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+            <div>
+                <h1 class="text-3xl font-bold logo-text">LUMASONIX</h1>
+                <p class="text-gray-600">專業技術支援 x 人力媒合行銷</p>
             </div>
-            
-            <!-- Form Content -->
-            <div class="p-6">
-                <!-- Client and Quote Information -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <!-- Left Column - Client Info -->
-                    <div class="bg-gray-50 p-4 rounded-lg">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4 border-b pb-2">客戶資訊</h3>
-                        <div class="grid grid-cols-3 gap-3">
-                            <div class="font-medium text-gray-700">廠商名稱:</div>
-                            <div class="col-span-2">
-                                <input type="text" class="form-input" id="clientName">
-                            </div>
-                            
-                            <div class="font-medium text-gray-700">派遣日期:</div>
-                            <div class="col-span-2">
-                                <input type="date" class="form-input" id="dispatchDate">
-                            </div>
-                            
-                            <div class="font-medium text-gray-700">活動地點:</div>
-                            <div class="col-span-2">
-                                <input type="text" class="form-input" id="eventLocation">
-                            </div>
-                            
-                            <div class="font-medium text-gray-700">聯絡窗口:</div>
-                            <div class="col-span-2">
-                                <input type="text" class="form-input" id="contactPerson">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Right Column - Quote Info -->
-                    <div class="bg-gray-50 p-4 rounded-lg">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4 border-b pb-2">報價資訊</h3>
-                        <div class="grid grid-cols-3 gap-3">
-                            <div class="font-medium text-gray-700">報價編號:</div>
-                            <div class="col-span-2">
-                                <input type="text" class="form-input" id="quoteNumber">
-                            </div>
-                            
-                            <div class="font-medium text-gray-700">報價日期:</div>
-                            <div class="col-span-2">
-                                <input type="date" class="form-input" id="quoteDate" value="">
-                            </div>
-                            
-                            <div class="font-medium text-gray-700">負責人:</div>
-                            <div class="col-span-2">
-                                <input type="text" class="form-input" id="responsiblePerson" value="蘇裕庭">
-                            </div>
-                            
-                            <div class="font-medium text-gray-700">聯絡電話:</div>
-                            <div class="col-span-2">
-                                <input type="text" class="form-input" id="contactPhone" value="0926169899">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Quote Items Table -->
-                <div class="overflow-x-auto mb-8">
-                    <table class="min-w-full bg-white border border-gray-200">
-                        <thead>
-                            <tr class="table-header">
-                                <th class="py-2 px-4 text-left" style="width: 120px;">品項</th>
-                                <th class="py-2 px-4 text-center" style="width: 80px;">數量</th>
-                                <th class="py-2 px-4 text-center" style="width: 120px;">單價 (NT$)</th>
-                                <th class="py-2 px-4 text-left">工作內容</th>
-                                <th class="py-2 px-4 text-right" style="width: 120px;">小計 (NT$)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="table-row border-b">
-                                <td class="py-2 px-4">人事支援</td>
-                                <td class="py-2 px-4">
-                                    <input type="number" min="0" class="form-input text-center" id="staff-qty" value="0">
-                                </td>
-                                <td class="py-2 px-4 text-center">2,500</td>
-                                <td class="py-2 px-4">進場、演出、撤場</td>
-                                <td class="py-2 px-4 text-right" id="staff-total">0</td>
-                            </tr>
-                            <tr class="table-row border-b">
-                                <td class="py-2 px-4">燈/音/視控</td>
-                                <td class="py-2 px-4">
-                                    <input type="number" min="0" class="form-input text-center" id="control-qty" value="0">
-                                </td>
-                                <td class="py-2 px-4 text-center">1,000</td>
-                                <td class="py-2 px-4">演出前一日彩排，將視為一場演出，另行計費。<br>彩排與演出同日進行，僅收取一次演出費用。</td>
-                                <td class="py-2 px-4 text-right" id="control-total">0</td>
-                            </tr>
-                            <tr class="table-row border-b">
-                                <td class="py-2 px-4">追光燈操作</td>
-                                <td class="py-2 px-4">
-                                    <input type="number" min="0" class="form-input text-center" id="spotlight-qty" value="0">
-                                </td>
-                                <td class="py-2 px-4 text-center">1,000</td>
-                                <td class="py-2 px-4">演出前一日彩排，將視為一場演出，另行計費。<br>彩排與演出同日進行，僅收取一次演出費用。</td>
-                                <td class="py-2 px-4 text-right" id="spotlight-total">0</td>
-                            </tr>
-                            <tr class="table-row border-b">
-                                <td class="py-2 px-4">高空</td>
-                                <td class="py-2 px-4">
-                                    <input type="number" min="0" class="form-input text-center" id="height-qty" value="0">
-                                </td>
-                                <td class="py-2 px-4 text-center">1,000</td>
-                                <td class="py-2 px-4">依layer6格以上約9米高度，另酌收費</td>
-                                <td class="py-2 px-4 text-right" id="height-total">0</td>
-                            </tr>
-                            <tr class="table-row border-b">
-                                <td class="py-2 px-4">加班費</td>
-                                <td class="py-2 px-4">
-                                    <input type="number" min="0" class="form-input text-center" id="overtime-qty" value="0">
-                                </td>
-                                <td class="py-2 px-4 text-center">350</td>
-                                <td class="py-2 px-4">每小時計算，超過8小時工作時間</td>
-                                <td class="py-2 px-4 text-right" id="overtime-total">0</td>
-                            </tr>
-                            <tr class="table-row border-b">
-                                <td class="py-2 px-4">行政執行費</td>
-                                <td class="py-2 px-4 text-center">
-                                    一式
-                                </td>
-                                <td class="py-2 px-4 text-center">10%</td>
-                                <td class="py-2 px-4">單價*人數*10%</td>
-                                <td class="py-2 px-4 text-right" id="admin-fee-total">0</td>
-                            </tr>
-                            <tr class="table-row border-b">
-                                <td class="py-2 px-4">其他</td>
-                                <td  class="py-2 px-4 text-center">
-                                    一式
-                                </td>
-                                <td class="py-2 px-4 text-center"></td>
-                                <td class="py-2 px-4">
-                                    <input type="text" class="form-input" id="other-description" placeholder="請輸入說明..." maxlength="15">
-                                </td>
-                                <td class="py-2 px-4 text-right" id="other-total">0</td>
-                            </tr>
-                            <tr class="table-row border-b">
-                                <td class="py-2 px-4">技術指導</td>
-                                <td class="py-2 px-4">
-                                    <input type="number" min="0" class="form-input text-center" id="tech-qty" value="0">
-                                </td>
-                                <td class="py-2 px-4 text-center">5,000</td>
-                                <td class="py-2 px-4">現場技術統籌與協調</td>
-                                <td class="py-2 px-4 text-right" id="tech-total">0</td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr class="bg-gray-100">
-                                <td colspan="4" class="py-3 px-4 text-right font-bold">總計 (NT$):</td>
-                                <td class="py-3 px-4 text-right font-bold" id="grand-total">0</td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-                
-                <!-- Notes and Terms -->
-                <div class="mb-8">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-2">備註事項</h3>
-                    <div class="bg-gray-50 p-4 rounded-lg text-sm">
-                        <ol class="list-decimal pl-5 space-y-2">
-                            <li>本人僅協助媒合與執行活動之統籌角色，執行風險與責任應由現場技術人員自負。</li>
-                            <li>移動至不同活動場地即視為新場次，費用重新計算。</li>
-                            <li>演出當天取消需支付報價金額之 50% ，改期需於五日前通知，否則視同取消。</li>
-                            <li>活動結束雙方應現場確認交付狀況後視驗收完畢，恕不再就當日服務異議減項。 </li>
-                            <li>維持作業品質與人員安排效率等相關行政作業，將酌收行政執行費用，已併入請款明細列示。</li>
-                        </ol>
-                    </div>
-                </div>
-                
-                <!-- Signature Area -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <div>
-                        <h4 class="text-sm font-medium text-gray-700 mb-2">客戶簽名</h4>
-                        <div class="border border-gray-300 h-24 rounded-lg"></div>
-                        <p class="text-sm text-gray-500 mt-1">日期: ____________________</p>
-                    </div>
-                    <div>
-                        <h4 class="text-sm font-medium text-gray-700 mb-2">簽名</h4>
-                        <div class="border border-gray-300 h-24 rounded-lg"></div>
-                        <p class="text-sm text-gray-500 mt-1">日期: ____________________</p>
-                    </div>
-                </div>
-                
-                <!-- Action Buttons -->
-                <div class="flex justify-end space-x-4 no-print">
-                    <button id="print-btn" class="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded">
-                        列印報價單
-                    </button>
-                    <button id="save-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded">
-                        儲存報價單
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Footer -->
-            <div class="bg-gray-800 text-white p-4 text-center text-sm">
-                <p>LUMASONIX x PROFESSIONAL | 專業技術支援 x 人力媒合行銷</p>
-                <p class="mt-1">電話: 0926-169-899 | 電子郵件: lumasonix@gmail.com</p>
+            <div class="mt-4 md:mt-0">
+                <h2 class="text-2xl font-bold text-gray-800">技術人員報價單</h2>
             </div>
         </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="border rounded-lg p-4">
+                <h3 class="font-bold text-lg mb-3 header-gradient text-white p-2 rounded">客戶資訊</h3>
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">廠商名稱:</label>
+                        <input type="text" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">派遣日期:</label>
+                        <input type="date" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">活動地點:</label>
+                        <input type="text" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">聯絡窗口:</label>
+                        <input type="text" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border rounded-lg p-4">
+                <h3 class="font-bold text-lg mb-3 header-gradient text-white p-2 rounded">報價資訊</h3>
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">報價編號:</label>
+                        <input type="text" value="LX-2025-98945" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 bg-gray-100" readonly>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">報價日期:</label>
+                        <input type="text" value="2025/05/29" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 bg-gray-100" readonly>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">負責人:</label>
+                        <input type="text" value="蘇裕庭" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 bg-gray-100" readonly>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">聯絡電話:</label>
+                        <input type="text" value="0926169899" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 bg-gray-100" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="overflow-x-auto mb-8">
+            <table class="min-w-full">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="w-1/5">品項</th>
+                        <th class="w-1/12">數量</th>
+                        <th class="w-1/8">單價 (NT$)</th>
+                        <th class="w-2/5">工作內容</th>
+                        <th class="w-1/8">小計 (NT$)</th>
+                    </tr>
+                </thead>
+                <tbody id="quoteItems">
+                    <tr>
+                        <td>人事支援</td>
+                        <td><input type="number" min="0" value="0" class="quantity border rounded w-full px-2 py-1" data-price="2500"></td>
+                        <td>2,500</td>
+                        <td>進場、演出、撤場</td>
+                        <td class="subtotal">0</td>
+                    </tr>
+                    <tr>
+                        <td>燈/音/視控</td>
+                        <td><input type="number" min="0" value="0" class="quantity border rounded w-full px-2 py-1" data-price="1000"></td>
+                        <td>1,000</td>
+                        <td>演出前一日彩排，將視為一場演出，另行計費。<br>彩排與演出同日進行，僅收取一次演出費用。</td>
+                        <td class="subtotal">0</td>
+                    </tr>
+                    <tr>
+                        <td>追光燈操作</td>
+                        <td><input type="number" min="0" value="0" class="quantity border rounded w-full px-2 py-1" data-price="1000"></td>
+                        <td>1,000</td>
+                        <td>演出前一日彩排，將視為一場演出，另行計費。<br>彩排與演出同日進行，僅收取一次演出費用。</td>
+                        <td class="subtotal">0</td>
+                    </tr>
+                    <tr>
+                        <td>高空</td>
+                        <td><input type="number" min="0" value="0" class="quantity border rounded w-full px-2 py-1" data-price="1000"></td>
+                        <td>1,000</td>
+                        <td>依layer6格以上約9米高度，另酌收費</td>
+                        <td class="subtotal">0</td>
+                    </tr>
+                    <tr>
+                        <td>加班費</td>
+                        <td><input type="number" min="0" value="0" class="quantity border rounded w-full px-2 py-1" data-price="350"></td>
+                        <td>350</td>
+                        <td>每小時計算，超過8小時工作時間</td>
+                        <td class="subtotal">0</td>
+                    </tr>
+                    <tr>
+                        <td>行政執行費</td>
+                        <td>一式</td>
+                        <td>10%</td>
+                        <td>單價*人數*10%</td>
+                        <td id="adminFee">0</td>
+                    </tr>
+                    <tr>
+                        <td>其他</td>
+                        <td>一式</td>
+                        <td><input type="number" min="0" value="0" id="otherUnitPrice" class="border rounded w-full px-2 py-1"></td>
+                        <td><textarea class="border rounded w-full px-2 py-1" placeholder="請輸入說明..."></textarea></td>
+                        <td id="otherSubtotal">0</td>
+                    </tr>
+                    <tr>
+                        <td>技術指導</td>
+                        <td><input type="number" min="0" value="0" class="quantity border rounded w-full px-2 py-1" data-price="5000"></td>
+                        <td>5,000</td>
+                        <td>現場技術統籌與協調</td>
+                        <td class="subtotal">0</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="font-bold bg-gray-100">
+                        <td colspan="4" class="text-right">總計 (NT$):</td>
+                        <td id="totalAmount">0</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="mb-8">
+            <h3 class="font-bold text-lg mb-3">備註事項</h3>
+            <ul class="list-disc pl-5 space-y-1 text-gray-700">
+                <li>本人僅協助媒合與執行活動之統籌角色，執行風險與責任應由現場技術人員自負。</li>
+                <li>移動至不同活動場地即視為新場次，費用重新計算。</li>
+                <li>演出當天取消需支付報價金額之 50% ，改期需於五日前通知，否則視同取消。</li>
+                <li>活動結束雙方應現場確認交付狀況後視驗收完畢，恕不再就當日服務異議減項。</li>
+                <li>維持作業品質與人員安排效率等相關行政作業，將酌收行政執行費用，已併入請款明細列示。</li>
+            </ul>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div>
+                <h3 class="font-bold mb-3">客戶簽名</h3>
+                <div class="border-b border-gray-400 h-20 mb-2"></div>
+                <div class="flex">
+                    <span class="mr-2">日期:</span>
+                    <div class="border-b border-gray-400 flex-grow"></div>
+                </div>
+            </div>
+            <div>
+                <h3 class="font-bold mb-3">簽名</h3>
+                <div class="border-b border-gray-400 h-20 mb-2"></div>
+                <div class="flex">
+                    <span class="mr-2">日期:</span>
+                    <div class="border-b border-gray-400 flex-grow"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="print-button-container flex justify-center space-x-4">
+            <button id="printButton" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded no-print">
+                列印報價單
+            </button>
+            <button id="saveButton" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded no-print">
+                儲存報價單
+            </button>
+        </div><div class="bg-gray-800 text-center  text-white max-w-5xl w-full py-4 rounded-md">
+    <p class="text-4x1 font-medium">LUMASONIX x PROFESSIONAL | 專業技術支援 x 人力媒合行銷</p>
+<p class="text-4x1 font-medium">電話: 0926-169-899 | 電子郵件: lumasonix@gmail.com</p>
+  </div>
     </div>
 
     <script>
-        // Set today's date as default for quote date
         document.addEventListener('DOMContentLoaded', function() {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('quoteDate').value = today;
+            // Calculate function
+            function calculateTotals() {
+                let subtotal = 0;
+                
+                // Calculate each line item
+                document.querySelectorAll('.quantity').forEach(input => {
+                    const quantity = parseInt(input.value) || 0;
+                    const price = parseInt(input.getAttribute('data-price'));
+                    const lineTotal = quantity * price;
+                    
+                    // Update the subtotal display for this row
+                    const subtotalCell = input.closest('tr').querySelector('.subtotal');
+                    subtotalCell.textContent = lineTotal.toLocaleString();
+                    
+                    subtotal += lineTotal;
+                });
+                
+                // Calculate "其他" item
+                const otherUnitPrice = parseInt(document.getElementById('otherUnitPrice').value) || 0;
+                document.getElementById('otherSubtotal').textContent = otherUnitPrice.toLocaleString();
+                subtotal += otherUnitPrice;
+                
+                // Calculate admin fee (10% of subtotal)
+                const adminFee = Math.round(subtotal * 0.1);
+                document.getElementById('adminFee').textContent = adminFee.toLocaleString();
+                
+                // Calculate total
+                const total = subtotal + adminFee;
+                document.getElementById('totalAmount').textContent = total.toLocaleString();
+            }
             
-            // Generate a random quote number
-            const randomNum = Math.floor(10000 + Math.random() * 90000);
-            const year = new Date().getFullYear();
-            document.getElementById('quoteNumber').value = `LX-${year}-${randomNum}`;
-        });
-        
-        // Calculate totals when quantities change
-        const qtyInputs = ['staff-qty', 'control-qty', 'spotlight-qty', 'height-qty', 'tech-qty', 'overtime-qty', 'other-qty'];
-        const prices = {
-            'staff-qty': 2500,
-            'control-qty': 1000,
-            'spotlight-qty': 1000,
-            'height-qty': 1000,
-            'tech-qty': 5000,
-            'overtime-qty': 350,
-            'other-qty': 1 // This will be multiplied by the quantity directly
-        };
-        
-        qtyInputs.forEach(id => {
-            document.getElementById(id).addEventListener('input', calculateTotals);
-        });
-        
-        // Also recalculate when other description changes (for display purposes)
-        document.getElementById('other-description').addEventListener('input', calculateTotals);
-        
-        function calculateTotals() {
-            let personnelTotal = 0;
-            let grandTotal = 0;
-            
-            // Calculate regular items
-            qtyInputs.forEach(id => {
-                const qty = parseInt(document.getElementById(id).value) || 0;
-                const price = prices[id];
-                const total = qty * price;
-                
-                const totalId = id.replace('qty', 'total');
-                document.getElementById(totalId).textContent = total.toLocaleString();
-                
-                // Add to personnel total for admin fee calculation (excluding "other")
-                if (id !== 'other-qty') {
-                    personnelTotal += total;
-                }
-                
-                grandTotal += total;
+            // Add event listeners to all quantity inputs
+            document.querySelectorAll('.quantity').forEach(input => {
+                input.addEventListener('input', calculateTotals);
             });
             
-            // Calculate administrative fee (10% of personnel costs)
-            const adminFee = Math.round(personnelTotal * 0.1);
-            document.getElementById('admin-fee-total').textContent = adminFee.toLocaleString();
+            // Add event listener to other unit price input
+            document.getElementById('otherUnitPrice').addEventListener('input', calculateTotals);
             
-            // Add admin fee to grand total
-            grandTotal += adminFee;
+            // Print button functionality
+            document.getElementById('printButton').addEventListener('click', function() {
+                window.print();
+            });
             
-            // Update grand total
-            document.getElementById('grand-total').textContent = grandTotal.toLocaleString();
-        }
-        
-        // Print functionality
-        document.getElementById('print-btn').addEventListener('click', function() {
-            window.print();
-        });
-        
-        // Save functionality (simplified for demo)
-        document.getElementById('save-btn').addEventListener('click', function() {
-            alert('報價單已儲存！在實際應用中，這裡會將數據保存到資料庫。');
+            // Save button functionality (just a placeholder - would need backend integration)
+            document.getElementById('saveButton').addEventListener('click', function() {
+                alert('報價單已儲存！（示範功能）');
+            });
+            
+            // Initial calculation
+            calculateTotals();
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'946f257c2650f07b',t:'MTc0ODQ0OTkzMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9474ab0083edf07f',t:'MTc0ODUwNzgyNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
