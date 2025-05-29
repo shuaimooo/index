@@ -131,18 +131,6 @@
             padding-right: 1rem;
         }
         
-        .payment-info {
-            background-color: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.5rem;
-            padding: 1rem;
-        }
-        
-        .payment-info-title {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-        
         @media print {
             body {
                 background-color: white;
@@ -191,7 +179,7 @@
                 </div>
                 <div class="form-field">
                     <label class="block text-sm font-medium text-gray-700 mb-1">負責人</label>
-                    <input type="text-sm 蘇裕庭" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <input type="text" id="manager" placeholder="蘇裕庭" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
                 <div class="form-field">
                     <label class="block text-sm font-medium text-gray-700 mb-1">廠商名稱</label>                      
@@ -199,7 +187,7 @@
                 </div>
                 <div class="form-field">
                     <label class="block text-sm font-medium text-gray-700 mb-1">連絡電話</label>
-                    <input type="text-sm " value="0926169899" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <input type="tel" id="phone" value="0926169899" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
             </div>
             
@@ -328,23 +316,6 @@
                         <div class="flex justify-between items-center pt-2 border-t border-gray-300">
                             <span class="font-bold text-lg">總計金額：</span>
                             <span class="font-bold text-lg text-blue-600" id="grand-total">0</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Payment Information Section -->
-           <div class="mt-8">
-                <h3 class="section-title">匯款資訊</h3>
-                <div class="payment-info mt-2">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div>
-                            <p class="payment-info-title">帳號戶名：蘇裕庭
-                            </p>
-                            <p class="payment-info-title">匯款代碼：808(玉山銀行中路特區分行)</p>
-                            
-                            <p class="payment-info-title">匯款帳號：0842-979-176643</p>
-                            
                         </div>
                     </div>
                 </div>
@@ -564,38 +535,6 @@
         function formatNumber(number) {
             return number.toLocaleString('en-US');
         }
-
-       
-  </div>
-
-  <!-- ✅ JavaScript 放這邊（尾端） -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  document.getElementById("save-invoice").addEventListener("click", async function () {
-    const { jsPDF } = window.jspdf;
-    const invoice = document.getElementById("invoice");
-
-    if (!invoice) {
-      alert("找不到請款區塊！");
-      return;
-    }
-
-    const canvas = await html2canvas(invoice);
-    const imgData = canvas.toDataURL("image/png");
-
-    const pdf = new jsPDF("p", "mm", "a4");
-    const width = pdf.internal.pageSize.getWidth();
-    const height = (canvas.height * width) / canvas.width;
-    pdf.addImage(imgData, "PNG", 0, 0, width, height);
-
-    pdf.save("請款單.pdf");
-  });
-});
-</script>
-
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9470048cf1c36a93',t:'MTc0ODQ1OTA2Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'947201cb5486f073',t:'MTc0ODQ3OTkyNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
