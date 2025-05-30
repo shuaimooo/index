@@ -248,11 +248,11 @@
       </tr>
     </tbody>
   </table>
+       </div>
 <button id="add-activity-row" class="no-print mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors text-2xl relative -top-[1.2cm]">
-  + 新增活動
+    + 新增活動
 </button>
-            
-            <!-- Service Items Table -->
+      <!-- Service Items Table -->
             <h3 class="section-title mt-8 text-2xl relative -top-[1.2cm]">費用明細</h3>
             <div class="overflow-x-auto mb-4 relative -top-[1.2cm]">
                 <table class="invoice-table text-lg font-semibold" id="expense-table">
@@ -410,10 +410,9 @@
             updateTotals();
         });
         
-        function addActivityRow() {
+    function addActivityRow() {
     const tbody = document.getElementById('activity-tbody');
     const row = document.createElement('tr');
-
     row.innerHTML = `
         <td><input type="text" class="activity-date" placeholder="MM/DD" maxlength="5" pattern="\\d{2}/\\d{2}" onchange="updateTotals()"></td>
         <td><input type="text" class="activity-name" placeholder="活動名稱/地點"></td>
@@ -427,9 +426,13 @@
         <td class="payment-column amount-cell"><input type="text" class="activity-amount w-digits-3 text-right" value="0" readonly></td>
         <td class="no-print delete-btn" onclick="deleteActivityRow(this)">✕</td>
     `;
-
     tbody.appendChild(row);
-        
+}
+
+// 綁定按鈕點擊事件
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('add-activity-row').addEventListener('click', addActivityRow);
+});
         function addOtherExpenseRow() {
             const tbody = document.getElementById('expense-tbody');
             const row = document.createElement('tr');
