@@ -199,10 +199,7 @@
    <thead>
   <tr style="height: 20px;">
     <!-- 日期只要顯示月/日，寬度約 5 個字元 -->
-   <td>
-  <input type="text" class="activity-date" placeholder="MM/DD" maxlength="5" pattern="\\d{2}/\\d{2}" onchange="updateTotals()">
-</td>
-
+  <th style="width: 5ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">日期</th>
     <!-- 活動地點／名稱 10字寬 -->
     <th style="width: 10ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">活動名稱／地點</th>
 
@@ -235,7 +232,9 @@
 </thead>
     <tbody id="activity-tbody">
       <tr>
-        <td><input type="date" class="activity-date" onchange="updateTotals()"></td>
+        <td>
+  <input type="text" class="activity-date" placeholder="MM/DD" maxlength="5" pattern="\\d{2}/\\d{2}" onchange="updateTotals()">
+</td>
         <td><input type="text" class="activity-name" placeholder="活動名稱/地點"></td>
         <td><input type="number" class="activity-people w-digits-3 mx-auto text-center" value="1" min="1" onchange="updateTotals()"></td>
         <td><input type="time" class="activity-start" value="08:00" onchange="updateTotals()"></td>
