@@ -199,16 +199,14 @@
     <th style="width: 5ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">日期</th>
 
     <!-- 活動地點／名稱 10字寬 -->
-    <th style="width: 10ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">活動地點</th>
+    <th style="width: 10ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">活動地點/名稱</th>
 
     <!-- 人數 三個數字寬度 -->
     <th style="width: 2ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">人數</th>
 
     <!-- 上班時間 xx:xx 4字寬，稍留點空間設5ch -->
-    <th style="width: 5ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">上班</th>
-
-    <!-- 下班時間 同上 -->
-    <th style="width: 5ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">下班</th>
+    <td><input type="text" class="activity-start" placeholder="HH:MM" pattern="[0-2][0-9]:[0-5][0-9]" maxlength="5" onchange="updateTotals()"></td>
+<td><input type="text" class="activity-end" placeholder="HH:MM" pattern="[0-2][0-9]:[0-5][0-9]" maxlength="5" onchange="updateTotals()"></td>
 
     <!-- 高空，控場/追光欄位不動，維持原本設定 -->
     <th style="width: calc(6% + 30px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">高空</th>
