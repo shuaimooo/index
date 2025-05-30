@@ -199,7 +199,9 @@
    <thead>
   <tr style="height: 20px;">
     <!-- 日期只要顯示月/日，寬度約 5 個字元 -->
-    <th style="width: 5ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">日期</th>
+   <td>
+  <input type="text" class="activity-date" placeholder="MM/DD" maxlength="5" pattern="\\d{2}/\\d{2}" onchange="updateTotals()">
+</td>
 
     <!-- 活動地點／名稱 10字寬 -->
     <th style="width: 10ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">活動名稱／地點</th>
