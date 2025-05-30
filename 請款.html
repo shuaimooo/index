@@ -194,24 +194,31 @@
             <div class="overflow-x-auto mb-4">
   <table class="activity-table text-lg" id="activity-table">
    <thead>
-  <tr style="height: 10px;">
+  <div class="overflow-x-auto mb-4">
+  <table class="activity-table text-lg" id="activity-table">
+   <thead>
+  <tr style="height: 20px;">
     <!-- 日期只要顯示月/日，寬度約 5 個字元 -->
     <th style="width: 5ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">日期</th>
 
     <!-- 活動地點／名稱 10字寬 -->
-    <th style="width: 10ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">活動地點/名稱</th>
+    <th style="width: 10ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">活動名稱／地點</th>
 
     <!-- 人數 三個數字寬度 -->
-    <th style="width: 2ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">人數</th>
+    <th style="width: 3ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">人數</th>
 
-  <td><input type="text" class="activity-start" value="08:00" maxlength="5" onchange="updateTotals()"></td>
-<td><input type="text" class="activity-end" value="17:00" maxlength="5" onchange="updateTotals()"></td>
+    <!-- 上班時間 xx:xx 4字寬，稍留點空間設5ch -->
+    <th style="width: 5ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">上班</th>
+
+    <!-- 下班時間 同上 -->
+    <th style="width: 5ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">下班</th>
+
     <!-- 高空，控場/追光欄位不動，維持原本設定 -->
     <th style="width: calc(6% + 30px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">高空</th>
-    <th style="width: calc(6% + 30px); overflow: hidden; text-overflow: ellipsis;">控場/追光</th>
+    <th style="width: calc(8% + 30px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">控場/追光</th>
 
     <!-- 加班 三個數字寬度 -->
-    <th style="width: 2ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">加班</th>
+    <th style="width: 3ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">加班</th>
 
     <!-- 備註 5字寬 -->
     <th style="width: 5ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">備註</th>
@@ -223,6 +230,24 @@
     <th class="no-print" style="width: calc(5% + 30px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">操作</th>
   </tr>
 </thead>
+    <tbody id="activity-tbody">
+      <tr>
+        <td><input type="date" class="activity-date" onchange="updateTotals()"></td>
+        <td><input type="text" class="activity-name" placeholder="活動名稱/地點"></td>
+        <td><input type="number" class="activity-people w-digits-3 mx-auto text-center" value="1" min="1" onchange="updateTotals()"></td>
+        <td><input type="time" class="activity-start" value="08:00" onchange="updateTotals()"></td>
+        <td><input type="time" class="activity-end" value="17:00" onchange="updateTotals()"></td>
+        <td class="checkbox-center"><input type="checkbox" class="activity-height" onchange="updateTotals()"></td>
+        <td class="checkbox-center"><input type="checkbox" class="activity-control" onchange="updateTotals()"></td>
+        <td><input type="number" class="activity-overtime w-digits-3" value="0" min="0" step="0.5" onchange="updateTotals()"></td>
+        <td><input type="text" class="activity-note w-digits-5" placeholder="備註" maxlength="5"></td>
+        <td class="payment-column amount-cell"><input type="text" class="activity-amount w-digits-3 text-right" value="0" readonly=""></td>
+        <td class="no-print delete-btn" onclick="deleteActivityRow(this)">✕</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
       <tr style="height: 20px;">
     <!-- 你的欄位 -->
   </tr>
