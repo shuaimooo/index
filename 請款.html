@@ -193,22 +193,40 @@
             <h3 class="section-title text-2xl">活動支援明細</h3>
             <div class="overflow-x-auto mb-4">
   <table class="activity-table text-lg" id="activity-table">
-    <thead>
-    <thead>
-      <tr>
-        <th style="width:5%">日期</th>
-        <th style="width:50%">活動名稱／地點</th>
-        <th style="width:4%">人數</th>
-        <th style="width:5%">上班</th>
-        <th style="width:5%">下班</th>
-        <th style="width:6%">高空</th>
-        <th style="width:6%">控場/追光</th>
-        <th style="width:2%">加班</th>
-        <th style="width:10%">備註</th>
-        <th class="payment-column" style="width:40%">請款金額</th>
-        <th style="width:5%" class="no-print">操作</th>
-      </tr>
-    </thead>
+   <thead>
+  <tr style="height: 20px;">
+    <!-- 日期只要顯示月/日，寬度約 5 個字元 -->
+    <th style="width: 5ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">日期</th>
+
+    <!-- 活動地點／名稱 10字寬 -->
+    <th style="width: 10ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">活動名稱／地點</th>
+
+    <!-- 人數 三個數字寬度 -->
+    <th style="width: 3ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">人數</th>
+
+    <!-- 上班時間 xx:xx 4字寬，稍留點空間設5ch -->
+    <th style="width: 5ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">上班</th>
+
+    <!-- 下班時間 同上 -->
+    <th style="width: 5ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">下班</th>
+
+    <!-- 高空，控場/追光欄位不動，維持原本設定 -->
+    <th style="width: calc(6% + 30px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">高空</th>
+    <th style="width: calc(8% + 30px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">控場/追光</th>
+
+    <!-- 加班 三個數字寬度 -->
+    <th style="width: 3ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">加班</th>
+
+    <!-- 備註 5字寬 -->
+    <th style="width: 5ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">備註</th>
+
+    <!-- 請款金額 6個數字寬 -->
+    <th class="payment-column" style="width: 6ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">請款金額</th>
+
+    <!-- 操作欄位不動 -->
+    <th class="no-print" style="width: calc(5% + 30px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">操作</th>
+  </tr>
+</thead>
     <tbody id="activity-tbody">
       <tr>
         <td><input type="date" class="activity-date" onchange="updateTotals()"></td>
