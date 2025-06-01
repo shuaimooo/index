@@ -192,6 +192,39 @@
             margin-right: 2px;
         }
         
+        .tabular-nums {
+            font-variant-numeric: tabular-nums;
+        }
+        
+        /* 備註區塊樣式 */
+        .notes-section {
+            background-color: #f9f9f9;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .section-header {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .notes-content ul {
+            padding-left: 1.5rem;
+            margin: 0;
+        }
+        
+        .notes-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+        
+        /* 操作欄位不換行 */
+        .nowrap {
+            white-space: nowrap;
+        }
+        
         @media print {
             .page {
                 box-shadow: none;
@@ -230,18 +263,18 @@
         <div class="header text-white p-6 rounded-t-lg">
             <div class="flex justify-between items-center">
                 <div>
-                    <h1 class="text-3xl font-bold">LUMASONIX x PROFESSIONAL</h1>
-                    <p class="text-lg">專業技術支援 x 人力媒合行銷</p>
+                    <h1 class="text-4xl font-bold">LUMASONIX x PROFESSIONAL</h1>
+                    <p class="text-3xl">專業技術支援 x 人力媒合行銷</p>
                 </div>
                 <div>
-                    <p class="text-xl font-bold">技術人員請款單</p>
+                    <p class="text-3xl font-bold">技術人員請款單</p>
                 </div>
             </div>
         </div>
         
         <!-- 客戶資訊 -->
         <div class="bg-gray-100 p-6 border-b border-gray-300">
-            <div class="grid grid-cols-3 gap-4">
+           <div class="grid grid-cols-3 gap-4">
                 <div>
                     <p class="mb-1"><strong>請款編號</strong></p>
                     <input type="text" id="invoiceNumber" value="LX-" class="w-full">
@@ -268,22 +301,23 @@
                     <p class="mb-1"><strong>廠商名稱</strong></p>
                    <input type="text" id="vendorName" placeholder="請輸入廠商名稱" class="w-full">
 
+
                 </div>
             </div>
         </div>
         
         <!-- 費用明細 -->
         <div class="p-6">
-            <h2 class="text-xl font-bold mb-4">費用統計</h2>
+            <h2 class="text-2xl font-bold mb-4">費用統計</h2>
             <table class="w-full mb-6">
                 <thead class="bg-gray-200">
                     <tr>
-                        <th>項目</th>
-                        <th>數量</th>
-                        <th>單價</th>
+                        <th class="w-1/4">項目</th>
+                        <th class="w-1/12 text-center">數量</th>
+                        <th class="w-1/12 text-center">單價</th>
                         <th>描述項目</th>
-                        <th>金額</th>
-                        <th>操作</th>
+                        <th class="w-1/8 text-center">金額</th>
+                        <th class="w-16 text-center nowrap">操作</th>
                     </tr>
                 </thead>
                 <tbody id="feeTable">
@@ -293,7 +327,7 @@
                         <td><input type="number" id="personnelPrice" value="2500" class="w-full text-center" onchange="calculateFees()"></td>
                         <td>進場演出撤場</td>
                         <td><input type="number" id="personnelAmount" value="2500" class="w-full text-right" readonly></td>
-                        <td class="text-center">-</td>
+                        <td class="text-center nowrap">-</td>
                     </tr>
                     <tr>
                         <td>控場/追光/高空</td>
@@ -301,7 +335,7 @@
                         <td><input type="number" id="specialPrice" value="1000" class="w-full text-center" onchange="calculateFees()"></td>
                         <td>演出前一日彩排，將視為一場演出，另行計費,彩排與演出同日進行，僅收取一次演出費用</td>
                         <td><input type="number" id="specialAmount" value="0" class="w-full text-right" readonly></td>
-                        <td class="text-center">-</td>
+                        <td class="text-center nowrap">-</td>
                     </tr>
                     <tr>
                         <td>加班</td>
@@ -309,23 +343,23 @@
                         <td><input type="number" id="overtimePrice" value="350" class="w-full text-center" onchange="calculateFees()"></td>
                         <td>當月總計加班時數</td>
                         <td><input type="number" id="overtimeAmount" value="0" class="w-full text-right" readonly></td>
-                        <td class="text-center">-</td>
+                        <td class="text-center nowrap">-</td>
                     </tr>
                     <tr id="adminFeeRow">
                         <td>行政執行費</td>
-                        <td>一式</td>
-                        <td>10%</td>
+                        <td class="text-center">一式</td>
+                        <td class="text-center">10%</td>
                         <td>當月總計人數*10%*2500</td>
                         <td><input type="number" id="adminAmount" value="250" class="w-full text-right" readonly></td>
-                        <td class="text-center">-</td>
+                        <td class="text-center nowrap">-</td>
                     </tr>
                     <tr>
                         <td>其他</td>
-                        <td>一式</td>
-                        <td>-</td>
+                        <td class="text-center">一式</td>
+                        <td class="text-center">-</td>
                         <td><input type="text" placeholder="描述" class="w-full"></td>
                         <td><input type="number" id="otherAmount" value="0" class="w-full text-right" onchange="calculateFees()"></td>
-                        <td class="text-center">
+                        <td class="text-center nowrap">
                             <button class="text-red-500 hover:text-red-700" onclick="removeRow(this)">
                                 ✕
                             </button>
@@ -344,36 +378,51 @@
                 </button>
             </div>
             
-            <!-- 費用統計 -->
-           <div class="bg-gray-100 p-4 rounded-lg w-80">
-    <!-- 小計 -->
-    <div class="flex items-center justify-between mb-2">
-        <span class="font-bold">費用小計：</span>
-        <div class="flex items-center w-40 justify-end">
-            <span id="subtotal" class="font-bold tabular-nums text-right w-24">2,750</span>
-            <span class="ml-1 font-bold">元整</span>
-        </div>
-    </div>
+            <!-- 費用統計和匯款資訊並排 -->
+            <div class="flex justify-between items-start">
+                <!-- 匯款資訊 - 左側 -->
+                 <div class="bg-gray-100 p-6 rounded-lg w-1/2 mr-4">
+                    <h2 class="text-3xl font-bold mb-2">【匯款資訊】</h2>
+                    <h2 class="text-2xl font-bold mb-2">帳號戶名：蘇裕庭</h2> 
+                    <h2 class="text-xl font-bold mb-2">匯款代碼：808(玉山中路特區分行)</h2>
+                    <h2 class="text-2xl font-bold mb-2">匯款帳號：0842-979-176643</h2>
+                    
+                               </div>
 
-    <!-- 總計 -->
-    <div class="flex items-center justify-between font-bold text-2xl text-red-500">
-        <span>總計金額：</span>
-        <div class="flex items-center w-40 justify-end">
-            <span id="total" class="tabular-nums text-right w-24">2,750</span>
-            <span class="ml-1 text-base">元整</span>
-        </div>
-    </div>
-</div>
-        <!-- 匯款資訊 -->
-        <div class="bg-gray-100 p-6 mt-6 rounded-lg">
-            <h2 class="text-xl font-bold mb-2">【匯款資訊】</h2>
-            <h2 class="text-sm font-bold mb-2">帳號戶名：蘇裕庭</h2> 
-            <h2 class="text-sm font-bold mb-2">匯款代碼：808(玉山銀行中路特區分行)</h2>
-            <h2 class="text-sm font-bold mb-2">匯款帳號：0842-979-176643</h2>
+                
+                <!-- 費用統計 - 右側 -->
+                <div class="bg-gray-100 p-4 rounded-lg w-80 ml-auto">
+                    <!-- 小計 -->
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="font-bold">費用小計：</span>
+                        <div class="flex items-center w-40 justify-end">
+                            <span id="subtotal" class="font-bold tabular-nums text-right w-24">2,750</span>
+                            <span class="ml-1 font-bold">元整</span>
+                        </div>
+                    </div>
+
+                    <!-- 總計 -->
+                    <div class="flex items-center justify-between font-bold text-2xl text-red-500">
+                        <span>總計金額：</span>
+                        <div class="flex items-center w-40 justify-end">
+                            <span id="total" class="tabular-nums text-right w-24">2,750</span>
+                            <span class="ml-1 text-base">元整</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="mt-4">
-                <p class="mb-1"><strong>備註</strong></p>
-                <textarea placeholder="請輸入備註事項..." rows="3" class="w-full"></textarea>
+            
+            <!-- 備註區塊 - 獨立區域 -->
+            <div class="notes-section mt-6">
+                <div class="section-header">備註事項</div>
+                <div class="notes-content">
+                    <ul>
+                        <li>本人僅協助媒合與執行活動之統籌角色，執行風險與責任應由現場技術人員自負。</li>
+                        <li>移動至不同活動場地即視為新場次，費用重新計算。</li>
+                           <li>活動結束雙方於現場確認交付狀況後視驗收完畢，恕不再就當日服務異議減項。</li>
+                        <li>維持作業品質與人員安排效率等相關行政作業，將酌收行政執行費用，已併入請款明細列示。</li>
+                    </ul>
+                </div>
             </div>
         </div>
         
@@ -390,18 +439,18 @@
         <div class="header text-white p-6 rounded-t-lg">
             <div class="flex justify-between items-center">
                 <div>
-                    <h1 class="text-3xl font-bold">LUMASONIX x PROFESSIONAL</h1>
-                    <p class="text-lg">專業技術支援 x 人力媒合行銷</p>
+                    <h1 class="text-4xl font-bold">LUMASONIX x PROFESSIONAL</h1>
+                    <p class="text-3xl">專業技術支援 x 人力媒合行銷</p>
                 </div>
                 <div>
-                    <p class="text-xl font-bold">技術人員請款單</p>
+                    <p class="text-2xl font-bold">技術人員請款單</p>
                 </div>
             </div>
         </div>
         
         <!-- 活動明細 -->
         <div class="p-6">
-            <h2 class="text-xl font-bold mb-4">活動支援明細</h2>
+            <h2 class="text-2xl font-bold mb-4">活動支援明細</h2>
             <table class="w-full mb-6 activity-table">
                 <thead class="bg-gray-200 double-header">
                     <tr>
@@ -413,16 +462,16 @@
                         <th rowspan="2">高空控/追光</th>
                         <th rowspan="2">加班<br>時數</th>
                         <th rowspan="2">請款<br>金額</th>
-                        <th rowspan="2">操作</th>
+                        <th rowspan="2" class="nowrap">操作</th>
                     </tr>
                 </thead>
                 <tbody id="activityTable">
                     <tr>
                         <td><input type="text" placeholder="MM/DD" class="activity-date"></td>
                         <td><input type="text" placeholder="活動地點" class="activity-location"></td>
-                        <td><input type="number" value="1" min="1" class="activity-qty" onchange="calculateActivityFees(this)"></td>
-                        <td><input type="text" placeholder="HH:MM" class="activity-start-time"></td>
-                        <td><input type="text" placeholder="HH:MM" class="activity-end-time"></td>
+                        <td><input type="number" value="1" min="1" class="activity-qty text-center" onchange="calculateActivityFees(this)"></td>
+                        <td><input type="text" placeholder="HH:MM" class="activity-start-time text-center"></td>
+                        <td><input type="text" placeholder="HH:MM" class="activity-end-time text-center"></td>
                         <td class="special-work-cell">
                             <input type="number" value="0" min="0" class="activity-special-qty" onchange="calculateActivityFees(this)">
                             <div class="special-work-checkboxes">
@@ -438,8 +487,8 @@
                                 <div class="stepper-btn" onclick="adjustOvertime(this, 0.5)">+</div>
                             </div>
                         </td>
-                        <td><input type="number" value="2500" class="activity-amount" readonly></td>
-                        <td class="text-center">
+                        <td><input type="number" value="2500" class="activity-amount text-right" readonly></td>
+                        <td class="text-center nowrap">
                             <button class="text-red-500 hover:text-red-700" onclick="removeActivityRow(this)">
                                 ✕
                             </button>
@@ -459,10 +508,30 @@
             </div>
             
             <!-- 活動費用統計 -->
-            <div class="bg-gray-100 p-4 rounded-lg">
-                <div class="flex justify-between font-bold text-xl text-red-500">
-                    <span>總計金額：</span>
-                    <span id="activityTotal">2,500</span>
+            <div class="flex justify-end">
+                <div class="bg-gray-100 p-4 rounded-lg w-80">
+                    <!-- 總計 -->
+                    <div class="flex items-center justify-between font-bold text-2xl text-red-500">
+                        <span>總計金額：</span>
+                        <div class="flex items-center w-40 justify-end">
+                            <span id="activityTotal" class="tabular-nums text-right w-24">2,500</span>
+                            <span class="ml-1 text-base">元整</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 備註區塊 -->
+            <div class="notes-section mt-6">
+                <div class="section-header">備註事項</div>
+                <div class="notes-content">
+                    <ul>
+                        <li>本人僅協助媒合與執行活動之統籌角色，執行風險與責任應由現場技術人員自負。</li>
+                        <li>移動至不同活動場地即視為新場次，費用重新計算。</li>
+                           <li>活動結束雙方於現場確認交付狀況後視驗收完畢，恕不再就當日服務異議減項。</li>
+                        <li>維持作業品質與人員安排效率等相關行政作業，將酌收行政執行費用，已併入請款明細列示。</li>
+
+                    </ul>
                 </div>
             </div>
         </div>
@@ -503,13 +572,27 @@
                         <th rowspan="2">高空控/追光</th>
                         <th rowspan="2">加班<br>時數</th>
                         <th rowspan="2">請款<br>金額</th>
-                        <th rowspan="2">操作</th>
+                        <th rowspan="2" class="nowrap">操作</th>
                     </tr>
                 </thead>
                 <tbody id="activityTableContinued">
                     <!-- 這裡會動態添加更多活動 -->
                 </tbody>
             </table>
+            
+            <!-- 備註區塊 -->
+            <div class="notes-section mt-6">
+                <div class="section-header">備註事項</div>
+                <div class="notes-content">
+                    <ul>
+                        <li>本人僅協助媒合與執行活動之統籌角色，執行風險與責任應由現場技術人員自負。</li>
+                        <li>移動至不同活動場地即視為新場次，費用重新計算。</li>
+                        <li>演出當天取消需支付報價金額之 50% ，改期需於五日前通知，否則視同取消。</li>
+                        <li>活動結束雙方應現場確認交付狀況後視驗收完畢，恕不再就當日服務異議減項。</li>
+                        <li>維持作業品質與人員安排效率等相關行政作業，將酌收行政執行費用，已併入請款明細列示。</li>
+                    </ul>
+                </div>
+            </div>
         </div>
         
         <!-- 頁尾 -->
@@ -594,11 +677,11 @@
             
             newRow.innerHTML = `
                 <td><input type="text" placeholder="項目名稱" class="w-full"></td>
-                <td><input type="number" placeholder="數量" class="w-full text-right" onchange="calculateFees()"></td>
-                <td><input type="number" placeholder="單價" class="w-full text-right" onchange="calculateFees()"></td>
+                <td><input type="number" placeholder="數量" class="w-full text-center" onchange="calculateFees()"></td>
+                <td><input type="number" placeholder="單價" class="w-full text-center" onchange="calculateFees()"></td>
                 <td><input type="text" placeholder="描述" class="w-full"></td>
                 <td><input type="number" value="0" class="w-full text-right" onchange="calculateFees()"></td>
-                <td class="text-center">
+                <td class="text-center nowrap">
                     <button class="text-red-500 hover:text-red-700" onclick="removeRow(this)">
                         ✕
                     </button>
@@ -629,9 +712,9 @@
             newRow.innerHTML = `
                 <td><input type="text" placeholder="MM/DD" class="activity-date"></td>
                 <td><input type="text" placeholder="活動地點" class="activity-location"></td>
-                <td><input type="number" value="1" min="1" class="activity-qty" onchange="calculateActivityFees(this)"></td>
-                <td><input type="text" placeholder="HH:MM" class="activity-start-time"></td>
-                <td><input type="text" placeholder="HH:MM" class="activity-end-time"></td>
+                <td><input type="number" value="1" min="1" class="activity-qty text-center" onchange="calculateActivityFees(this)"></td>
+                <td><input type="text" placeholder="HH:MM" class="activity-start-time text-center"></td>
+                <td><input type="text" placeholder="HH:MM" class="activity-end-time text-center"></td>
                 <td class="special-work-cell">
                     <input type="number" value="0" min="0" class="activity-special-qty" onchange="calculateActivityFees(this)">
                     <div class="special-work-checkboxes">
@@ -647,8 +730,8 @@
                         <div class="stepper-btn" onclick="adjustOvertime(this, 0.5)">+</div>
                     </div>
                 </td>
-                <td><input type="number" value="2500" class="activity-amount" readonly></td>
-                <td class="text-center">
+                <td><input type="number" value="2500" class="activity-amount text-right" readonly></td>
+                <td class="text-center nowrap">
                     <button class="text-red-500 hover:text-red-700" onclick="removeActivityRow(this)">
                         ✕
                     </button>
@@ -834,5 +917,5 @@
             }
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'949161ddb544de77',t:'MTc0ODgwODkxOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'94924d75456ade67',t:'MTc0ODgxODU2OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
