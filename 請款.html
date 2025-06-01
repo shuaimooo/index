@@ -68,6 +68,130 @@
             text-align: center;
         }
         
+        /* 數字輸入框樣式 */
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+        
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        
+        /* 步進器樣式 */
+        .stepper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .stepper-input {
+            width: 60px;
+            text-align: center;
+        }
+        
+        .stepper-btn {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #e2e8f0;
+            border-radius: 4px;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .stepper-btn:hover {
+            background-color: #cbd5e0;
+        }
+        
+        /* 複合欄位樣式 */
+        .combined-field {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            font-size: 0.875rem;
+        }
+        
+        .number-input-small {
+            width: 60px;
+            text-align: center;
+        }
+        
+        /* 雙行表頭樣式 */
+        .double-header th {
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+        
+        .double-header th.subheader {
+            font-weight: normal;
+            font-size: 0.875rem;
+            border-top: none;
+        }
+        
+        /* 活動表格樣式 */
+        .activity-table td {
+            border: 1px solid #e2e8f0;
+            padding: 0.5rem;
+        }
+        
+        .activity-table input[type="text"],
+        .activity-table input[type="number"] {
+            border: none;
+            background: transparent;
+            width: 100%;
+            padding: 0.25rem;
+        }
+        
+        .activity-table input:focus {
+            outline: none;
+            background-color: #f0f9ff;
+        }
+        
+        .special-work-cell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        
+        .special-work-cell input[type="number"] {
+            width: 40px;
+            text-align: center;
+            margin-bottom: 4px;
+        }
+        
+        .special-work-checkboxes {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        
+        .special-work-checkboxes label {
+            display: flex;
+            align-items: center;
+            margin: 0;
+            font-size: 0.75rem;
+        }
+        
+        .special-work-checkboxes input[type="checkbox"] {
+            width: auto;
+            margin-right: 2px;
+        }
+        
         @media print {
             .page {
                 box-shadow: none;
@@ -171,19 +295,11 @@
                         <td class="text-center">-</td>
                     </tr>
                     <tr>
-                        <td>控場/追光</td>
-                        <td><input type="number" id="controlQty" value="0" class="w-full text-right" onchange="calculateFees()"></td>
-                        <td><input type="number" id="controlPrice" value="1000" class="w-full text-right" onchange="calculateFees()"></td>
+                        <td>控場/追光/高空</td>
+                        <td><input type="number" id="specialQty" value="0" class="w-full text-right" onchange="calculateFees()"></td>
+                        <td><input type="number" id="specialPrice" value="1000" class="w-full text-right" onchange="calculateFees()"></td>
                         <td>演出前一日彩排，將視為一場演出，另行計費,彩排與演出同日進行，僅收取一次演出費用</td>
-                        <td><input type="number" id="controlAmount" value="0" class="w-full text-right" readonly></td>
-                        <td class="text-center">-</td>
-                    </tr>
-                    <tr>
-                        <td>高空</td>
-                        <td><input type="number" id="heightQty" value="0" class="w-full text-right" onchange="calculateFees()"></td>
-                        <td><input type="number" id="heightPrice" value="1000" class="w-full text-right" onchange="calculateFees()"></td>
-                        <td>依layer6格約9米高度以上另酌收費用</td>
-                        <td><input type="number" id="heightAmount" value="0" class="w-full text-right" readonly></td>
+                        <td><input type="number" id="specialAmount" value="0" class="w-full text-right" readonly></td>
                         <td class="text-center">-</td>
                     </tr>
                     <tr>
@@ -288,34 +404,50 @@
         <!-- 活動明細 -->
         <div class="p-6">
             <h2 class="text-xl font-bold mb-4">活動支援明細</h2>
-            <table class="w-full mb-6">
-                <thead class="bg-gray-200">
+            <table class="w-full mb-6 activity-table">
+                <thead class="bg-gray-200 double-header">
                     <tr>
-                        <th>日期</th>
-                        <th>活動名稱/地點</th>
-                        <th>人數</th>
-                        <th>上班時間</th>
-                        <th>下班時間</th>
-                        <th>高空</th>
-                        <th>控場/追光</th>
-                        <th>加班</th>
-                        <th>請款金額</th>
-                        <th>操作</th>
+                        <th rowspan="2">日期</th>
+                        <th rowspan="2">活動名稱<br>活動地點</th>
+                        <th rowspan="2">人數</th>
+                        <th rowspan="2">上班<br>時間</th>
+                        <th rowspan="2">下班<br>時間</th>
+                        <th rowspan="2">高空控/追光</th>
+                        <th rowspan="2">加班<br>時數</th>
+                        <th rowspan="2">請款<br>金額</th>
+                        <th rowspan="2">操作</th>
                     </tr>
                 </thead>
                 <tbody id="activityTable">
                     <tr>
-                        <td><input type="text" placeholder="MM/DD" class="w-full"></td>
-                        <td><input type="text" placeholder="活動名稱/地點" class="w-full"></td>
-                        <td><input type="number" value="1" class="w-full text-center activity-qty" onchange="calculateActivityFees(this)"></td>
-                        <td><input type="text" placeholder="HH:MM" class="w-full"></td>
-                        <td><input type="text" placeholder="HH:MM" class="w-full"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="form-checkbox h-5 w-5 activity-height" onchange="calculateActivityFees(this)"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="form-checkbox h-5 w-5 activity-control" onchange="calculateActivityFees(this)"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="form-checkbox h-5 w-5 activity-overtime" onchange="calculateActivityFees(this)"></td>
-                        <td><input type="number" value="2500" class="w-full text-right activity-amount" readonly></td>
+                        <td><input type="text" placeholder="MM/DD" class="activity-date"></td>
+                        <td>
+                            <div class="flex flex-col gap-2">
+                                <input type="text" placeholder="活動名稱" class="activity-name">
+                                <input type="text" placeholder="活動地點" class="activity-location">
+                            </div>
+                        </td>
+                        <td><input type="number" value="1" min="1" class="activity-qty" onchange="calculateActivityFees(this)"></td>
+                        <td><input type="text" placeholder="HH:MM" class="activity-start-time"></td>
+                        <td><input type="text" placeholder="HH:MM" class="activity-end-time"></td>
+                        <td class="special-work-cell">
+                            <input type="number" value="0" min="0" class="activity-special-qty" onchange="calculateActivityFees(this)">
+                            <div class="special-work-checkboxes">
+                                <label><input type="checkbox" class="activity-height"> 高</label>
+                                <label><input type="checkbox" class="activity-spotlight"> 追</label>
+                                <label><input type="checkbox" class="activity-control"> 控</label>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="stepper">
+                                <div class="stepper-btn" onclick="adjustOvertime(this, -0.5)">-</div>
+                                <input type="number" value="0" step="0.5" min="0" class="stepper-input activity-overtime-hours" onchange="validateOvertime(this); calculateActivityFees(this)">
+                                <div class="stepper-btn" onclick="adjustOvertime(this, 0.5)">+</div>
+                            </div>
+                        </td>
+                        <td><input type="number" value="2500" class="activity-amount" readonly></td>
                         <td class="text-center">
-                            <button class="text-red-500 hover:text-red-700" onclick="removeRow(this)">
+                            <button class="text-red-500 hover:text-red-700" onclick="removeActivityRow(this)">
                                 ✕
                             </button>
                         </td>
@@ -367,19 +499,18 @@
         <!-- 活動明細續頁 -->
         <div class="p-6">
             <h2 class="text-xl font-bold mb-4">活動支援明細 (續)</h2>
-            <table class="w-full mb-6">
-                <thead class="bg-gray-200">
+            <table class="w-full mb-6 activity-table">
+                <thead class="bg-gray-200 double-header">
                     <tr>
-                        <th>日期</th>
-                        <th>活動名稱/地點</th>
-                        <th>人數</th>
-                        <th>上班時間</th>
-                        <th>下班時間</th>
-                        <th>高空</th>
-                        <th>控場/追光</th>
-                        <th>加班</th>
-                        <th>請款金額</th>
-                        <th>操作</th>
+                        <th rowspan="2">日期</th>
+                        <th rowspan="2">活動名稱<br>活動地點</th>
+                        <th rowspan="2">人數</th>
+                        <th rowspan="2">上班<br>時間</th>
+                        <th rowspan="2">下班<br>時間</th>
+                        <th rowspan="2">高空控/追光</th>
+                        <th rowspan="2">加班<br>時數</th>
+                        <th rowspan="2">請款<br>金額</th>
+                        <th rowspan="2">操作</th>
                     </tr>
                 </thead>
                 <tbody id="activityTableContinued">
@@ -422,17 +553,11 @@
             const personnelAmount = personnelQty * personnelPrice;
             document.getElementById('personnelAmount').value = personnelAmount;
             
-            // 控場/追光費用
-            const controlQty = parseFloat(document.getElementById('controlQty').value) || 0;
-            const controlPrice = parseFloat(document.getElementById('controlPrice').value) || 0;
-            const controlAmount = controlQty * controlPrice;
-            document.getElementById('controlAmount').value = controlAmount;
-            
-            // 高空費用
-            const heightQty = parseFloat(document.getElementById('heightQty').value) || 0;
-            const heightPrice = parseFloat(document.getElementById('heightPrice').value) || 0;
-            const heightAmount = heightQty * heightPrice;
-            document.getElementById('heightAmount').value = heightAmount;
+            // 特殊工作費用 (控場/追光/高空)
+            const specialQty = parseFloat(document.getElementById('specialQty').value) || 0;
+            const specialPrice = parseFloat(document.getElementById('specialPrice').value) || 0;
+            const specialAmount = specialQty * specialPrice;
+            document.getElementById('specialAmount').value = specialAmount;
             
             // 加班費用
             const overtimeQty = parseFloat(document.getElementById('overtimeQty').value) || 0;
@@ -448,14 +573,13 @@
             const otherAmount = parseFloat(document.getElementById('otherAmount').value) || 0;
             
             // 計算總費用
-            let subtotal = personnelAmount + controlAmount + heightAmount + overtimeAmount + adminAmount + otherAmount;
+            let subtotal = personnelAmount + specialAmount + overtimeAmount + adminAmount + otherAmount;
             
             // 加上其他動態添加的費用項目
             const feeRows = document.querySelectorAll('#feeTable tr:not(#personnelSupportRow):not(#adminFeeRow)');
             feeRows.forEach(row => {
                 const amountInput = row.querySelector('td:nth-child(5) input');
-                if (amountInput && amountInput.id !== 'controlAmount' && 
-                    amountInput.id !== 'heightAmount' && 
+                if (amountInput && amountInput.id !== 'specialAmount' && 
                     amountInput.id !== 'overtimeAmount' && 
                     amountInput.id !== 'otherAmount') {
                     subtotal += parseFloat(amountInput.value) || 0;
@@ -506,51 +630,156 @@
                 }
             }
             
+            // 創建新行
             const newRow = document.createElement('tr');
             
             newRow.innerHTML = `
-                <td><input type="text" placeholder="MM/DD" class="w-full"></td>
-                <td><input type="text" placeholder="活動名稱/地點" class="w-full"></td>
-                <td><input type="number" value="1" class="w-full text-center activity-qty" onchange="calculateActivityFees(this)"></td>
-                <td><input type="text" placeholder="HH:MM" class="w-full"></td>
-                <td><input type="text" placeholder="HH:MM" class="w-full"></td>
-                <td class="checkbox-cell"><input type="checkbox" class="form-checkbox h-5 w-5 activity-height" onchange="calculateActivityFees(this)"></td>
-                <td class="checkbox-cell"><input type="checkbox" class="form-checkbox h-5 w-5 activity-control" onchange="calculateActivityFees(this)"></td>
-                <td class="checkbox-cell"><input type="checkbox" class="form-checkbox h-5 w-5 activity-overtime" onchange="calculateActivityFees(this)"></td>
-                <td><input type="number" value="2500" class="w-full text-right activity-amount" readonly></td>
+                <td><input type="text" placeholder="MM/DD" class="activity-date"></td>
+                <td>
+                    <div class="flex flex-col gap-2">
+                        <input type="text" placeholder="活動名稱" class="activity-name">
+                        <input type="text" placeholder="活動地點" class="activity-location">
+                    </div>
+                </td>
+                <td><input type="number" value="1" min="1" class="activity-qty" onchange="calculateActivityFees(this)"></td>
+                <td><input type="text" placeholder="HH:MM" class="activity-start-time"></td>
+                <td><input type="text" placeholder="HH:MM" class="activity-end-time"></td>
+                <td class="special-work-cell">
+                    <input type="number" value="0" min="0" class="activity-special-qty" onchange="calculateActivityFees(this)">
+                    <div class="special-work-checkboxes">
+                        <label><input type="checkbox" class="activity-height"> 高</label>
+                        <label><input type="checkbox" class="activity-spotlight"> 追</label>
+                        <label><input type="checkbox" class="activity-control"> 控</label>
+                    </div>
+                </td>
+                <td>
+                    <div class="stepper">
+                        <div class="stepper-btn" onclick="adjustOvertime(this, -0.5)">-</div>
+                        <input type="number" value="0" step="0.5" min="0" class="stepper-input activity-overtime-hours" onchange="validateOvertime(this); calculateActivityFees(this)">
+                        <div class="stepper-btn" onclick="adjustOvertime(this, 0.5)">+</div>
+                    </div>
+                </td>
+                <td><input type="number" value="2500" class="activity-amount" readonly></td>
                 <td class="text-center">
-                    <button class="text-red-500 hover:text-red-700" onclick="removeRow(this)">
+                    <button class="text-red-500 hover:text-red-700" onclick="removeActivityRow(this)">
                         ✕
                     </button>
                 </td>
             `;
             
             targetTable.appendChild(newRow);
+            
             calculateAllActivityFees();
+        }
+        
+        // 調整加班時數
+        function adjustOvertime(btn, change) {
+            const input = btn.parentNode.querySelector('input');
+            let value = parseFloat(input.value) || 0;
+            value += change;
+            
+            // 確保值不小於0且是0.5的倍數
+            if (value < 0) value = 0;
+            
+            // 四捨五入到最接近的0.5倍數
+            value = Math.round(value * 2) / 2;
+            
+            input.value = value;
+            calculateActivityFees(input);
+        }
+        
+        // 驗證加班時數
+        function validateOvertime(input) {
+            let value = parseFloat(input.value) || 0;
+            
+            // 確保值不小於0且是0.5的倍數
+            if (value < 0) value = 0;
+            
+            // 四捨五入到最接近的0.5倍數
+            value = Math.round(value * 2) / 2;
+            
+            input.value = value;
         }
         
         // 計算單個活動費用
         function calculateActivityFees(element) {
-            const row = element.closest('tr');
+            // 找到包含此元素的行
+            let row = element.closest('tr');
+            
             const basePrice = 2500; // 基本費用
-            const heightPrice = 1000; // 高空費用
-            const controlPrice = 1000; // 控場/追光費用
-            const overtimePrice = 350; // 加班費用
+            const specialPrice = 1000; // 特殊工作費用
+            const overtimeHourlyRate = 350; // 加班時薪
             
             const qty = parseFloat(row.querySelector('.activity-qty').value) || 1;
-            const isHeight = row.querySelector('.activity-height').checked;
-            const isControl = row.querySelector('.activity-control').checked;
-            const isOvertime = row.querySelector('.activity-overtime').checked;
+            const specialQty = parseFloat(row.querySelector('.activity-special-qty').value) || 0;
+            const overtimeHours = parseFloat(row.querySelector('.activity-overtime-hours').value) || 0;
             
             let totalAmount = basePrice * qty;
-            if (isHeight) totalAmount += heightPrice;
-            if (isControl) totalAmount += controlPrice;
-            if (isOvertime) totalAmount += overtimePrice;
+            totalAmount += specialQty * specialPrice;
+            totalAmount += overtimeHours * overtimeHourlyRate;
             
             row.querySelector('.activity-amount').value = totalAmount;
             
             // 更新活動總計
             calculateAllActivityFees();
+            
+            // 更新第一頁的加班總時數和特殊工作總人數
+            updateTotalOvertimeHours();
+            updateTotalSpecialQty();
+        }
+        
+        // 更新加班總時數
+        function updateTotalOvertimeHours() {
+            let totalOvertimeHours = 0;
+            
+            // 計算第一頁活動的加班時數
+            const activityRows = document.querySelectorAll('#activityTable tr');
+            activityRows.forEach(row => {
+                const overtimeInput = row.querySelector('.activity-overtime-hours');
+                if (overtimeInput) {
+                    totalOvertimeHours += parseFloat(overtimeInput.value) || 0;
+                }
+            });
+            
+            // 計算續頁活動的加班時數
+            const activityRowsContinued = document.querySelectorAll('#activityTableContinued tr');
+            activityRowsContinued.forEach(row => {
+                const overtimeInput = row.querySelector('.activity-overtime-hours');
+                if (overtimeInput) {
+                    totalOvertimeHours += parseFloat(overtimeInput.value) || 0;
+                }
+            });
+            
+            // 更新第一頁的加班時數
+            document.getElementById('overtimeQty').value = totalOvertimeHours;
+            calculateFees();
+        }
+        
+        // 更新特殊工作總人數
+        function updateTotalSpecialQty() {
+            let totalSpecialQty = 0;
+            
+            // 計算第一頁活動的特殊工作人數
+            const activityRows = document.querySelectorAll('#activityTable tr');
+            activityRows.forEach(row => {
+                const specialQtyInput = row.querySelector('.activity-special-qty');
+                if (specialQtyInput) {
+                    totalSpecialQty += parseFloat(specialQtyInput.value) || 0;
+                }
+            });
+            
+            // 計算續頁活動的特殊工作人數
+            const activityRowsContinued = document.querySelectorAll('#activityTableContinued tr');
+            activityRowsContinued.forEach(row => {
+                const specialQtyInput = row.querySelector('.activity-special-qty');
+                if (specialQtyInput) {
+                    totalSpecialQty += parseFloat(specialQtyInput.value) || 0;
+                }
+            });
+            
+            // 更新第一頁的特殊工作人數
+            document.getElementById('specialQty').value = totalSpecialQty;
+            calculateFees();
         }
         
         // 計算所有活動費用總和
@@ -585,6 +814,18 @@
             row.remove();
             calculateFees();
             calculateAllActivityFees();
+            updateTotalOvertimeHours();
+            updateTotalSpecialQty();
+        }
+        
+        // 移除活動行
+        function removeActivityRow(button) {
+            const row = button.closest('tr');
+            row.remove();
+            
+            calculateAllActivityFees();
+            updateTotalOvertimeHours();
+            updateTotalSpecialQty();
         }
         
         // 格式化數字為千分位
@@ -605,5 +846,5 @@
             }
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'949014ce6093de77',t:'MTc0ODc5NTI3Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9491103ec07ff07b',t:'MTc0ODgwNTU3NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
