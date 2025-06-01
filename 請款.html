@@ -345,16 +345,25 @@
             </div>
             
             <!-- 費用統計 -->
-            <div class="bg-gray-100 p-4 rounded-lg">
-                <div class="flex justify-between mb-2">
-                    <span class="font-bold">費用小計：</span>
-                    <span id="subtotal">2,750 class="font-bold 元"</span>
-                </div>
-                <div class="flex justify-between font-bold text-2xl text-red-500">
-                    <span>總計金額：</span>
-                    <span id="total">2,750</span>元
-                </div>
-         </div>
+           <div class="bg-gray-100 p-4 rounded-lg w-80">
+    <!-- 小計 -->
+    <div class="flex items-center justify-between mb-2">
+        <span class="font-bold">費用小計：</span>
+        <div class="flex items-center w-40 justify-end">
+            <span id="subtotal" class="font-bold tabular-nums text-right w-24">2,750</span>
+            <span class="ml-1 font-bold">元整</span>
+        </div>
+    </div>
+
+    <!-- 總計 -->
+    <div class="flex items-center justify-between font-bold text-2xl text-red-500">
+        <span>總計金額：</span>
+        <div class="flex items-center w-40 justify-end">
+            <span id="total" class="tabular-nums text-right w-24">2,750</span>
+            <span class="ml-1 text-base">元整</span>
+        </div>
+    </div>
+</div>
         <!-- 匯款資訊 -->
         <div class="bg-gray-100 p-6 mt-6 rounded-lg">
             <h2 class="text-xl font-bold mb-2">【匯款資訊】</h2>
@@ -453,7 +462,7 @@
             <div class="bg-gray-100 p-4 rounded-lg">
                 <div class="flex justify-between font-bold text-xl text-red-500">
                     <span>總計金額：</span>
-                    <span id="activityTotal">2,500</span>元
+                    <span id="activityTotal">2,500</span>
                 </div>
             </div>
         </div>
