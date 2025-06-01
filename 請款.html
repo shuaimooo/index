@@ -3,1055 +3,607 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LUMASONIX 技術人員請款單</title>
+    <title>LUMASONIX 專業技術支援 - 請款單</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
         
         body {
             font-family: 'Noto Sans TC', sans-serif;
-            font-size: 1.05rem;
-        }
-        
-        @page {
-            size: A4;
-            margin: 0;
+            background-color: #f5f5f5;
         }
         
         .page {
-            width: 210mm;
-            min-height: 297mm;
-            padding: 15mm;
-            margin: 0 auto;
-            background: white;
-            position: relative;
-        }
-        
-        .page-break {
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             page-break-after: always;
-            break-after: page;
         }
         
-        @media print {
-            body {
-                margin: 0;
-                padding: 0;
-            }
-            .no-print {
-                display: none;
-            }
-            .page {
-                margin: 0;
-                box-shadow: none;
-            }
+        .header {
+            background-color: #000000;
         }
         
-        input, select {
-            border: none;
-            border-bottom: 1px solid #ccc;
-            background: transparent;
-            padding: 2px 0;
-            width: 100%;
-            font-size: 1.05rem;
-        }
-        
-        input:focus, select:focus {
-            outline: none;
-            border-bottom: 1px solid #333;
-        }
-        
-        .checkbox-custom {
-            width: 18px;
-            height: 18px;
-            border: 1px solid #333;
-            display: inline-block;
-            position: relative;
-            cursor: pointer;
-        }
-        
-        .checkbox-custom.checked:after {
-            content: '✓';
-            position: absolute;
-            top: -3px;
-            left: 3px;
-            font-size: 1.1rem;
+        .footer {
+            background-color: #f8f9fa;
         }
         
         table {
-            font-size: 1.05rem;
-            table-layout: fixed;
+            border-collapse: collapse;
             width: 100%;
         }
         
         th, td {
-            padding: 0.5rem 0.5rem;
-            overflow: hidden;
+            padding: 0.75rem;
+            text-align: left;
+            vertical-align: middle;
         }
         
-        /* Ensure activity name column has enough width */
-        .activity-name-col {
-            min-width: 120px; /* Enough for at least 8 characters */
-            width: 120px;
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
         }
         
-        /* Prevent header text wrapping */
-        .nowrap-header {
-            white-space: nowrap;
+        .btn {
+            transition: all 0.3s ease;
         }
         
-        /* Fixed column widths for activities table */
-        .date-col {
-            width: 70px;
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         
-        .people-col {
-            width: 50px;
+        input, textarea, select {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.25rem;
+            padding: 0.5rem;
+            width: 100%;
         }
         
-        .time-col {
-            width: 80px;
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #3a7bd5;
+            box-shadow: 0 0 0 3px rgba(58, 123, 213, 0.1);
         }
         
-        .checkbox-col {
-            width: 40px;
+        .checkbox-cell {
+            text-align: center;
         }
         
-        .overtime-col {
-            width: 50px;
-        }
-        
-        .amount-col {
-            width: 80px;
-        }
-        
-        .action-col {
-            width: 40px;
-        }
-        
-        /* Header styles to prevent wrapping */
-        .header-title {
-            white-space: nowrap;
-            font-size: 2.25rem; /* Adjusted size */
-        }
-        
-        .header-subtitle {
-            white-space: nowrap;
-            font-size: 0.9rem; /* Adjusted size */
-        }
-        
-        .header-invoice-title {
-            white-space: nowrap;
-            font-size: 2.25rem; /* Adjusted size */
+        @media print {
+            .page {
+                box-shadow: none;
+                margin: 0;
+                padding: 0;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+            
+            body {
+                background-color: white;
+            }
+            
+            .page {
+                page-break-after: always;
+            }
         }
     </style>
 </head>
-<body class="bg-gray-100">
-    <div class="container mx-auto py-8">
-        <div id="invoice-container">
-            <!-- First Page -->
-            <div class="page bg-white shadow-lg mb-8" id="page-1">
-                <!-- Header -->
-                <div class="border-b-2 border-black pb-4 mb-6">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <div class="header-title font-bold">LUMASONIX x PROFESSIONAL</div>
-                            <div class="header-subtitle font-normal">專業技術支援 x 人力媒合行銷</div>
-                        </div>
-                        <div class="header-invoice-title font-bold">技術人員請款單</div>
-                    </div>
+<body class="min-h-screen">
+    <!-- 控制按鈕 - 只在螢幕上顯示 -->
+    <div class="fixed top-4 right-4 flex gap-2 no-print z-50">
+        <button onclick="showPage(1)" class="btn bg-blue-600 text-white px-4 py-2 rounded-lg">第一頁</button>
+        <button onclick="showPage(2)" class="btn bg-blue-600 text-white px-4 py-2 rounded-lg">第二頁</button>
+        <button onclick="showPage(3)" class="btn bg-blue-600 text-white px-4 py-2 rounded-lg">第三頁</button>
+        <button onclick="window.print()" class="btn bg-green-600 text-white px-4 py-2 rounded-lg">列印請款單</button>
+        <button onclick="downloadPDF()" class="btn bg-purple-600 text-white px-4 py-2 rounded-lg">下載 PDF</button>
+        <button onclick="resetForm()" class="btn bg-yellow-600 text-white px-4 py-2 rounded-lg">重製表單</button>
+    </div>
+
+    <!-- 第一頁：費用明細 -->
+    <div id="page1" class="page max-w-4xl mx-auto my-8 p-8 rounded-lg">
+        <!-- 頁首 -->
+        <div class="header text-white p-6 rounded-t-lg">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold">LUMASONIX x PROFESSIONAL</h1>
+                    <p class="text-lg">專業技術支援 x 人力媒合行銷</p>
                 </div>
-                
-                <!-- Invoice Info -->
-                <div class="grid grid-cols-3 gap-6 mb-8">
-                    <div>
-                        <div class="mb-3">
-                            <label class="block text-base font-medium">請款日期</label>
-                            <input type="date" id="invoice-date" class="w-full text-lg" value="2025-06-01">
-                        </div>
-                        <div class="mb-3">
-                            <label class="block text-base font-medium">請款月份</label>
-                            <input type="text" id="invoice-month" class="w-full text-lg" value="2025年06月">
-                        </div>
-                    </div>
-                    <div>
-                        <div class="mb-3">
-                            <label class="block text-base font-medium">請款編號</label>
-                            <input type="text" id="invoice-number" class="w-full text-lg" value="LX-">
-                        </div>
-                        <div class="mb-3">
-                            <label class="block text-base font-medium">負責人</label>
-                            <input type="text" id="manager" class="w-full text-lg" value="蘇裕庭">
-                        </div>
-                    </div>
-                    <div>
-                        <div class="mb-3">
-                            <label class="block text-base font-medium">廠商名稱</label>
-                            <input type="text" id="vendor" class="w-full text-lg" placeholder="請輸入廠商名稱">
-                        </div>
-                        <div class="mb-3">
-                            <label class="block text-base font-medium">連絡電話</label>
-                            <input type="text" id="phone" class="w-full text-lg" value="0926169899">
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Expenses Section -->
-                <div class="mb-4">
-                    <h2 class="text-2xl font-bold">費用統計</h2>
-                </div>
-                
-                <div class="mb-8">
-                    <table class="w-full border-collapse" id="expenses-table">
-                        <thead>
-                            <tr class="bg-gray-100">
-                                <th class="border border-gray-300 px-3 py-2 text-base">項目</th>
-                                <th class="border border-gray-300 px-3 py-2 text-base">數量</th>
-                                <th class="border border-gray-300 px-3 py-2 text-base">單價</th>
-                                <th class="border border-gray-300 px-3 py-2 text-base">描述項目</th>
-                                <th class="border border-gray-300 px-3 py-2 text-base">金額</th>
-                                <th class="border border-gray-300 px-3 py-2 text-base">操作</th>
-                            </tr>
-                        </thead>
-                        <tbody id="expenses-body">
-                            <tr>
-                                <td class="border border-gray-300 px-3 py-2">人事支援</td>
-                                <td class="border border-gray-300 px-3 py-2">
-                                    <input type="number" class="w-full text-base expense-qty" value="1" min="0" data-type="staff">
-                                </td>
-                                <td class="border border-gray-300 px-3 py-2">
-                                    <input type="number" class="w-full text-base expense-price" value="2500" data-type="staff">
-                                </td>
-                                <td class="border border-gray-300 px-3 py-2">進場演出撤場</td>
-                                <td class="border border-gray-300 px-3 py-2">
-                                    <input type="number" class="w-full text-base expense-amount" value="2500" readonly>
-                                </td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                            </tr>
-                            <tr>
-                                <td class="border border-gray-300 px-3 py-2">控場/追光</td>
-                                <td class="border border-gray-300 px-3 py-2">
-                                    <input type="number" class="w-full text-base expense-qty" value="0" min="0" data-type="control">
-                                </td>
-                                <td class="border border-gray-300 px-3 py-2">
-                                    <input type="number" class="w-full text-base expense-price" value="1000" data-type="control">
-                                </td>
-                                <td class="border border-gray-300 px-3 py-2">演出前一日彩排，將視為一場演出，另行計費,彩排與演出同日進行，僅收取一次演出費用</td>
-                                <td class="border border-gray-300 px-3 py-2">
-                                    <input type="number" class="w-full text-base expense-amount" value="0" readonly>
-                                </td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                            </tr>
-                            <tr>
-                                <td class="border border-gray-300 px-3 py-2">高空</td>
-                                <td class="border border-gray-300 px-3 py-2">
-                                    <input type="number" class="w-full text-base expense-qty" value="0" min="0" data-type="height">
-                                </td>
-                                <td class="border border-gray-300 px-3 py-2">
-                                    <input type="number" class="w-full text-base expense-price" value="1000" data-type="height">
-                                </td>
-                                <td class="border border-gray-300 px-3 py-2">依layer6格約9米高度以上另酌收費用</td>
-                                <td class="border border-gray-300 px-3 py-2">
-                                    <input type="number" class="w-full text-base expense-amount" value="0" readonly>
-                                </td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                            </tr>
-                            <tr>
-                                <td class="border border-gray-300 px-3 py-2">加班</td>
-                                <td class="border border-gray-300 px-3 py-2">
-                                    <input type="number" class="w-full text-base expense-qty" value="0" min="0" data-type="overtime">
-                                </td>
-                                <td class="border border-gray-300 px-3 py-2">
-                                    <input type="number" class="w-full text-base expense-price" value="350" data-type="overtime">
-                                </td>
-                                <td class="border border-gray-300 px-3 py-2">當月總計加班時數</td>
-                                <td class="border border-gray-300 px-3 py-2">
-                                    <input type="number" class="w-full text-base expense-amount" value="0" readonly>
-                                </td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                            </tr>
-                            <tr>
-                                <td class="border border-gray-300 px-3 py-2">行政執行費</td>
-                                <td class="border border-gray-300 px-3 py-2">一式</td>
-                                <td class="border border-gray-300 px-3 py-2">10%</td>
-                                <td class="border border-gray-300 px-3 py-2">當月總計人數*10%*2500</td>
-                                <td class="border border-gray-300 px-3 py-2">
-                                    <input type="number" class="w-full text-base expense-amount" id="admin-fee" value="250" readonly>
-                                </td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                            </tr>
-                            <tr id="other-expense-row">
-                                <td class="border border-gray-300 px-3 py-2">其他</td>
-                                <td class="border border-gray-300 px-3 py-2">一式</td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2">
-                                    <input type="text" class="w-full text-base" id="other-desc" placeholder="描述">
-                                </td>
-                                <td class="border border-gray-300 px-3 py-2">
-                                    <input type="number" class="w-full text-base expense-amount" id="other-amount" value="0">
-                                </td>
-                                <td class="border border-gray-300 px-3 py-2 text-center">
-                                    <button class="text-red-500 font-bold" onclick="clearOtherExpense()">✕</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="4" class="border border-gray-300 px-3 py-2 text-right font-bold">費用小計：</td>
-                                <td class="border border-gray-300 px-3 py-2">
-                                    <input type="number" class="w-full text-base font-bold" id="subtotal" value="2750" readonly>
-                                </td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-                
-                <div class="mb-6 no-print">
-                    <button id="add-expense" class="bg-blue-500 text-white px-5 py-2 rounded hover:bg-blue-600 text-lg">
-                        + 新增其他費用
-                    </button>
-                </div>
-                
-                <!-- Total -->
-                <div class="flex justify-end mb-8">
-                    <div class="w-1/3">
-                        <div class="flex justify-between border-t-2 border-black pt-3">
-                            <div class="font-bold text-xl">費用小計：</div>
-                            <div class="font-bold text-xl" id="total-subtotal">2,750</div>
-                        </div>
-                        <div class="flex justify-between border-t-2 border-black pt-3 mt-3">
-                            <div class="font-bold text-2xl">總計金額：</div>
-                            <div class="font-bold text-2xl" id="total-amount">2,750</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Bank Info -->
-                <div class="border-2 border-gray-300 p-5 mb-8">
-                    <h3 class="font-bold text-xl mb-3">【匯款資訊】</h3>
-                    <div class="mb-2 text-lg">帳號戶名：蘇裕庭</div>
-                    <div class="mb-2 text-lg">匯款代碼：808(玉山銀行中路特區分行)</div>
-                    <div class="mb-2 text-lg">匯款帳號：<input type="text" class="border-b border-gray-300 w-64"></div>
-                </div>
-                
-                <!-- Notes -->
-                <div class="mb-8">
-                    <h3 class="font-bold text-xl mb-3">備註</h3>
-                    <textarea id="notes" class="w-full border border-gray-300 p-3 h-24 text-lg" placeholder="請輸入備註事項..."></textarea>
-                </div>
-                
-                <!-- Footer -->
-                <div class="text-center text-base mt-10">
-                    <div class="font-bold mb-1">LUMASONIX x PROFESSIONAL | 專業技術支援 x 人力媒合行銷</div>
-                    <div>電話: 0926-169-899 | 電子郵件: lumasonix@gmail.com</div>
-                </div>
-            </div>
-            
-            <!-- Second Page - Activities -->
-            <div class="page bg-white shadow-lg mb-8" id="page-2">
-                <!-- Header -->
-                <div class="border-b-2 border-black pb-4 mb-6">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <div class="header-title font-bold">LUMASONIX x PROFESSIONAL</div>
-                            <div class="header-subtitle font-normal">專業技術支援 x 人力媒合行銷</div>
-                        </div>
-                        <div class="header-invoice-title font-bold">技術人員請款單</div>
-                    </div>
-                </div>
-                
-                <!-- Activities Section Header -->
-                <div class="mb-4">
-                    <h2 class="text-2xl font-bold">活動支援明細</h2>
-                </div>
-                
-                <!-- Activities Table -->
-                <div class="mb-6">
-                    <table class="border-collapse" id="activities-table">
-                        <thead>
-                            <tr class="bg-gray-100">
-                                <th class="border border-gray-300 px-3 py-2 text-base nowrap-header date-col">日期</th>
-                                <th class="border border-gray-300 px-3 py-2 text-base nowrap-header activity-name-col">活動名稱/地點</th>
-                                <th class="border border-gray-300 px-3 py-2 text-base nowrap-header people-col">人數</th>
-                                <th class="border border-gray-300 px-3 py-2 text-base nowrap-header time-col">上班時間</th>
-                                <th class="border border-gray-300 px-3 py-2 text-base nowrap-header time-col">下班時間</th>
-                                <th class="border border-gray-300 px-3 py-2 text-base nowrap-header checkbox-col">高空</th>
-                                <th class="border border-gray-300 px-3 py-2 text-base nowrap-header checkbox-col">控場/追光</th>
-                                <th class="border border-gray-300 px-3 py-2 text-base nowrap-header overtime-col">加班</th>
-                                <th class="border border-gray-300 px-3 py-2 text-base nowrap-header amount-col">請款金額</th>
-                                <th class="border border-gray-300 px-3 py-2 text-base nowrap-header action-col">操作</th>
-                            </tr>
-                        </thead>
-                        <tbody id="activities-body">
-                            <!-- Sample row -->
-                            <tr>
-                                <td class="border border-gray-300 px-3 py-2">
-                                    <input type="text" class="w-full text-base" placeholder="MM/DD" value="">
-                                </td>
-                                <td class="border border-gray-300 px-3 py-2 activity-name-col">
-                                    <input type="text" class="w-full text-base" placeholder="活動名稱/地點" value="">
-                                </td>
-                                <td class="border border-gray-300 px-3 py-2">
-                                    <input type="number" class="w-full text-base" value="1" min="1">
-                                </td>
-                                <td class="border border-gray-300 px-3 py-2">
-                                    <input type="text" class="w-full text-base" placeholder="HH:MM" value="">
-                                </td>
-                                <td class="border border-gray-300 px-3 py-2">
-                                    <input type="text" class="w-full text-base" placeholder="HH:MM" value="">
-                                </td>
-                                <td class="border border-gray-300 px-3 py-2 text-center">
-                                    <div class="checkbox-custom" onclick="toggleCheckbox(this)"></div>
-                                </td>
-                                <td class="border border-gray-300 px-3 py-2 text-center">
-                                    <div class="checkbox-custom" onclick="toggleCheckbox(this)"></div>
-                                </td>
-                                <td class="border border-gray-300 px-3 py-2">
-                                    <input type="number" class="w-full text-base" value="0" min="0">
-                                </td>
-                                <td class="border border-gray-300 px-3 py-2">
-                                    <input type="number" class="w-full text-base amount" value="2500" readonly>
-                                </td>
-                                <td class="border border-gray-300 px-3 py-2 text-center">
-                                    <button class="text-red-500 font-bold text-lg" onclick="removeRow(this)">✕</button>
-                                </td>
-                            </tr>
-                            <!-- Empty rows to fill the table -->
-                            <tr class="empty-row">
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                            </tr>
-                            <tr class="empty-row">
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                            </tr>
-                            <tr class="empty-row">
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                            </tr>
-                            <tr class="empty-row">
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                            </tr>
-                            <tr class="empty-row">
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                            </tr>
-                            <tr class="empty-row">
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                            </tr>
-                            <tr class="empty-row">
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                            </tr>
-                            <tr class="empty-row">
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                            </tr>
-                            <tr class="empty-row">
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                            </tr>
-                            <tr class="empty-row">
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="mb-6 no-print">
-                    <button id="add-activity" class="bg-blue-500 text-white px-5 py-2 rounded hover:bg-blue-600 text-lg">
-                        + 新增活動
-                    </button>
-                </div>
-                
-                <!-- Footer -->
-                <div class="text-center text-base mt-10 absolute bottom-10 w-[180mm]">
-                    <div class="font-bold mb-1">LUMASONIX x PROFESSIONAL | 專業技術支援 x 人力媒合行銷</div>
-                    <div>電話: 0926-169-899 | 電子郵件: lumasonix@gmail.com</div>
-                </div>
-            </div>
-            
-            <!-- Additional pages will be added dynamically -->
-            <div class="page bg-white shadow-lg mb-8" id="page-3">
-                <!-- Header -->
-                <div class="border-b-2 border-black pb-4 mb-6">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <div class="header-title font-bold">LUMASONIX x PROFESSIONAL</div>
-                            <div class="header-subtitle font-normal">專業技術支援 x 人力媒合行銷</div>
-                        </div>
-                        <div class="header-invoice-title font-bold">技術人員請款單 (續)</div>
-                    </div>
-                </div>
-                
-                <!-- Activities Section Header -->
-                <div class="mb-4">
-                    <h2 class="text-2xl font-bold">活動支援明細 (續)</h2>
-                </div>
-                
-                <!-- Activities Table -->
-                <div class="mb-6">
-                    <table class="border-collapse" id="activities-table-continued">
-                        <thead>
-                            <tr class="bg-gray-100">
-                                <th class="border border-gray-300 px-3 py-2 text-base nowrap-header date-col">日期</th>
-                                <th class="border border-gray-300 px-3 py-2 text-base nowrap-header activity-name-col">活動名稱/地點</th>
-                                <th class="border border-gray-300 px-3 py-2 text-base nowrap-header people-col">人數</th>
-                                <th class="border border-gray-300 px-3 py-2 text-base nowrap-header time-col">上班時間</th>
-                                <th class="border border-gray-300 px-3 py-2 text-base nowrap-header time-col">下班時間</th>
-                                <th class="border border-gray-300 px-3 py-2 text-base nowrap-header checkbox-col">高空</th>
-                                <th class="border border-gray-300 px-3 py-2 text-base nowrap-header checkbox-col">控場/追光</th>
-                                <th class="border border-gray-300 px-3 py-2 text-base nowrap-header overtime-col">加班</th>
-                                <th class="border border-gray-300 px-3 py-2 text-base nowrap-header amount-col">請款金額</th>
-                                <th class="border border-gray-300 px-3 py-2 text-base nowrap-header action-col">操作</th>
-                            </tr>
-                        </thead>
-                        <tbody id="activities-body-continued">
-                            <!-- Empty rows to fill the table -->
-                            <tr class="empty-row">
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                            </tr>
-                            <tr class="empty-row">
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                            </tr>
-                            <tr class="empty-row">
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                            </tr>
-                            <tr class="empty-row">
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                            </tr>
-                            <tr class="empty-row">
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                            </tr>
-                            <tr class="empty-row">
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                            </tr>
-                            <tr class="empty-row">
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                            </tr>
-                            <tr class="empty-row">
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                            </tr>
-                            <tr class="empty-row">
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                            </tr>
-                            <tr class="empty-row">
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                                <td class="border border-gray-300 px-3 py-2"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <!-- Footer -->
-                <div class="text-center text-base mt-10 absolute bottom-10 w-[180mm]">
-                    <div class="font-bold mb-1">LUMASONIX x PROFESSIONAL | 專業技術支援 x 人力媒合行銷</div>
-                    <div>電話: 0926-169-899 | 電子郵件: lumasonix@gmail.com</div>
+                <div>
+                    <p class="text-xl font-bold">技術人員請款單</p>
                 </div>
             </div>
         </div>
         
-        <!-- Action Buttons -->
-        <div class="flex justify-center space-x-6 mt-6 no-print">
-            <button id="download-pdf" class="bg-green-600 text-white px-8 py-3 rounded hover:bg-green-700 text-xl">
-                下載 PDF
-            </button>
-            <button id="print-invoice" class="bg-blue-600 text-white px-8 py-3 rounded hover:bg-blue-700 text-xl">
-                列印請款單
-            </button>
-            <button id="save-invoice" class="bg-purple-600 text-white px-8 py-3 rounded hover:bg-purple-700 text-xl">
-                儲存請款單
-            </button>
+        <!-- 客戶資訊 -->
+        <div class="bg-gray-100 p-6 border-b border-gray-300">
+            <div class="grid grid-cols-3 gap-4">
+                <div>
+                    <p class="mb-1"><strong>請款日期</strong></p>
+                    <input type="date" id="invoiceDate" value="2025-06-01" class="w-full">
+                </div>
+                <div>
+                    <p class="mb-1"><strong>請款月份</strong></p>
+                    <input type="text" id="invoiceMonth" value="2025年06月" class="w-full">
+                </div>
+                <div>
+                    <p class="mb-1"><strong>請款編號</strong></p>
+                    <input type="text" id="invoiceNumber" value="LX-" class="w-full">
+                </div>
+            </div>
+            <div class="grid grid-cols-3 gap-4 mt-4">
+                <div>
+                    <p class="mb-1"><strong>負責人</strong></p>
+                    <input type="text" id="responsiblePerson" value="蘇裕庭" class="w-full">
+                </div>
+                <div>
+                    <p class="mb-1"><strong>廠商名稱</strong></p>
+                    <input type="text" id="vendorName" placeholder="請輸入廠商名稱" class="w-full">
+                </div>
+                <div>
+                    <p class="mb-1"><strong>連絡電話</strong></p>
+                    <input type="text" id="contactPhone" value="0926169899" class="w-full">
+                </div>
+            </div>
+        </div>
+        
+        <!-- 費用明細 -->
+        <div class="p-6">
+            <h2 class="text-xl font-bold mb-4">費用統計</h2>
+            <table class="w-full mb-6">
+                <thead class="bg-gray-200">
+                    <tr>
+                        <th>項目</th>
+                        <th>數量</th>
+                        <th>單價</th>
+                        <th>描述項目</th>
+                        <th>金額</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="feeTable">
+                    <tr id="personnelSupportRow">
+                        <td>人事支援</td>
+                        <td><input type="number" id="personnelQty" value="1" class="w-full text-right" onchange="calculateFees()"></td>
+                        <td><input type="number" id="personnelPrice" value="2500" class="w-full text-right" onchange="calculateFees()"></td>
+                        <td>進場演出撤場</td>
+                        <td><input type="number" id="personnelAmount" value="2500" class="w-full text-right" readonly></td>
+                        <td class="text-center">-</td>
+                    </tr>
+                    <tr>
+                        <td>控場/追光</td>
+                        <td><input type="number" id="controlQty" value="0" class="w-full text-right" onchange="calculateFees()"></td>
+                        <td><input type="number" id="controlPrice" value="1000" class="w-full text-right" onchange="calculateFees()"></td>
+                        <td>演出前一日彩排，將視為一場演出，另行計費,彩排與演出同日進行，僅收取一次演出費用</td>
+                        <td><input type="number" id="controlAmount" value="0" class="w-full text-right" readonly></td>
+                        <td class="text-center">-</td>
+                    </tr>
+                    <tr>
+                        <td>高空</td>
+                        <td><input type="number" id="heightQty" value="0" class="w-full text-right" onchange="calculateFees()"></td>
+                        <td><input type="number" id="heightPrice" value="1000" class="w-full text-right" onchange="calculateFees()"></td>
+                        <td>依layer6格約9米高度以上另酌收費用</td>
+                        <td><input type="number" id="heightAmount" value="0" class="w-full text-right" readonly></td>
+                        <td class="text-center">-</td>
+                    </tr>
+                    <tr>
+                        <td>加班</td>
+                        <td><input type="number" id="overtimeQty" value="0" class="w-full text-right" onchange="calculateFees()"></td>
+                        <td><input type="number" id="overtimePrice" value="350" class="w-full text-right" onchange="calculateFees()"></td>
+                        <td>當月總計加班時數</td>
+                        <td><input type="number" id="overtimeAmount" value="0" class="w-full text-right" readonly></td>
+                        <td class="text-center">-</td>
+                    </tr>
+                    <tr id="adminFeeRow">
+                        <td>行政執行費</td>
+                        <td>一式</td>
+                        <td>10%</td>
+                        <td>當月總計人數*10%*2500</td>
+                        <td><input type="number" id="adminAmount" value="250" class="w-full text-right" readonly></td>
+                        <td class="text-center">-</td>
+                    </tr>
+                    <tr>
+                        <td>其他</td>
+                        <td>一式</td>
+                        <td>-</td>
+                        <td><input type="text" placeholder="描述" class="w-full"></td>
+                        <td><input type="number" id="otherAmount" value="0" class="w-full text-right" onchange="calculateFees()"></td>
+                        <td class="text-center">
+                            <button class="text-red-500 hover:text-red-700" onclick="removeRow(this)">
+                                ✕
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <!-- 新增費用按鈕 -->
+            <div class="flex justify-end mb-6">
+                <button id="addFeeBtn" class="btn bg-blue-500 text-white px-4 py-2 rounded-lg flex items-center" onclick="addFeeItem()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                    </svg>
+                    新增其他費用
+                </button>
+            </div>
+            
+            <!-- 費用統計 -->
+            <div class="bg-gray-100 p-4 rounded-lg">
+                <div class="flex justify-between mb-2">
+                    <span class="font-bold">費用小計：</span>
+                    <span id="subtotal">2,750</span>
+                </div>
+                <div class="flex justify-between font-bold text-xl text-blue-700">
+                    <span>總計金額：</span>
+                    <span id="total">2,750</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 匯款資訊 -->
+        <div class="bg-gray-100 p-6 mt-6 rounded-lg">
+            <h2 class="text-xl font-bold mb-2">【匯款資訊】</h2>
+            <div class="grid grid-cols-3 gap-4">
+                <div>
+                    <p class="mb-1"><strong>帳號戶名：</strong></p>
+                    <input type="text" value="蘇裕庭" class="w-full">
+                </div>
+                <div>
+                    <p class="mb-1"><strong>匯款代碼：</strong></p>
+                    <input type="text" value="808(玉山銀行中路特區分行)" class="w-full">
+                </div>
+                <div>
+                    <p class="mb-1"><strong>匯款帳號：</strong></p>
+                    <input type="text" class="w-full">
+                </div>
+            </div>
+            <div class="mt-4">
+                <p class="mb-1"><strong>備註</strong></p>
+                <textarea placeholder="請輸入備註事項..." rows="3" class="w-full"></textarea>
+            </div>
+        </div>
+        
+        <!-- 頁尾 -->
+        <div class="footer mt-8 p-4 text-center text-gray-600 rounded-b-lg">
+            <p>LUMASONIX x PROFESSIONAL | 專業技術支援 x 人力媒合行銷</p>
+            <p>電話: 0926-169-899 | 電子郵件: lumasonix@gmail.com</p>
+        </div>
+    </div>
+
+    <!-- 第二頁：活動明細 -->
+    <div id="page2" class="page max-w-4xl mx-auto my-8 p-8 rounded-lg hidden">
+        <!-- 頁首 -->
+        <div class="header text-white p-6 rounded-t-lg">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold">LUMASONIX x PROFESSIONAL</h1>
+                    <p class="text-lg">專業技術支援 x 人力媒合行銷</p>
+                </div>
+                <div>
+                    <p class="text-xl font-bold">技術人員請款單</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 活動明細 -->
+        <div class="p-6">
+            <h2 class="text-xl font-bold mb-4">活動支援明細</h2>
+            <table class="w-full mb-6">
+                <thead class="bg-gray-200">
+                    <tr>
+                        <th>日期</th>
+                        <th>活動名稱/地點</th>
+                        <th>人數</th>
+                        <th>上班時間</th>
+                        <th>下班時間</th>
+                        <th>高空</th>
+                        <th>控場/追光</th>
+                        <th>加班</th>
+                        <th>請款金額</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="activityTable">
+                    <tr>
+                        <td><input type="text" placeholder="MM/DD" class="w-full"></td>
+                        <td><input type="text" placeholder="活動名稱/地點" class="w-full"></td>
+                        <td><input type="number" value="1" class="w-full text-center activity-qty" onchange="calculateActivityFees(this)"></td>
+                        <td><input type="text" placeholder="HH:MM" class="w-full"></td>
+                        <td><input type="text" placeholder="HH:MM" class="w-full"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="form-checkbox h-5 w-5 activity-height" onchange="calculateActivityFees(this)"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="form-checkbox h-5 w-5 activity-control" onchange="calculateActivityFees(this)"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="form-checkbox h-5 w-5 activity-overtime" onchange="calculateActivityFees(this)"></td>
+                        <td><input type="number" value="2500" class="w-full text-right activity-amount" readonly></td>
+                        <td class="text-center">
+                            <button class="text-red-500 hover:text-red-700" onclick="removeRow(this)">
+                                ✕
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <!-- 新增活動按鈕 -->
+            <div class="flex justify-end mb-6">
+                <button id="addActivityBtn" class="btn bg-blue-500 text-white px-4 py-2 rounded-lg flex items-center" onclick="addActivityItem()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                    </svg>
+                    新增活動
+                </button>
+            </div>
+            
+            <!-- 活動費用統計 -->
+            <div class="bg-gray-100 p-4 rounded-lg">
+                <div class="flex justify-between font-bold text-xl text-blue-700">
+                    <span>總計金額：</span>
+                    <span id="activityTotal">2,500</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 頁尾 -->
+        <div class="footer mt-8 p-4 text-center text-gray-600 rounded-b-lg">
+            <p>LUMASONIX x PROFESSIONAL | 專業技術支援 x 人力媒合行銷</p>
+            <p>電話: 0926-169-899 | 電子郵件: lumasonix@gmail.com</p>
+        </div>
+    </div>
+
+    <!-- 第三頁：活動明細續頁 -->
+    <div id="page3" class="page max-w-4xl mx-auto my-8 p-8 rounded-lg hidden">
+        <!-- 頁首 -->
+        <div class="header text-white p-6 rounded-t-lg">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold">LUMASONIX x PROFESSIONAL</h1>
+                    <p class="text-lg">專業技術支援 x 人力媒合行銷</p>
+                </div>
+                <div>
+                    <p class="text-xl font-bold">技術人員請款單 (續)</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 活動明細續頁 -->
+        <div class="p-6">
+            <h2 class="text-xl font-bold mb-4">活動支援明細 (續)</h2>
+            <table class="w-full mb-6">
+                <thead class="bg-gray-200">
+                    <tr>
+                        <th>日期</th>
+                        <th>活動名稱/地點</th>
+                        <th>人數</th>
+                        <th>上班時間</th>
+                        <th>下班時間</th>
+                        <th>高空</th>
+                        <th>控場/追光</th>
+                        <th>加班</th>
+                        <th>請款金額</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="activityTableContinued">
+                    <!-- 這裡會動態添加更多活動 -->
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- 頁尾 -->
+        <div class="footer mt-8 p-4 text-center text-gray-600 rounded-b-lg">
+            <p>LUMASONIX x PROFESSIONAL | 專業技術支援 x 人力媒合行銷</p>
+            <p>電話: 0926-169-899 | 電子郵件: lumasonix@gmail.com</p>
         </div>
     </div>
 
     <script>
-        // Toggle checkbox
-        function toggleCheckbox(element) {
-            element.classList.toggle('checked');
-            calculateTotals();
+        // 設置當前日期
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化頁面
+            showPage(1);
+            
+            // 計算初始費用
+            calculateFees();
+        });
+        
+        // 頁面切換功能
+        function showPage(pageNum) {
+            document.getElementById('page1').classList.add('hidden');
+            document.getElementById('page2').classList.add('hidden');
+            document.getElementById('page3').classList.add('hidden');
+            
+            document.getElementById('page' + pageNum).classList.remove('hidden');
         }
         
-        // Remove row
+        // 計算費用
+        function calculateFees() {
+            // 人事支援費用
+            const personnelQty = parseFloat(document.getElementById('personnelQty').value) || 0;
+            const personnelPrice = parseFloat(document.getElementById('personnelPrice').value) || 0;
+            const personnelAmount = personnelQty * personnelPrice;
+            document.getElementById('personnelAmount').value = personnelAmount;
+            
+            // 控場/追光費用
+            const controlQty = parseFloat(document.getElementById('controlQty').value) || 0;
+            const controlPrice = parseFloat(document.getElementById('controlPrice').value) || 0;
+            const controlAmount = controlQty * controlPrice;
+            document.getElementById('controlAmount').value = controlAmount;
+            
+            // 高空費用
+            const heightQty = parseFloat(document.getElementById('heightQty').value) || 0;
+            const heightPrice = parseFloat(document.getElementById('heightPrice').value) || 0;
+            const heightAmount = heightQty * heightPrice;
+            document.getElementById('heightAmount').value = heightAmount;
+            
+            // 加班費用
+            const overtimeQty = parseFloat(document.getElementById('overtimeQty').value) || 0;
+            const overtimePrice = parseFloat(document.getElementById('overtimePrice').value) || 0;
+            const overtimeAmount = overtimeQty * overtimePrice;
+            document.getElementById('overtimeAmount').value = overtimeAmount;
+            
+            // 行政執行費 (人事支援金額的10%)
+            const adminAmount = personnelAmount * 0.1;
+            document.getElementById('adminAmount').value = adminAmount;
+            
+            // 其他費用
+            const otherAmount = parseFloat(document.getElementById('otherAmount').value) || 0;
+            
+            // 計算總費用
+            let subtotal = personnelAmount + controlAmount + heightAmount + overtimeAmount + adminAmount + otherAmount;
+            
+            // 加上其他動態添加的費用項目
+            const feeRows = document.querySelectorAll('#feeTable tr:not(#personnelSupportRow):not(#adminFeeRow)');
+            feeRows.forEach(row => {
+                const amountInput = row.querySelector('td:nth-child(5) input');
+                if (amountInput && amountInput.id !== 'controlAmount' && 
+                    amountInput.id !== 'heightAmount' && 
+                    amountInput.id !== 'overtimeAmount' && 
+                    amountInput.id !== 'otherAmount') {
+                    subtotal += parseFloat(amountInput.value) || 0;
+                }
+            });
+            
+            // 更新小計和總計
+            document.getElementById('subtotal').textContent = formatNumber(subtotal);
+            document.getElementById('total').textContent = formatNumber(subtotal);
+            
+            // 同步更新第二頁的活動費用計算
+            calculateAllActivityFees();
+        }
+        
+        // 新增費用項目
+        function addFeeItem() {
+            const feeTable = document.getElementById('feeTable');
+            const newRow = document.createElement('tr');
+            
+            newRow.innerHTML = `
+                <td><input type="text" placeholder="項目名稱" class="w-full"></td>
+                <td><input type="number" placeholder="數量" class="w-full text-right" onchange="calculateFees()"></td>
+                <td><input type="number" placeholder="單價" class="w-full text-right" onchange="calculateFees()"></td>
+                <td><input type="text" placeholder="描述" class="w-full"></td>
+                <td><input type="number" value="0" class="w-full text-right" onchange="calculateFees()"></td>
+                <td class="text-center">
+                    <button class="text-red-500 hover:text-red-700" onclick="removeRow(this)">
+                        ✕
+                    </button>
+                </td>
+            `;
+            
+            feeTable.appendChild(newRow);
+        }
+        
+        // 新增活動項目
+        function addActivityItem() {
+            const activityTable = document.getElementById('activityTable');
+            const activityTableContinued = document.getElementById('activityTableContinued');
+            
+            // 決定要添加到哪個表格
+            let targetTable = activityTable;
+            if (activityTable.rows.length >= 10) {
+                targetTable = activityTableContinued;
+                // 如果是第一次添加到續頁，顯示第三頁
+                if (activityTableContinued.rows.length === 0) {
+                    showPage(3);
+                }
+            }
+            
+            const newRow = document.createElement('tr');
+            
+            newRow.innerHTML = `
+                <td><input type="text" placeholder="MM/DD" class="w-full"></td>
+                <td><input type="text" placeholder="活動名稱/地點" class="w-full"></td>
+                <td><input type="number" value="1" class="w-full text-center activity-qty" onchange="calculateActivityFees(this)"></td>
+                <td><input type="text" placeholder="HH:MM" class="w-full"></td>
+                <td><input type="text" placeholder="HH:MM" class="w-full"></td>
+                <td class="checkbox-cell"><input type="checkbox" class="form-checkbox h-5 w-5 activity-height" onchange="calculateActivityFees(this)"></td>
+                <td class="checkbox-cell"><input type="checkbox" class="form-checkbox h-5 w-5 activity-control" onchange="calculateActivityFees(this)"></td>
+                <td class="checkbox-cell"><input type="checkbox" class="form-checkbox h-5 w-5 activity-overtime" onchange="calculateActivityFees(this)"></td>
+                <td><input type="number" value="2500" class="w-full text-right activity-amount" readonly></td>
+                <td class="text-center">
+                    <button class="text-red-500 hover:text-red-700" onclick="removeRow(this)">
+                        ✕
+                    </button>
+                </td>
+            `;
+            
+            targetTable.appendChild(newRow);
+            calculateAllActivityFees();
+        }
+        
+        // 計算單個活動費用
+        function calculateActivityFees(element) {
+            const row = element.closest('tr');
+            const basePrice = 2500; // 基本費用
+            const heightPrice = 1000; // 高空費用
+            const controlPrice = 1000; // 控場/追光費用
+            const overtimePrice = 350; // 加班費用
+            
+            const qty = parseFloat(row.querySelector('.activity-qty').value) || 1;
+            const isHeight = row.querySelector('.activity-height').checked;
+            const isControl = row.querySelector('.activity-control').checked;
+            const isOvertime = row.querySelector('.activity-overtime').checked;
+            
+            let totalAmount = basePrice * qty;
+            if (isHeight) totalAmount += heightPrice;
+            if (isControl) totalAmount += controlPrice;
+            if (isOvertime) totalAmount += overtimePrice;
+            
+            row.querySelector('.activity-amount').value = totalAmount;
+            
+            // 更新活動總計
+            calculateAllActivityFees();
+        }
+        
+        // 計算所有活動費用總和
+        function calculateAllActivityFees() {
+            let activityTotal = 0;
+            
+            // 計算第一頁活動
+            const activityRows = document.querySelectorAll('#activityTable tr');
+            activityRows.forEach(row => {
+                const amountInput = row.querySelector('.activity-amount');
+                if (amountInput) {
+                    activityTotal += parseFloat(amountInput.value) || 0;
+                }
+            });
+            
+            // 計算續頁活動
+            const activityRowsContinued = document.querySelectorAll('#activityTableContinued tr');
+            activityRowsContinued.forEach(row => {
+                const amountInput = row.querySelector('.activity-amount');
+                if (amountInput) {
+                    activityTotal += parseFloat(amountInput.value) || 0;
+                }
+            });
+            
+            // 更新活動總計
+            document.getElementById('activityTotal').textContent = formatNumber(activityTotal);
+        }
+        
+        // 移除行
         function removeRow(button) {
             const row = button.closest('tr');
             row.remove();
-            calculateTotals();
-            updateActivityRows();
+            calculateFees();
+            calculateAllActivityFees();
         }
         
-        // Clear other expense
-        function clearOtherExpense() {
-            document.getElementById('other-desc').value = '';
-            document.getElementById('other-amount').value = '0';
-            calculateTotals();
-        }
-        
-        // Add activity row
-        document.getElementById('add-activity').addEventListener('click', function() {
-            const tbody = document.getElementById('activities-body');
-            const emptyRows = tbody.querySelectorAll('.empty-row');
-            
-            if (emptyRows.length > 0) {
-                // Replace the first empty row with a real row
-                const firstEmptyRow = emptyRows[0];
-                firstEmptyRow.classList.remove('empty-row');
-                firstEmptyRow.innerHTML = `
-                    <td class="border border-gray-300 px-3 py-2">
-                        <input type="text" class="w-full text-base" placeholder="MM/DD">
-                    </td>
-                    <td class="border border-gray-300 px-3 py-2 activity-name-col">
-                        <input type="text" class="w-full text-base" placeholder="活動名稱/地點">
-                    </td>
-                    <td class="border border-gray-300 px-3 py-2">
-                        <input type="number" class="w-full text-base" value="1" min="1">
-                    </td>
-                    <td class="border border-gray-300 px-3 py-2">
-                        <input type="text" class="w-full text-base" placeholder="HH:MM">
-                    </td>
-                    <td class="border border-gray-300 px-3 py-2">
-                        <input type="text" class="w-full text-base" placeholder="HH:MM">
-                    </td>
-                    <td class="border border-gray-300 px-3 py-2 text-center">
-                        <div class="checkbox-custom" onclick="toggleCheckbox(this)"></div>
-                    </td>
-                    <td class="border border-gray-300 px-3 py-2 text-center">
-                        <div class="checkbox-custom" onclick="toggleCheckbox(this)"></div>
-                    </td>
-                    <td class="border border-gray-300 px-3 py-2">
-                        <input type="number" class="w-full text-base" value="0" min="0">
-                    </td>
-                    <td class="border border-gray-300 px-3 py-2">
-                        <input type="number" class="w-full text-base amount" value="2500" readonly>
-                    </td>
-                    <td class="border border-gray-300 px-3 py-2 text-center">
-                        <button class="text-red-500 font-bold text-lg" onclick="removeRow(this)">✕</button>
-                    </td>
-                `;
-            } else {
-                // If no empty rows in the first page, add to the continued page
-                const continuedBody = document.getElementById('activities-body-continued');
-                const continuedEmptyRows = continuedBody.querySelectorAll('.empty-row');
-                
-                if (continuedEmptyRows.length > 0) {
-                    const firstEmptyRow = continuedEmptyRows[0];
-                    firstEmptyRow.classList.remove('empty-row');
-                    firstEmptyRow.innerHTML = `
-                        <td class="border border-gray-300 px-3 py-2">
-                            <input type="text" class="w-full text-base" placeholder="MM/DD">
-                        </td>
-                        <td class="border border-gray-300 px-3 py-2 activity-name-col">
-                            <input type="text" class="w-full text-base" placeholder="活動名稱/地點">
-                        </td>
-                        <td class="border border-gray-300 px-3 py-2">
-                            <input type="number" class="w-full text-base" value="1" min="1">
-                        </td>
-                        <td class="border border-gray-300 px-3 py-2">
-                            <input type="text" class="w-full text-base" placeholder="HH:MM">
-                        </td>
-                        <td class="border border-gray-300 px-3 py-2">
-                            <input type="text" class="w-full text-base" placeholder="HH:MM">
-                        </td>
-                        <td class="border border-gray-300 px-3 py-2 text-center">
-                            <div class="checkbox-custom" onclick="toggleCheckbox(this)"></div>
-                        </td>
-                        <td class="border border-gray-300 px-3 py-2 text-center">
-                            <div class="checkbox-custom" onclick="toggleCheckbox(this)"></div>
-                        </td>
-                        <td class="border border-gray-300 px-3 py-2">
-                            <input type="number" class="w-full text-base" value="0" min="0">
-                        </td>
-                        <td class="border border-gray-300 px-3 py-2">
-                            <input type="number" class="w-full text-base amount" value="2500" readonly>
-                        </td>
-                        <td class="border border-gray-300 px-3 py-2 text-center">
-                            <button class="text-red-500 font-bold text-lg" onclick="removeRow(this)">✕</button>
-                        </td>
-                    `;
-                } else {
-                    alert('已達到最大活動數量限制');
-                }
-            }
-            
-            calculateTotals();
-        });
-        
-        // Update activity rows (ensure empty rows are at the bottom)
-        function updateActivityRows() {
-            const page2Body = document.getElementById('activities-body');
-            const page3Body = document.getElementById('activities-body-continued');
-            
-            // Get all non-empty rows from both pages
-            const page2Rows = Array.from(page2Body.querySelectorAll('tr:not(.empty-row)'));
-            const page3Rows = Array.from(page3Body.querySelectorAll('tr:not(.empty-row)'));
-            
-            // Get all empty rows
-            const page2EmptyRows = Array.from(page2Body.querySelectorAll('.empty-row'));
-            const page3EmptyRows = Array.from(page3Body.querySelectorAll('.empty-row'));
-            
-            // Clear both tables
-            page2Body.innerHTML = '';
-            page3Body.innerHTML = '';
-            
-            // Fill page 2 first (up to 10 rows)
-            const maxPage2Rows = 10;
-            const allRows = [...page2Rows, ...page3Rows];
-            
-            // Add rows to page 2
-            for (let i = 0; i < Math.min(maxPage2Rows, allRows.length); i++) {
-                page2Body.appendChild(allRows[i].cloneNode(true));
-            }
-            
-            // Add empty rows to fill page 2
-            for (let i = allRows.length; i < maxPage2Rows; i++) {
-                if (page2EmptyRows.length > 0) {
-                    page2Body.appendChild(page2EmptyRows.shift().cloneNode(true));
-                } else {
-                    const emptyRow = createEmptyRow();
-                    page2Body.appendChild(emptyRow);
-                }
-            }
-            
-            // Add remaining rows to page 3
-            for (let i = maxPage2Rows; i < allRows.length; i++) {
-                page3Body.appendChild(allRows[i].cloneNode(true));
-            }
-            
-            // Add empty rows to fill page 3
-            const remainingEmptyRows = [...page2EmptyRows, ...page3EmptyRows];
-            while (page3Body.children.length < 10) {
-                if (remainingEmptyRows.length > 0) {
-                    page3Body.appendChild(remainingEmptyRows.shift().cloneNode(true));
-                } else {
-                    const emptyRow = createEmptyRow();
-                    page3Body.appendChild(emptyRow);
-                }
-            }
-            
-            // Add event listeners to all checkboxes and buttons
-            document.querySelectorAll('.checkbox-custom').forEach(function(checkbox) {
-                checkbox.onclick = function() { toggleCheckbox(this); };
-            });
-            
-            document.querySelectorAll('button[onclick="removeRow(this)"]').forEach(function(button) {
-                button.onclick = function() { removeRow(this); };
-            });
-        }
-        
-        // Create an empty row
-        function createEmptyRow() {
-            const row = document.createElement('tr');
-            row.className = 'empty-row';
-            row.innerHTML = `
-                <td class="border border-gray-300 px-3 py-2"></td>
-                <td class="border border-gray-300 px-3 py-2"></td>
-                <td class="border border-gray-300 px-3 py-2"></td>
-                <td class="border border-gray-300 px-3 py-2"></td>
-                <td class="border border-gray-300 px-3 py-2"></td>
-                <td class="border border-gray-300 px-3 py-2"></td>
-                <td class="border border-gray-300 px-3 py-2"></td>
-                <td class="border border-gray-300 px-3 py-2"></td>
-                <td class="border border-gray-300 px-3 py-2"></td>
-                <td class="border border-gray-300 px-3 py-2"></td>
-            `;
-            return row;
-        }
-        
-        // Add expense
-        document.getElementById('add-expense').addEventListener('click', function() {
-            const tbody = document.getElementById('expenses-body');
-            const otherRow = document.getElementById('other-expense-row');
-            const newRow = document.createElement('tr');
-            newRow.innerHTML = `
-                <td class="border border-gray-300 px-3 py-2">
-                    <input type="text" class="w-full text-base" placeholder="項目名稱">
-                </td>
-                <td class="border border-gray-300 px-3 py-2">
-                    <input type="number" class="w-full text-base custom-expense-qty" value="1" min="0">
-                </td>
-                <td class="border border-gray-300 px-3 py-2">
-                    <input type="number" class="w-full text-base custom-expense-price" value="0">
-                </td>
-                <td class="border border-gray-300 px-3 py-2">
-                    <input type="text" class="w-full text-base" placeholder="描述">
-                </td>
-                <td class="border border-gray-300 px-3 py-2">
-                    <input type="number" class="w-full text-base expense-amount custom-expense-amount" value="0">
-                </td>
-                <td class="border border-gray-300 px-3 py-2 text-center">
-                    <button class="text-red-500 font-bold text-lg" onclick="removeRow(this)">✕</button>
-                </td>
-            `;
-            tbody.insertBefore(newRow, otherRow);
-            
-            // Add event listeners for custom expense calculations
-            const qtyInput = newRow.querySelector('.custom-expense-qty');
-            const priceInput = newRow.querySelector('.custom-expense-price');
-            const amountInput = newRow.querySelector('.custom-expense-amount');
-            
-            qtyInput.addEventListener('input', function() {
-                amountInput.value = qtyInput.value * priceInput.value;
-                calculateTotals();
-            });
-            
-            priceInput.addEventListener('input', function() {
-                amountInput.value = qtyInput.value * priceInput.value;
-                calculateTotals();
-            });
-            
-            amountInput.addEventListener('input', calculateTotals);
-            
-            calculateTotals();
-        });
-        
-        // Calculate totals
-        function calculateTotals() {
-            // Calculate expense amounts
-            document.querySelectorAll('.expense-qty').forEach(function(input) {
-                const row = input.closest('tr');
-                const type = input.dataset.type;
-                const qty = parseFloat(input.value) || 0;
-                const price = parseFloat(row.querySelector(`.expense-price[data-type="${type}"]`).value) || 0;
-                const amountInput = row.querySelector('.expense-amount');
-                amountInput.value = qty * price;
-            });
-            
-            // Calculate admin fee (10% of staff support)
-            const staffQty = parseFloat(document.querySelector('.expense-qty[data-type="staff"]').value) || 0;
-            const staffPrice = parseFloat(document.querySelector('.expense-price[data-type="staff"]').value) || 0;
-            const adminFee = Math.round(staffQty * 0.1 * staffPrice);
-            document.getElementById('admin-fee').value = adminFee;
-            
-            // Calculate subtotal
-            let subtotal = 0;
-            document.querySelectorAll('.expense-amount').forEach(function(input) {
-                subtotal += parseFloat(input.value) || 0;
-            });
-            
-            document.getElementById('subtotal').value = subtotal;
-            document.getElementById('total-subtotal').textContent = formatNumber(subtotal);
-            document.getElementById('total-amount').textContent = formatNumber(subtotal);
-        }
-        
-        // Format number with commas
+        // 格式化數字為千分位
         function formatNumber(num) {
-            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            return num.toLocaleString('zh-TW');
         }
         
-        // Event listeners for expense calculations
-        document.querySelectorAll('.expense-qty, .expense-price').forEach(function(input) {
-            input.addEventListener('input', calculateTotals);
-        });
-        
-        document.getElementById('other-amount').addEventListener('input', calculateTotals);
-        
-        // Print invoice
-        document.getElementById('print-invoice').addEventListener('click', function() {
+        // 下載PDF
+        function downloadPDF() {
+            alert('PDF下載功能將在實際應用中實現');
             window.print();
-        });
+        }
         
-        // Download PDF
-        document.getElementById('download-pdf').addEventListener('click', function() {
-            const element = document.getElementById('invoice-container');
-            const opt = {
-                margin: 10,
-                filename: '請款單_' + document.getElementById('invoice-number').value + '.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-            
-            // Hide no-print elements temporarily
-            const noPrintElements = document.querySelectorAll('.no-print');
-            noPrintElements.forEach(el => el.style.display = 'none');
-            
-            // Generate PDF
-            html2pdf().set(opt).from(element).save().then(() => {
-                // Restore no-print elements
-                noPrintElements.forEach(el => el.style.display = '');
-            });
-        });
-        
-        // Save invoice (mock functionality)
-        document.getElementById('save-invoice').addEventListener('click', function() {
-            alert('請款單已儲存！');
-        });
-        
-        // Initialize calculations
-        calculateTotals();
+        // 重製表單
+        function resetForm() {
+            if (confirm('確定要重製表單嗎？所有已輸入的資料將被清除。')) {
+                location.reload();
+            }
+        }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'948e51fd447df06f',t:'MTc0ODc3NjgxMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'949014ce6093de77',t:'MTc0ODc5NTI3Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
