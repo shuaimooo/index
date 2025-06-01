@@ -242,9 +242,19 @@
         </div>
         
         <!-- 客戶資訊 -->
-        <div class="bg-gray-100 p-6 border-b border-gray-300">
+ <div class="bg-gray-100 p-6 border-b border-gray-300">
             <div class="grid grid-cols-3 gap-4">
                 <div>
+                    <p class="mb-1"><strong>請款編號</strong></p>
+                    <input type="text" id="invoiceNumber" value="LX-" class="w-full">
+                <div>
+                    <p class="mb-1"><strong>負責人</strong></p>
+                    <input type="text" id="responsiblePerson" value="蘇裕庭" class="w-full">
+                </div>
+                <div>
+                    <p class="mb-1"><strong>連絡電話</strong></p>
+                    <input type="text" id="contactPhone" value="0926169899" class="w-full">
+                </div>
                     <p class="mb-1"><strong>請款日期</strong></p>
                     <input type="date" id="invoiceDate" value="2025-06-01" class="w-full">
                 </div>
@@ -253,26 +263,10 @@
                     <input type="text" id="invoiceMonth" value="2025年06月" class="w-full">
                 </div>
                 <div>
-                    <p class="mb-1"><strong>請款編號</strong></p>
-                    <input type="text" id="invoiceNumber" value="LX-" class="w-full">
-                </div>
-            </div>
-            <div class="grid grid-cols-3 gap-4 mt-4">
-                <div>
-                    <p class="mb-1"><strong>負責人</strong></p>
-                    <input type="text" id="responsiblePerson" value="蘇裕庭" class="w-full">
-                </div>
-                <div>
                     <p class="mb-1"><strong>廠商名稱</strong></p>
                     <input type="text" id="vendorName" placeholder="請輸入廠商名稱" class="w-full">
                 </div>
-                <div>
-                    <p class="mb-1"><strong>連絡電話</strong></p>
-                    <input type="text" id="contactPhone" value="0926169899" class="w-full">
-                </div>
-            </div>
-        </div>
-        
+               <div>
         <!-- 費用明細 -->
         <div class="p-6">
             <h2 class="text-xl font-bold mb-4">費用統計</h2>
