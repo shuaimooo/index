@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -242,8 +240,22 @@
         </div>
         
         <!-- 客戶資訊 -->
-  <div class="bg-gray-100 p-6 border-b border-gray-300">
+        <div class="bg-gray-100 p-6 border-b border-gray-300">
             <div class="grid grid-cols-3 gap-4">
+                <div>
+                    <p class="mb-1"><strong>請款編號</strong></p>
+                    <input type="text" id="invoiceNumber" value="LX-" class="w-full">
+                </div>
+                <div>
+                    <p class="mb-1"><strong>負責人</strong></p>
+                    <input type="text" id="responsiblePerson" value="蘇裕庭" class="w-full">
+                </div>
+                <div>
+                    <p class="mb-1"><strong>連絡電話</strong></p>
+                    <input type="text" id="contactPhone" value="0926169899" class="w-full">
+                </div>
+            </div>
+            <div class="grid grid-cols-3 gap-4 mt-4">
                 <div>
                     <p class="mb-1"><strong>請款日期</strong></p>
                     <input type="date" id="invoiceDate" value="2025-06-01" class="w-full">
@@ -253,24 +265,13 @@
                     <input type="text" id="invoiceMonth" value="2025年06月" class="w-full">
                 </div>
                 <div>
-                    <p class="mb-1"><strong>請款編號</strong></p>
-                    <input type="text" id="invoiceNumber" value="LX-" class="w-full">
-                </div>
-            </div>
-            <div class="grid grid-cols-3 gap-4 mt-4">
-                <div>
-                    <p class="mb-1"><strong>負責人</strong></p>
-                    <input type="text" id="responsiblePerson" value="蘇裕庭" class="w-full">
-                </div>
-                <div>
                     <p class="mb-1"><strong>廠商名稱</strong></p>
-                    <input type="text" id="vendorName" placeholder="請輸入廠商名稱" class="w-full">
-                </div>
-                <div>
-                    <p class="mb-1"><strong>連絡電話</strong></p>
-                    <input type="text" id="contactPhone" value="0926169899" class="w-full">
+                   <input type="text" id="vendorName" placeholder="請輸入廠商名稱" class="w-full">
+
                 </div>
             </div>
+        </div>
+        
         <!-- 費用明細 -->
         <div class="p-6">
             <h2 class="text-xl font-bold mb-4">費用統計</h2>
@@ -349,19 +350,17 @@
                     <span class="font-bold">費用小計：</span>
                     <span id="subtotal">2,750</span>
                 </div>
-                <div class="flex justify-between font-bold text-xl text-blue-700">
+                <div class="flex justify-between font-bold text-xl text-red-700">
                     <span>總計金額：</span>
                     <span id="total">2,750</span>
                 </div>
-            </div>
-        </div>
-        
+         </div>
         <!-- 匯款資訊 -->
         <div class="bg-gray-100 p-6 mt-6 rounded-lg">
-            <h2 class="text-xl font-bold mb-2">【匯款資訊】</h2> 
-            <h2 class="text-sm font-bold mb-2">帳號戶名：蘇裕庭</h2>
+            <h2 class="text-xl font-bold mb-2">【匯款資訊】</h2>
+            <h2 class="text-sm font-bold mb-2">帳號戶名：蘇裕庭</h2> 
             <h2 class="text-sm font-bold mb-2">匯款代碼：808(玉山銀行中路特區分行)</h2>
-             <h2 class="text-sm font-bold mb-2">匯款帳號：0842-979-176643</h2>
+            <h2 class="text-sm font-bold mb-2">匯款帳號：0842-979-176643</h2>
             </div>
             <div class="mt-4">
                 <p class="mb-1"><strong>備註</strong></p>
@@ -452,7 +451,7 @@
             
             <!-- 活動費用統計 -->
             <div class="bg-gray-100 p-4 rounded-lg">
-                <div class="flex justify-between font-bold text-xl text-blue-700">
+                <div class="flex justify-between font-bold text-xl text-red-700">
                     <span>總計金額：</span>
                     <span id="activityTotal">2,500</span>
                 </div>
