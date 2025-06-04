@@ -1,571 +1,665 @@
-
-<html lang="zh-TW"><head>
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>技術人員請款單</title>
+    <title>LUMASONIX 技術人員請款單</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
-        
         body {
             font-family: 'Noto Sans TC', sans-serif;
             background-color: #f5f7fa;
+            font-size: 16px;
         }
-        
-        .invoice-container {
+        .form-container {
+            width: 210mm; /* A4 width */
+            min-height: 297mm; /* A4 height */
+            margin: 0 auto;
             background-color: white;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 0;
+            position: relative;
         }
-        
+        .header-black {
+            background-color: #000000;
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        input, select {
+            border: 1px solid #e2e8f0;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            width: 100%;
+            font-size: 1.125rem;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3a1c71;
+            box-shadow: 0 0 0 3px rgba(58, 28, 113, 0.2);
+        }
         table {
             width: 100%;
             border-collapse: collapse;
         }
-        
         th, td {
-            border: 1px solid #e2e8f0;
-            padding: 8px;
+            padding: 0.75rem;
             text-align: left;
-            font-size: 0.9rem;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 1.125rem;
         }
-        
         th {
             background-color: #f8fafc;
-            font-weight: 600;
+            font-weight: 500;
         }
-        
-        .input-group input {
-            transition: border-color 0.2s ease;
-        }
-        
-        .input-group input:focus {
-            border-color: #3b82f6;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-        }
-        
-        .labor-name, .labor-birth, .labor-id, .labor-phone, .labor-address, .labor-amount {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.375rem;
-        }
-        
-        .labor-card {
-            border: 1px solid #e2e8f0;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            background-color: #ffffff;
-        }
-        
-        .section-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: #1f2937;
-        }
-        
-        .form-input {
-            width: 100%;
-            padding: 0.375rem 0.75rem;
-            border: 1px solid #e2e8f0;
+        .btn {
+            padding: 0.75rem 1.5rem;
             border-radius: 0.25rem;
-            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1.125rem;
         }
-        
-        .form-input:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        .btn-primary {
+            background-color: #3a1c71;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #2d1657;
+        }
+        .btn-secondary {
+            background-color: #e2e8f0;
+            color: #4a5568;
+        }
+        .btn-secondary:hover {
+            background-color: #cbd5e0;
+        }
+        .btn-danger {
+            background-color: #e53e3e;
+            color: white;
+        }
+        .btn-danger:hover {
+            background-color: #c53030;
+        }
+        @media print {
+            body {
+                background-color: white;
+            }
+            .form-container {
+                box-shadow: none;
+                margin: 0;
+                padding: 0;
+            }
+            .no-print {
+                display: none;
+            }
+        }
+        .time-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
         }
     </style>
-<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-8{margin-bottom:2rem}.mr-1{margin-right:0.25rem}.mr-2{margin-right:0.5rem}.mt-1{margin-top:0.25rem}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.h-10{height:2.5rem}.h-4{height:1rem}.h-5{height:1.25rem}.min-h-screen{min-height:100vh}.w-12{width:3rem}.w-16{width:4rem}.w-4{width:1rem}.w-5{width:1.25rem}.w-full{width:100%}.min-w-full{min-width:100%}.max-w-5xl{max-width:64rem}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-1{gap:0.25rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.rounded{border-radius:0.25rem}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.rounded-l-md{border-top-left-radius:0.375rem;border-bottom-left-radius:0.375rem}.rounded-r-md{border-top-right-radius:0.375rem;border-bottom-right-radius:0.375rem}.border{border-width:1px}.border-0{border-width:0px}.border-l-0{border-left-width:0px}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235 / var(--tw-border-opacity, 1))}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219 / var(--tw-border-opacity, 1))}.bg-blue-50{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity, 1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-gray-800{--tw-bg-opacity:1;background-color:rgb(31 41 55 / var(--tw-bg-opacity, 1))}.p-4{padding:1rem}.p-8{padding:2rem}.p-6{padding:1.5rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-8{padding-left:2rem;padding-right:2rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.py-8{padding-top:2rem;padding-bottom:2rem}.px-0{padding-left:0px;padding-right:0px}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-base{font-size:1rem;line-height:1.5rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.text-blue-100{--tw-text-opacity:1;color:rgb(219 234 254 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55 / var(--tw-text-opacity, 1))}.text-red-600{--tw-text-opacity:1;color:rgb(220 38 38 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.hover\:bg-gray-50:hover{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.hover\:text-red-800:hover{--tw-text-opacity:1;color:rgb(153 27 27 / var(--tw-text-opacity, 1))}@media (min-width: 640px){.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}}@media (min-width: 768px){.md\:col-span-2{grid-column:span 2 / span 2}.md\:mb-0{margin-bottom:0px}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}.md\:p-8{padding:2rem}}@media (min-width: 1024px){.lg\:px-8{padding-left:2rem;padding-right:2rem}}</style><style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.relative{position:relative}.-top-\[2cm\]{top:-2cm}.-left-\[2cm\]{left:-2cm}.-left-\[3cm\]{left:-3cm}.-left-\[5cm\]{left:-5cm}.-left-\[4cm\]{left:-4cm}.-top-\[-1cm\]{top:1cm}.-top-\[1cm\]{top:-1cm}.-top-\[0\.7cm\]{top:-0.7cm}.-top-\[1\.3cm\]{top:-1.3cm}.-top-\[1\.2cm\]{top:-1.2cm}.-top-\[1\.5cm\]{top:-1.5cm}.-top-\[1\.6cm\]{top:-1.6cm}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-8{margin-bottom:2rem}.mr-1{margin-right:0.25rem}.mr-2{margin-right:0.5rem}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.h-10{height:2.5rem}.h-4{height:1rem}.h-5{height:1.25rem}.h-6{height:1.5rem}.w-12{width:3rem}.w-16{width:4rem}.w-4{width:1rem}.w-5{width:1.25rem}.w-\[5\.50cm\]{width:5.50cm}.w-full{width:100%}.w-10{width:2.5rem}.min-w-full{min-width:100%}.max-w-5xl{max-width:64rem}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-1{gap:0.25rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.overflow-x-auto{overflow-x:auto}.rounded{border-radius:0.25rem}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.rounded-l-md{border-top-left-radius:0.375rem;border-bottom-left-radius:0.375rem}.border{border-width:1px}.border-0{border-width:0px}.border-l-0{border-left-width:0px}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235 / var(--tw-border-opacity, 1))}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219 / var(--tw-border-opacity, 1))}.border-gray-500{--tw-border-opacity:1;border-color:rgb(107 114 128 / var(--tw-border-opacity, 1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.bg-gray-500{--tw-bg-opacity:1;background-color:rgb(107 114 128 / var(--tw-bg-opacity, 1))}.bg-gray-800{--tw-bg-opacity:1;background-color:rgb(31 41 55 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.p-4{padding:1rem}.p-6{padding:1.5rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-8{padding-left:2rem;padding-right:2rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55 / var(--tw-text-opacity, 1))}.text-gray-900{--tw-text-opacity:1;color:rgb(17 24 39 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-red-600{--tw-text-opacity:1;color:rgb(220 38 38 / var(--tw-text-opacity, 1))}.hover\:bg-gray-50:hover{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.hover\:text-red-800:hover{--tw-text-opacity:1;color:rgb(153 27 27 / var(--tw-text-opacity, 1))}@media (min-width: 768px){.md\:col-span-2{grid-column:span 2 / span 2}.md\:mb-0{margin-bottom:0px}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}.md\:p-8{padding:2rem}}</style><style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.relative{position:relative}.-left-\[4cm\]{left:-4cm}.-top-\[0\.7cm\]{top:-0.7cm}.-top-\[1\.2cm\]{top:-1.2cm}.-top-\[1\.3cm\]{top:-1.3cm}.-top-\[1\.6cm\]{top:-1.6cm}.-top-\[1cm\]{top:-1cm}.-top-\[2cm\]{top:-2cm}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-8{margin-bottom:2rem}.mr-1{margin-right:0.25rem}.mr-2{margin-right:0.5rem}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.grid{display:grid}.h-10{height:2.5rem}.h-4{height:1rem}.h-5{height:1.25rem}.h-6{height:1.5rem}.w-10{width:2.5rem}.w-11{width:2.75rem}.w-16{width:4rem}.w-4{width:1rem}.w-5{width:1.25rem}.w-\[5\.50cm\]{width:5.50cm}.w-full{width:100%}.min-w-full{min-width:100%}.max-w-5xl{max-width:64rem}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-1{gap:0.25rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.overflow-x-auto{overflow-x:auto}.rounded{border-radius:0.25rem}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.border{border-width:1px}.border-0{border-width:0px}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235 / var(--tw-border-opacity, 1))}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219 / var(--tw-border-opacity, 1))}.border-gray-500{--tw-border-opacity:1;border-color:rgb(107 114 128 / var(--tw-border-opacity, 1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.bg-gray-500{--tw-bg-opacity:1;background-color:rgb(107 114 128 / var(--tw-bg-opacity, 1))}.bg-gray-800{--tw-bg-opacity:1;background-color:rgb(31 41 55 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.p-4{padding:1rem}.p-6{padding:1.5rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-8{padding-left:2rem;padding-right:2rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55 / var(--tw-text-opacity, 1))}.text-gray-900{--tw-text-opacity:1;color:rgb(17 24 39 / var(--tw-text-opacity, 1))}.text-red-600{--tw-text-opacity:1;color:rgb(220 38 38 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:bg-gray-50:hover{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.hover\:text-red-800:hover{--tw-text-opacity:1;color:rgb(153 27 27 / var(--tw-text-opacity, 1))}@media (min-width: 768px){.md\:mb-0{margin-bottom:0px}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}.md\:p-8{padding:2rem}}</style><style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.relative{position:relative}.-left-\[4cm\]{left:-4cm}.-top-\[0\.7cm\]{top:-0.7cm}.-top-\[1\.2cm\]{top:-1.2cm}.-top-\[1\.3cm\]{top:-1.3cm}.-top-\[1\.6cm\]{top:-1.6cm}.-top-\[1cm\]{top:-1cm}.-top-\[2cm\]{top:-2cm}.-top-\[5cm\]{top:-5cm}.-top-\[4cm\]{top:-4cm}.-top-\[2\.1cm\]{top:-2.1cm}.-top-\[2\.5cm\]{top:-2.5cm}.-top-\[3\.5cm\]{top:-3.5cm}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-8{margin-bottom:2rem}.mr-2{margin-right:0.5rem}.mt-1{margin-top:0.25rem}.mb-6{margin-bottom:1.5rem}.block{display:block}.flex{display:flex}.grid{display:grid}.h-10{height:2.5rem}.h-5{height:1.25rem}.h-6{height:1.5rem}.w-10{width:2.5rem}.w-11{width:2.75rem}.w-16{width:4rem}.w-5{width:1.25rem}.w-\[5\.50cm\]{width:5.50cm}.w-full{width:100%}.w-\[80cm\]{width:80cm}.w-\[50cm\]{width:50cm}.min-w-full{min-width:100%}.max-w-5xl{max-width:64rem}.max-w-xl{max-width:36rem}.max-w-2xl{max-width:42rem}.max-w-4xl{max-width:56rem}.max-w-6xl{max-width:72rem}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:0.25rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.overflow-x-auto{overflow-x:auto}.rounded{border-radius:0.25rem}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.border{border-width:1px}.border-0{border-width:0px}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235 / var(--tw-border-opacity, 1))}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219 / var(--tw-border-opacity, 1))}.border-gray-500{--tw-border-opacity:1;border-color:rgb(107 114 128 / var(--tw-border-opacity, 1))}.border-gray-800{--tw-border-opacity:1;border-color:rgb(31 41 55 / var(--tw-border-opacity, 1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.bg-gray-500{--tw-bg-opacity:1;background-color:rgb(107 114 128 / var(--tw-bg-opacity, 1))}.bg-gray-800{--tw-bg-opacity:1;background-color:rgb(31 41 55 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-blue-200{--tw-bg-opacity:1;background-color:rgb(191 219 254 / var(--tw-bg-opacity, 1))}.p-4{padding:1rem}.p-6{padding:1.5rem}.p-2{padding:0.5rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-8{padding-left:2rem;padding-right:2rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55 / var(--tw-text-opacity, 1))}.text-gray-900{--tw-text-opacity:1;color:rgb(17 24 39 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:bg-gray-50:hover{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}@media (min-width: 768px){.md\:mb-0{margin-bottom:0px}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}.md\:p-8{padding:2rem}}</style><style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.relative{position:relative}.-left-\[4cm\]{left:-4cm}.-top-\[0\.7cm\]{top:-0.7cm}.-top-\[1\.2cm\]{top:-1.2cm}.-top-\[1\.3cm\]{top:-1.3cm}.-top-\[1\.6cm\]{top:-1.6cm}.-top-\[1cm\]{top:-1cm}.-top-\[2cm\]{top:-2cm}.-top-\[4cm\]{top:-4cm}.-left-\[3\.5cm\]{left:-3.5cm}.-left-\[3\.8cm\]{left:-3.8cm}.-left-\[3\.0cm\]{left:-3.0cm}.-left-\[3\.2cm\]{left:-3.2cm}.-left-\[3cm\]{left:-3cm}.-left-\[3\.3cm\]{left:-3.3cm}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-8{margin-bottom:2rem}.mr-2{margin-right:0.5rem}.mt-1{margin-top:0.25rem}.block{display:block}.flex{display:flex}.grid{display:grid}.h-10{height:2.5rem}.h-5{height:1.25rem}.h-6{height:1.5rem}.w-10{width:2.5rem}.w-11{width:2.75rem}.w-16{width:4rem}.w-5{width:1.25rem}.w-\[5\.50cm\]{width:5.50cm}.w-full{width:100%}.w-12{width:3rem}.w-14{width:3.5rem}.w-1{width:0.25rem}.min-w-full{min-width:100%}.max-w-5xl{max-width:64rem}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:0.25rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.overflow-x-auto{overflow-x:auto}.rounded{border-radius:0.25rem}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.border{border-width:1px}.border-0{border-width:0px}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235 / var(--tw-border-opacity, 1))}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219 / var(--tw-border-opacity, 1))}.border-gray-500{--tw-border-opacity:1;border-color:rgb(107 114 128 / var(--tw-border-opacity, 1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.bg-gray-500{--tw-bg-opacity:1;background-color:rgb(107 114 128 / var(--tw-bg-opacity, 1))}.bg-gray-800{--tw-bg-opacity:1;background-color:rgb(31 41 55 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.p-4{padding:1rem}.p-6{padding:1.5rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-8{padding-left:2rem;padding-right:2rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-2xl{font-size:1.5rem;line-height:2rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55 / var(--tw-text-opacity, 1))}.text-gray-900{--tw-text-opacity:1;color:rgb(17 24 39 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:bg-gray-50:hover{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}@media (min-width: 768px){.md\:mb-0{margin-bottom:0px}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}.md\:p-8{padding:2rem}}</style></head>
-<body class="p-4 md:p-8">
-    <div id="invoice-content" class="invoice-container max-w-5xl mx-auto p-6 rounded-lg">
-        <!-- Header -->
-        <div class="flex flex-col md:flex-row justify-between items-center mb-8">
-            <div class="mb-4 md:mb-0">
-                <h1 class="text-4xl font-bold text-gray-900">LUMASONIX x PROFESSIONAL</h1>
-                <p class="text-3xl">專業技術支援 x 人力媒合行銷</p>
+</head>
+<body>
+    <div class="form-container my-8">
+        <div class="header-black">
+            <div class="text-left">
+                <h1 class="text-3xl font-bold">LUMASONIX x PROFESSIONAL</h1>
+                <p class="text-xl mt-2">專業技術支援 x 人力媒合行銷</p>
             </div>
-            <div class="bg-gray-800 text-white py-2 px-4 rounded">
+            <div class="text-right">
                 <h2 class="text-3xl font-bold">技術人員請款單</h2>
             </div>
         </div>
 
-        <!-- Client and Event Information -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 text-lg">
-            <!-- Left Column: Client Info -->
-            <div class="space-y-4">
+        <form id="invoiceForm" class="p-6">
+            <!-- 基本資訊 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
-                    <label class="block text-3xl font-medium text-gray-700 mb-1">廠商名稱</label>
-                    <input type="text" placeholder="請輸入廠商名稱" class="w-full h-10 px-3 py-2 border border-gray-300 rounded-md text-base">
+                    <label class="block text-xl font-medium text-gray-700 mb-1">廠商名稱</label>
+                    <input type="text" id="vendorName" placeholder="請輸入廠商名稱" class="w-full text-xl">
                 </div>
                 <div>
-                    <label class="block text-lg font-medium text-gray-700 mb-1">上班時間</label>
-<div class="flex items-center gap-1">
-                        <input type="text" class="w-14 h-6 px-2 py-1 border border-gray-300 rounded text-center" maxlength="4" placeholder="">年
-                        <input type="text" class="w-10 h-6 px-2 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">月
-                        <input type="text" class="w-10 h-6 px-2 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">日
-                        <input type="text" class="w-10 h-6 px-2 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">時
-                        <input type="text" class="w-10 h-6 px-2 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">分   至
-                    </div>
-<div class="flex items-center gap-1">
-                        <input type="text" class="w-14 h-6 px-2 py-1 border border-gray-300 rounded text-center" maxlength="4" placeholder="">年
-                        <input type="text" class="w-10 h-6 px-2 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">月
-                        <input type="text" class="w-10 h-6 px-2 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">日
-                        <input type="text" class="w-10 h-6 px-2 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">時
-                        <input type="text" class="w-10 h-6 px-2 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">分   至
-                    </div>
-                    
+                    <label class="block text-xl font-medium text-gray-700 mb-1">活動地點</label>
+                    <input type="text" id="eventLocation" placeholder="請輸入活動地點" class="w-full text-xl">
                 </div>
             </div>
 
-            <!-- Right Column: Time Info -->
-            <div class="space-y-4">
-                <!-- 進場時間 -->
-                <div>
-                    <label class="block text-3xl font-medium text-gray-700 mb-1">活動地點</label>
-<input type="text" placeholder="請輸入活動地點" class="w-full h-10 px-3 py-2 border border-gray-300 rounded-md text-base">
-                    
-                </div>
+           <!-- 時間資訊 -->
+            <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- 左側：上班時間 -->
+                    <div>
+                        <label class="block text-xl font-medium text-gray-700 mb-2">上班時間</label>
+                        <div class="flex items-center gap-1 mb-3">
+                            <input type="text" id="startYear1" class="w-12 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="4" placeholder="">
+                            <span class="text-sm">年</span>
+                            <input type="text" id="startMonth1" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="2" placeholder="">
+                            <span class="text-sm">月</span>
+                            <input type="text" id="startDay1" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="2" placeholder="">
+                            <span class="text-sm">日</span>
+                            <input type="text" id="startHour1" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="2" placeholder="">
+                            <span class="text-sm">時</span>
+                            <input type="text" id="startMinute1" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="2" placeholder="">
+                            <span class="text-sm">分</span>
+                            <span class="text-sm ml-2">至</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <input type="text" id="startYear2" class="w-12 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="4" placeholder="">
+                            <span class="text-SM">年</span>
+                            <input type="text" id="startMonth2" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="2" placeholder="">
+                            <span class="text-sm">月</span>
+                            <input type="text" id="startDay2" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="2" placeholder="">
+                            <span class="text-sm">日</span>
+                            <input type="text" id="startHour2" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="2" placeholder="">
+                            <span class="text-sm">時</span>
+<input type="text" id="startHour2" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="2" placeholder="">
+                            
+                            <span class="text-sm">分</span>
+<span class="text-sm ml-2">至</span>
 
-                <!-- 彩排時間 -->
-                <div>
-                    <label class="block text-lg font-medium text-gray-700 mb-1 relative -left-[3cm]  ">下班時間</label>
-                    <div class="flex items-center gap-1 relative -left-[3.2cm]">
-                        <input type="text" class="w-14 h-6 px-2 py-1 border border-gray-300 rounded text-center" maxlength="4" placeholder="">年
-                        <input type="text" class="w-10 h-6 px-2 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">月
-                        <input type="text" class="w-10 h-6 px-2 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">日
-                        <input type="text" class="w-10 h-6 px-2 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">時
-                        <input type="text" class="w-10 h-6 px-2 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">分
-                    </div>
-<div class="flex items-center gap-1 relative -left-[3.2cm]">
-                        <input type="text" class="w-14 h-6 px-2 py-1 border border-gray-300 rounded text-center" maxlength="4" placeholder="">年
-                        <input type="text" class="w-10 h-6 px-2 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">月
-                        <input type="text" class="w-10 h-6 px-2 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">日
-                        <input type="text" class="w-10 h-6 px-2 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">時
-                        <input type="text" class="w-10 h-6 px-2 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">分
+                            
+                        </div>
                     </div>
                     
+                    <!-- 右側：下班時間 -->
+                    <div>
+                        <label class="block text-xl font-medium text-gray-700 mb-2">下班時間</label>
+                       <div class="flex items-center gap-1 mb-3">
+                            <input type="text" id="startYear1" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="4" placeholder="">
+                            <span class="text-sm">年</span>
+                            <input type="text" id="startMonth1" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="2" placeholder="">
+                            <span class="text-sm">月</span>
+                            <input type="text" id="startDay1" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="2" placeholder="">
+                            <span class="text-sm">日</span>
+                            <input type="text" id="startHour1" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="2" placeholder="">
+                            <span class="text-sm">時</span>
+                            <input type="text" id="startMinute1" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="2" placeholder="">
+                            <span class="text-sm">分</span>
+                            
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <input type="text" id="startYear2" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="4" placeholder="">
+                            <span class="text-SM">年</span>
+                            <input type="text" id="startMonth2" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="2" placeholder="">
+                            <span class="text-sm">月</span>
+                            <input type="text" id="startDay2" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="2" placeholder="">
+                            <span class="text-sm">日</span>
+                            <input type="text" id="startHour2" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="2" placeholder="">
+                            <span class="text-sm">時</span>
+<input type="text" id="startHour2" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="2" placeholder="">
+                            
+                            <span class="text-sm">分</span>
+                          
+                        
+                    </div></div>
                 </div>
             </div>
-        </div>
 
-                <!-- Activity Support Details -->
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">活動支援明細</h3>
-                <div class="overflow-x-auto mb-8">
-                    <table class="min-w-full bg-white border border-gray-500">
+
+            <!-- 活動支援明細 -->
+            <div class="mb-6">
+                <h3 class="text-xl font-medium mb-3">活動支援明細</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
                         <thead>
-                               <tr class="table-header text-3xl  ">
-                        <th style="width: 120px; padding: 0 8px;" class="py-2 px-4  ">品項</th>
-                        <th style="width: 80px; padding: 0 8px;" class="py-2 px-4 text-center">數量</th>
-                        <th style="width: 80px; padding: 0 8px;" class="py-2 px-4 text-left">單價</th>
-                        <th class="py-2 px-4 text-left">工作內容</th>
-                        <th class="py-2 px-4 text-right">小計 (NT$)</th>
-                        </tr>
+                            <tr>
+                                <th class="text-xl">品項</th>
+                                <th class="text-xl">數量</th>
+                                <th class="text-xl">單價 (NT$)</th>
+                                <th class="text-xl">工作內容</th>
+                                <th class="text-xl">小計 (NT$)</th>
+                            </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="border border-gray-200">人事支援</td>
-                                <td class="border border-gray-200">
-                                    <input type="number" id="staff-qty" value="0" min="0" class="w-full text-center px-2 py-1 border-0" onchange="calculateTotal()">
-                                </td>
-                                <td class="border border-gray-200">
-                                    <input type="number" id="staff-price" value="2500" class="w-full text-center px-2 py-1 border-0" onchange="calculateTotal()">
-                                </td>
-                                <td class="border border-gray-200">進場、演出、撤場</td>
-                                <td class="border border-gray-200 text-right" id="staff-subtotal">0.0</td>
+                                <td class="text-xl">人事支援</td>
+                                <td><input type="number" id="staffCount" value="0" min="0" class="w-20 text-xl"></td>
+                                <td class="text-xl">2,500</td>
+                                <td class="text-xl">進場、演出、撤場</td>
+                                <td id="staffTotal" class="text-xl">0.0</td>
                             </tr>
                             <tr>
-                                <td class="border border-gray-200">燈/音/視控</td>
-                                <td class="border border-gray-200">
-                                    <input type="number" id="tech-qty" value="0" min="0" class="w-full text-center px-2 py-1 border-0" onchange="calculateTotal()">
-                                </td>
-                                <td class="border border-gray-200">
-                                    <input type="number" id="tech-price" value="1000" class="w-full text-center px-2 py-1 border-0" onchange="calculateTotal()">
-                                </td>
-                                <td class="border border-gray-200">演出前一日彩排，將視為一場演出，另行計費。</td>
-                                <td class="border border-gray-200 text-right" id="tech-subtotal">0.0</td>
+                                <td class="text-xl">燈/音/視控</td>
+                                <td><input type="number" id="techCount" value="0" min="0" class="w-20 text-xl"></td>
+                                <td class="text-xl">1,000</td>
+                                <td class="text-xl">演出前一日彩排，將視為一場演出，另行計費。</td>
+                                <td id="techTotal" class="text-xl">0.0</td>
                             </tr>
                             <tr>
-                                <td class="border border-gray-200">追光燈操作</td>
-                                <td class="border border-gray-200">
-                                    <input type="number" id="spotlight-qty" value="0" min="0" class="w-full text-center px-2 py-1 border-0" onchange="calculateTotal()">
-                                </td>
-                                <td class="border border-gray-200">
-                                    <input type="number" id="spotlight-price" value="1000" class="w-full text-center px-2 py-1 border-0" onchange="calculateTotal()">
-                                </td>
-                                <td class="border border-gray-200">演出前一日彩排，將視為一場演出，另行計費。</td>
-                                <td class="border border-gray-200 text-right" id="spotlight-subtotal">0.0</td>
+                                <td class="text-xl">追光燈操作</td>
+                                <td><input type="number" id="spotlightCount" value="0" min="0" class="w-20 text-xl"></td>
+                                <td class="text-xl">1,000</td>
+                                <td class="text-xl">演出前一日彩排，將視為一場演出，另行計費。</td>
+                                <td id="spotlightTotal" class="text-xl">0.0</td>
                             </tr>
                             <tr>
-                                <td class="border border-gray-200">高空作業</td>
-                                <td class="border border-gray-200">
-                                    <input type="number" id="height-qty" value="0" min="0" class="w-full text-center px-2 py-1 border-0" onchange="calculateTotal()">
-                                </td>
-                                <td class="border border-gray-200">
-                                    <input type="number" id="height-price" value="1000" class="w-full text-center px-2 py-1 border-0" onchange="calculateTotal()">
-                                </td>
-                                <td class="border border-gray-200">作業高度達layher第 6 格以上(約9米)</td>
-                                <td class="border border-gray-200 text-right" id="height-subtotal">0.0</td>
+                                <td class="text-xl">高空作業</td>
+                                <td><input type="number" id="heightCount" value="0" min="0" class="w-20 text-xl"></td>
+                                <td class="text-xl">1,000</td>
+                                <td class="text-xl">作業高度達layher第 6 格以上(約9米)</td>
+                                <td id="heightTotal" class="text-xl">0.0</td>
                             </tr>
                             <tr>
-  <td class="border border-gray-200">加班費用</td>
-  
-  <!-- 加班時數 -->
-  <td class="border border-gray-200">
-    <input type="number" id="overtime-qty" step="0.5" min="0" value="0" class="w-full text-center px-2 py-1 border-0" oninput="calculateTotal()">
-  </td>
-  
-  <!-- 單價 -->
-  <td class="border border-gray-200">
-    <input type="number" id="overtime-price" step="1" min="0" value="350" class="w-full text-center px-2 py-1 border-0" oninput="calculateTotal()">
-  </td>
-  
-  <!-- 備註 -->
-  <td class="border border-gray-200">依實際加班時數計算</td>
-  
-  <!-- 小計 -->
-  <td class="border border-gray-200 text-right" id="overtime-subtotal">0.0</td>
-</tr>
-                            <tr>
-                                <td class="border border-gray-200">行政執行費</td>
-                                <td class="border border-gray-200 text-center">一式</td>
-                                <td class="border border-gray-200 text-center">10%</td>
-                                <td class="border border-gray-200">人事支援 x 10%</td>
-                                <td class="border border-gray-200 text-right" id="admin-subtotal">0.0</td>
+                                <td class="text-xl">加班費用</td>
+                                <td><input type="number" id="overtimeCount" value="0" min="0" class="w-20 text-xl"></td>
+                                <td class="text-xl">350</td>
+                                <td class="text-xl">依實際加班時數計算</td>
+                                <td id="overtimeTotal" class="text-xl">0.0</td>
                             </tr>
                             <tr>
-                                <td class="border border-gray-200">其他</td>
-                                <td class="border border-gray-200 text-center">一式</td>
-                                <td class="border border-gray-200">
-                                    <input type="number" id="other-price" value="0" class="w-full text-center px-2 py-1 border-0" onchange="calculateTotal()">
-                                </td>
-                                <td class="border border-gray-200">
-                                    <input type="text" id="other-desc" placeholder="其他項目描述" class="w-full px-2 py-1 border-0">
-                                </td>
-                                <td class="border border-gray-200 text-right" id="other-subtotal">0.0</td>
+                                <td class="text-xl">行政執行費</td>
+                                <td class="text-xl">一式</td>
+                                <td class="text-xl">10%</td>
+                                <td class="text-xl">人事支援 x 10%</td>
+                                <td id="adminTotal" class="text-xl">0.0</td>
+                            </tr>
+                            <tr>
+                                <td class="text-xl">其他</td>
+                                <td class="text-xl">一式</td>
+                                <td><input type="number" id="otherPrice" value="0" min="0" class="w-20 text-xl"></td>
+                                <td><input type="text" id="otherDesc" placeholder="其他項目描述" class="w-full text-xl"></td>
+                                <td id="otherTotal" class="text-xl">0.0</td>
                             </tr>
                         </tbody>
                         <tfoot>
-                            <tr class="bg-gray-500">
-                                <td colspan="4" class="border border-gray-200 text-right font-medium text-white">未稅金額:</td>
-                                <td class="border border-gray-200 text-right text-white font-medium" id="subtotal">NT$0.0</td>
+                            <tr class="font-medium">
+                                <td colspan="4" class="text-right text-xl">未稅金額:</td>
+                                <td id="subtotal" class="text-xl">NT$0.0</td>
                             </tr>
-                            <tr class="bg-gray-500">
-                                <td colspan="4" class="border border-gray-200 text-right font-bold text-white">總計金額:</td>
-                                <td class="border border-gray-500 text-right text-white  font-bold" id="total">NT$0.0</td>
+                            <tr class="font-bold">
+                                <td colspan="4" class="text-right text-xl">總計金額:</td>
+                                <td id="total" class="text-xl">NT$0.0</td>
                             </tr>
                         </tfoot>
                     </table>
                 </div>
-                
-                <!-- Bank Info -->
-                <div class="bg-gray-50 p-4 rounded-lg mb-8 relative -top-[0.7cm]">
-                    <h3 class="text-3x1 font-semibold text-gray-800 mb-3">【匯款資訊】</h3>
-                    <p class="bank-info-label">帳號戶名：蘇裕庭</p>                    <p class="bank-info-label">匯款代碼：808(玉山銀行中路特區分行)</p>                    <p class="bank-info-label">匯款帳號：0842-979-176643</p>
-                    
-                </div>
-                
-                <!-- Labor Report Section -->
-                <h3 class="text-4x1 font-semibold text-gray-800 mb-4 relative -top-[1.3cm]">勞報資料檢附</h3>
-                <div id="staff-container">
-                    <!-- Staff Card 1 -->
-                    <div class="staff-card bg-white p-4 rounded-lg border mb-4 relative -top-[1cm]">
-  <!-- 第一列：四欄 -->
-  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-    <div>
-      <label class="block text-3x1 font-medium text-gray-700 mb-1">人員姓名</label>
-      <input type="text" placeholder="請輸入姓名" class="w-full px-2 py-2 border border-gray-300 rounded-md staff-name">
-    </div>
-    <div>
-      <label class="block text-3x1 font-medium text-gray-700 mb-1">出生年月日</label>
-      <input type="text" placeholder="例：1990/01/01" class="w-full px-2 py-2 border border-gray-300 rounded-md DATE">
-    </div>
-    <div>
-      <label class="block text-3x1 font-medium text-gray-700 mb-1">身分證字號</label>
-      <input type="text" placeholder="請輸入身分證字號" class="w-full px-2 py-2 border border-gray-300 rounded-md">
-    </div>
-    <div>
-      <label class="block text-3x1 font-medium text-gray-700 mb-1">連絡電話</label>
-      <input type="text" placeholder="請輸入電話" class="w-full px-2 py-2 border border-gray-300 rounded-md">
-    </div>
-  </div>
+            </div>
 
-  <!-- 第二列：地址 + 金額 -->
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <div>
-      <label class="block text-3x1 font-medium text-gray-700 mb-1">戶籍地址</label>
-      <input type="text" placeholder="戶籍地址" class="w-full px-2 py-2 border border-gray-300 rounded-md">
-    </div>
-    <div>
-      <label class="block text-3x1 font-medium text-gray-700 mb-1">勞報金額</label>
-      <input type="text" placeholder="勞報金額" class="w-[5.50cm] px-2 py-2 border border-gray-300 rounded-md">元
-
-    </div>
-  </div>
-</div>
-                            <div class="staff-card bg-white p-4 rounded-lg border mb-4 relative -top-[1cm]">
-  <!-- 第一列：四欄 -->
-  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-    <div>
-      <label class="block text-3x1 font-medium text-gray-700 mb-1">人員姓名</label>
-      <input type="text" placeholder="請輸入姓名" class="w-full px-2 py-2 border border-gray-300 rounded-md staff-name">
-    </div>
-    <div>
-      <label class="block text-3x1 font-medium text-gray-700 mb-1">出生年月日</label>
-      <input type="text" placeholder="例：1990/01/01" class="w-full px-2 py-2 border border-gray-300 rounded-md DATE">
-    </div>
-    <div>
-      <label class="block text-3x1 font-medium text-gray-700 mb-1">身分證字號</label>
-      <input type="text" placeholder="請輸入身分證字號" class="w-full px-2 py-2 border border-gray-300 rounded-md">
-    </div>
-    <div>
-      <label class="block text-3x1 font-medium text-gray-700 mb-1">連絡電話</label>
-      <input type="text" placeholder="請輸入電話" class="w-full px-2 py-2 border border-gray-300 rounded-md">
-    </div>
-  </div>
-
-  <!-- 第二列：地址 + 金額 -->
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <div>
-      <label class="block text-3x1 font-medium text-gray-700 mb-1">戶籍地址</label>
-      <input type="text" placeholder="戶籍地址" class="w-full px-2 py-2 border border-gray-300 rounded-md">
-    </div>
-    <div>
-      <label class="block text-3x1 font-medium text-gray-700 mb-1">勞報金額</label>
-      <input type="text" placeholder="勞報金額" class="w-[5.50cm] px-2 py-2 border border-gray-300 rounded-md">元
-
-    </div>
-  </div>
-</div>
-                
-                
-            
+           <!-- 匯款資訊 -->
+            <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                <h3 class="text-xl font-medium mb-2">【匯款資訊】</h3>
+                <p class="text-xl">帳號戶名：蘇裕庭</p>
+                <p class="text-xl">匯款代碼：808(玉山銀行中路特區分行)</p>
+                <p class="text-xl">匯款帳號：0842-979-176643</p>
 
             </div>
-                
-                <div class="mb-8 relative -top-[1.3cm]">
 
-                <div class="mb-8">
-                    <button type="button" class="btn-secondary flex items-center px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 hover:bg-gray-50" onclick="addStaff()">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                        </svg>
-                        新增人員
-                    </button>
+            <!-- 勞報資料檢附 -->
+            <div class="mb-6">
+                <h3 class="text-xl font-medium mb-3">勞報資料檢附</h3>
+                <div id="laborReportContainer">
+                    <!-- 第一位人員 -->
+                    <div class="labor-person bg-gray-50 p-4 rounded-lg mb-4">
+                        <div class="grid grid-cols-4 gap-4 mb-3">
+                            <div>
+                                <label class="block text-xl font-medium text-gray-700 mb-1">人員姓名</label>
+                                <input type="text" placeholder="請輸入姓名" class="w-full text-xl">
+                            </div>
+                            <div>
+                                <label class="block text-xl font-medium text-gray-700 mb-1">出生年月日</label>
+                                <input type="text" placeholder="例：1990/01/01" class="w-full text-xl">
+                            </div>
+                            <div>
+                                <label class="block text-xl font-medium text-gray-700 mb-1">身分證字號</label>
+                                <input type="text" placeholder="請輸入身分證字號" class="w-full text-xl">
+                            </div>
+                            <div>
+                                <label class="block text-xl font-medium text-gray-700 mb-1">連絡電話</label>
+                                <input type="text" placeholder="請輸入電話" class="w-full text-xl">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xl font-medium text-gray-700 mb-1">戶籍地址</label>
+                                <input type="text" placeholder="戶籍地址" class="w-full text-xl">
+                            </div>
+                            <div>
+                                <label class="block text-xl font-medium text-gray-700 mb-1">勞報金額</label>
+                                <div class="flex items-center">
+                                    <input type="number" placeholder="勞報金額" class="w-full text-xl">
+                                    <span class="ml-2 text-xl">元</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 第二位人員 -->
+                    <div class="labor-person bg-gray-50 p-4 rounded-lg mb-4">
+                        <div class="grid grid-cols-4 gap-4 mb-3">
+                            <div>
+                                <label class="block text-xl font-medium text-gray-700 mb-1">人員姓名</label>
+                                <input type="text" placeholder="請輸入姓名" class="w-full text-xl">
+                            </div>
+                            <div>
+                                <label class="block text-xl font-medium text-gray-700 mb-1">出生年月日</label>
+                                <input type="text" placeholder="例：1990/01/01" class="w-full text-xl">
+                            </div>
+                            <div>
+                                <label class="block text-xl font-medium text-gray-700 mb-1">身分證字號</label>
+                                <input type="text" placeholder="請輸入身分證字號" class="w-full text-xl">
+                            </div>
+                            <div>
+                                <label class="block text-xl font-medium text-gray-700 mb-1">連絡電話</label>
+                                <input type="text" placeholder="請輸入電話" class="w-full text-xl">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xl font-medium text-gray-700 mb-1">戶籍地址</label>
+                                <input type="text" placeholder="戶籍地址" class="w-full text-xl">
+                            </div>
+                            <div>
+                                <label class="block text-xl font-medium text-gray-700 mb-1">勞報金額</label>
+                                <div class="flex items-center">
+                                    <input type="number" placeholder="勞報金額" class="w-full text-xl">
+                                    <span class="ml-2 text-xl">元</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                </div>
-                
-                <!-- Notes -->
-                <div class="mb-8">
-                    <label class="block text-3x1 font-medium text-gray-700 mb-1 relative -top-[1.6cm]">備註</label>
-                    <textarea rows="3" placeholder="請輸入備註事項..." class="w-full px-4 py-2 border border-gray-300 rounded-md relative -top-[1.2cm]"></textarea>
-                </div>
-                
-                <!-- Contact Info -->
-                <div class="bg-gray-50 p-4 rounded-lg mb-8 relative -top-[2cm]">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-2">聯絡資訊</h3>
-                    <p class="mb-1"><span class="font-medium">負責人：</span>蘇裕庭</p>
-                    <p><span class="font-medium">連絡電話：</span>0926169899</p>
-                    <p class="mb-1"><span class="font-medium">請款日期：</span><input type="text" class="w-16 h-10 px-2 py-1 border border-gray-300 rounded text-center" maxlength="4" placeholder="">年
-                        <input type="text" class="w-10 h-6 px-2 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">月
-                        <input type="text" class="w-10 h-6 px-2 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">日
-                        <input type="text" class="w-10 h-6 px-2 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">時
-                        <input type="text" class="w-10 h-6 px-2 py-1 border border-gray-300 rounded text-center" maxlength="2" placeholder="">分
-</p>
+                <button type="button" id="addPersonBtn" class="btn btn-secondary mt-2">
+                    + 新增人員
+                </button>
+            </div>
 
-                </div>
-                
-                <!-- Submit Button -->
-                <div class="text-center">
-                    <button type="button" class="btn-primary px-8 py-3 rounded-md text-white font-medium" onclick="saveInvoice()">
-                        儲存報價單
-                    </button>
-                </div>
-            </div><div class="w-full flex justify-center relative -top-[4cm]">
-  <div class="bg-gray-800 text-center  text-white max-w-5xl w-full py-4 rounded-md">
-    <p class="text-4x1 font-medium">LUMASONIX x PROFESSIONAL | 專業技術支援 x 人力媒合行銷</p>
-<p class="text-4x1 font-medium">電話: 0926-169-899 | 電子郵件: lumasonix@gmail.com</p>
-  </div>
-</div>
-                <p></p>
-                <p class="mt-1"></p>
-            
+            <!-- 備註 -->
+            <div class="mb-6">
+                <label class="block text-xl font-medium text-gray-700 mb-1">備註</label>
+                <textarea id="notes" rows="3" placeholder="請輸入備註事項..." class="w-full border rounded-md p-2 text-xl"></textarea>
+            </div>
 
-        
-    
+            <!-- 聯絡資訊 -->
+            <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                <h3 class="text-xl font-medium mb-2">聯絡資訊</h3>
+                <p class="text-xl">負責人：蘇裕庭</p>
+                <p class="text-xl">連絡電話：0926169899</p>
+            </div>
+
+            <!-- 請款日期 -->
+            <div class="mb-6">
+                <label class="block text-xl font-medium text-gray-700 mb-2">請款日期：</label>
+                <div class="flex space-x-2">
+                    <input type="text" id="invoiceYear" placeholder="年" maxlength="4" class="w-20 text-xl text-center">
+                    <input type="text" id="invoiceMonth" placeholder="月" maxlength="2" class="w-20 text-xl text-center">
+                    <input type="text" id="invoiceDay" placeholder="日" maxlength="2" class="w-20 text-xl text-center">
+                    <input type="text" id="invoiceHour" placeholder="時" maxlength="2" class="w-20 text-xl text-center">
+                    <input type="text" id="invoiceMinute" placeholder="分" maxlength="2" class="w-20 text-xl text-center">
+                </div>
+            </div>
+
+            <!-- 按鈕區域 -->
+            <div class="flex justify-center space-x-4 mt-8 no-print">
+                <button type="button" id="generatePdfBtn" class="btn btn-primary text-xl px-6">
+                    下載生成PDF
+                </button>
+                <button type="button" id="setDateBtn" class="btn btn-secondary text-xl px-6">
+                    設置日期
+                </button>
+                <button type="button" id="resetFormBtn" class="btn btn-danger text-xl px-6">
+                    重置表單
+                </button>
+            </div>
+        </form>
+
+        <div class="bg-gray-100 p-4 text-center text-xl text-gray-600">
+            <p>LUMASONIX x PROFESSIONAL | 專業技術支援 x 人力媒合行銷</p>
+            <p>電話: 0926-169-899 | 電子郵件: lumasonix@gmail.com</p>
+        </div>
+    </div>
 
     <script>
-        // Calculate totals
-        function calculateTotal() {
-            // Staff support
-            const staffQty = parseFloat(document.getElementById('staff-qty').value) || 0;
-            const staffPrice = parseFloat(document.getElementById('staff-price').value) || 0;
-            const staffSubtotal = staffQty * staffPrice;
-            document.getElementById('staff-subtotal').textContent = formatNumber(staffSubtotal);
-            
-            // Tech support
-            const techQty = parseInt(document.getElementById('tech-qty').value) || 0;
-            const techPrice = parseInt(document.getElementById('tech-price').value) || 0;
-            const techSubtotal = techQty * techPrice;
-            document.getElementById('tech-subtotal').textContent = formatNumber(techSubtotal);
-            
-            // Spotlight
-            const spotlightQty = parseInt(document.getElementById('spotlight-qty').value) || 0;
-            const spotlightPrice = parseInt(document.getElementById('spotlight-price').value) || 0;
-            const spotlightSubtotal = spotlightQty * spotlightPrice;
-            document.getElementById('spotlight-subtotal').textContent = formatNumber(spotlightSubtotal);
-            
-            // Height work
-            const heightQty = parseInt(document.getElementById('height-qty').value) || 0;
-            const heightPrice = parseInt(document.getElementById('height-price').value) || 0;
-            const heightSubtotal = heightQty * heightPrice;
-            document.getElementById('height-subtotal').textContent = formatNumber(heightSubtotal);
-            
-            // Overtime
-            const overtimeQty = parseFloat(document.getElementById('overtime-qty').value) || 0;
-const overtimePrice = parseFloat(document.getElementById('overtime-price').value) || 0;
-const overtimeSubtotal = overtimeQty * overtimePrice;
-document.getElementById('overtime-subtotal').textContent = formatNumber(overtimeSubtotal);
-            
-            // Admin fee (10% of staff support)
-            const adminSubtotal = Math.round(staffSubtotal * 0.1);
-            document.getElementById('admin-subtotal').textContent = formatNumber(adminSubtotal);
-            
-            // Other
-            const otherPrice = parseInt(document.getElementById('other-price').value) || 0;
-            document.getElementById('other-subtotal').textContent = formatNumber(otherPrice);
-            
-            // Calculate subtotal and total
-            const subtotal = staffSubtotal + techSubtotal + spotlightSubtotal + heightSubtotal + 
-                            overtimeSubtotal + adminSubtotal + otherPrice;
-            
-            document.getElementById('subtotal').textContent = `NT$${formatNumber(subtotal)}`;
-            document.getElementById('total').textContent = `NT$${formatNumber(subtotal)}`;
-            
-            // Update staff amounts
-            updateStaffAmounts(staffSubtotal);
-        }
-        
-        // Format number with commas
-       function formatNumber(num) {
-  return num.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
-}
-        
-        // Add new staff member
-        function addStaff() {
-            const staffContainer = document.getElementById('staff-container');
-            const newStaff = document.createElement('div');
-            newStaff.className = 'staff-card bg-white p-4 rounded-lg border mb-4';
-            newStaff.innerHTML = `
-          <!-- 第一列：四欄 -->
- <div class="staff-card bg-white p-4 rounded-lg border mb-4 relative -top-[1cm]">
-  <!-- 第一列：四欄 -->
-  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-    <div>
-      <label class="block text-3x1 font-medium text-gray-700 mb-1">人員姓名</label>
-      <input type="text" placeholder="請輸入姓名" class="w-full px-2 py-2 border border-gray-300 rounded-md staff-name">
-    </div>
-    <div>
-      <label class="block text-3x1 font-medium text-gray-700 mb-1">出生年月日</label>
-      <input type="text" placeholder="例：1990/01/01" class="w-full px-2 py-2 border border-gray-300 rounded-md DATE">
-    </div>
-    <div>
-      <label class="block text-3x1 font-medium text-gray-700 mb-1">身分證字號</label>
-      <input type="text" placeholder="請輸入身分證字號" class="w-full px-2 py-2 border border-gray-300 rounded-md">
-    </div>
-    <div>
-      <label class="block text-3x1 font-medium text-gray-700 mb-1">連絡電話</label>
-      <input type="text" placeholder="請輸入電話" class="w-full px-2 py-2 border border-gray-300 rounded-md">
-    </div>
-  </div>
-
-  <!-- 第二列：地址 + 金額 -->
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <div>
-      <label class="block text-3x1 font-medium text-gray-700 mb-1">戶籍地址</label>
-      <input type="text" placeholder="戶籍地址" class="w-full px-2 py-2 border border-gray-300 rounded-md">
-    </div>
-    <div>
-      <label class="block text-3x1 font-medium text-gray-700 mb-1">勞報金額</label>
-      <input type="text" placeholder="勞報金額" class="w-[5.50cm] px-2 py-2 border border-gray-300 rounded-md">元
-
-    </div>
-  </div>
-</div>
-  </div>
-</div>
-                </div>
-                <button type="button" class="text-red-600 hover:text-red-800 text-sm font-medium" onclick="removeStaff(this)">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                    移除
-                </button>
-            `;
-            staffContainer.appendChild(newStaff);
-            updateStaffAmounts();
-        }
-        
-        // Remove staff member
-        function removeStaff(button) {
-            const staffCard = button.closest('.staff-card');
-            staffCard.remove();
-            updateStaffAmounts();
-        }
-        
-        // Update staff amounts
-        function updateStaffAmounts() {
-            const staffQty = parseInt(document.getElementById('staff-qty').value) || 0;
-            const staffPrice = parseInt(document.getElementById('staff-price').value) || 0;
-            const staffSubtotal = staffQty * staffPrice;
-            
-            const staffCards = document.querySelectorAll('.staff-card');
-            if (staffCards.length === 0) return;
-            
-            // Calculate amount per staff
-            const amountPerStaff = Math.floor(staffSubtotal / staffCards.length);
-            
-            // Distribute amounts
-            const staffAmounts = document.querySelectorAll('.staff-amount');
-            staffAmounts.forEach(input => {
-                input.value = amountPerStaff;
-            });
-        }
-        
-        // Save invoice
-        function saveInvoice() {
-            // Get all form data
-            const vendor = document.getElementById('vendor').value;
-            const location = document.getElementById('location').value;
-            
-            // Validate required fields
-            if (!vendor) {
-                alert('請輸入廠商名稱');
-                return;
-            }
-            
-            if (!location) {
-                alert('請輸入活動地點');
-                return;
-            }
-            
-            // Show success message
-            alert('報價單已儲存成功！');
-        }
-        
-        // Initialize calculations
         document.addEventListener('DOMContentLoaded', function() {
-            calculateTotal();
+            // 設置當前日期作為默認值
+            function setCurrentDate() {
+                const now = new Date();
+                const year = now.getFullYear();
+                const month = (now.getMonth() + 1).toString().padStart(2, '0');
+                const day = now.getDate().toString().padStart(2, '0');
+                const hours = now.getHours().toString().padStart(2, '0');
+                const minutes = now.getMinutes().toString().padStart(2, '0');
+                
+                // 設置上班時間1
+                document.getElementById('startYear1').value = year;
+                document.getElementById('startMonth1').value = month;
+                document.getElementById('startDay1').value = day;
+                document.getElementById('startHour1').value = hours;
+                document.getElementById('startMinute1').value = minutes;
+                
+                // 設置上班時間2
+                document.getElementById('startYear2').value = year;
+                document.getElementById('startMonth2').value = month;
+                document.getElementById('startDay2').value = day;
+                document.getElementById('startHour2').value = hours;
+                document.getElementById('startMinute2').value = minutes;
+                
+                // 設置下班時間1
+                document.getElementById('endYear1').value = year;
+                document.getElementById('endMonth1').value = month;
+                document.getElementById('endDay1').value = day;
+                document.getElementById('endHour1').value = hours;
+                document.getElementById('endMinute1').value = minutes;
+                
+                // 設置下班時間2
+                document.getElementById('endYear2').value = year;
+                document.getElementById('endMonth2').value = month;
+                document.getElementById('endDay2').value = day;
+                document.getElementById('endHour2').value = hours;
+                document.getElementById('endMinute2').value = minutes;
+                
+                // 設置請款日期
+                document.getElementById('invoiceYear').value = year;
+                document.getElementById('invoiceMonth').value = month;
+                document.getElementById('invoiceDay').value = day;
+                document.getElementById('invoiceHour').value = hours;
+                document.getElementById('invoiceMinute').value = minutes;
+            }
+            
+            setCurrentDate();
+            
+            // 計算金額
+            function calculateTotals() {
+                const staffCount = parseInt(document.getElementById('staffCount').value) || 0;
+                const techCount = parseInt(document.getElementById('techCount').value) || 0;
+                const spotlightCount = parseInt(document.getElementById('spotlightCount').value) || 0;
+                const heightCount = parseInt(document.getElementById('heightCount').value) || 0;
+                const overtimeCount = parseInt(document.getElementById('overtimeCount').value) || 0;
+                const otherPrice = parseInt(document.getElementById('otherPrice').value) || 0;
+                
+                const staffTotal = staffCount * 2500;
+                const techTotal = techCount * 1000;
+                const spotlightTotal = spotlightCount * 1000;
+                const heightTotal = heightCount * 1000;
+                const overtimeTotal = overtimeCount * 350;
+                const adminTotal = staffTotal * 0.1;
+                const otherTotal = otherPrice;
+                
+                document.getElementById('staffTotal').textContent = staffTotal.toLocaleString();
+                document.getElementById('techTotal').textContent = techTotal.toLocaleString();
+                document.getElementById('spotlightTotal').textContent = spotlightTotal.toLocaleString();
+                document.getElementById('heightTotal').textContent = heightTotal.toLocaleString();
+                document.getElementById('overtimeTotal').textContent = overtimeTotal.toLocaleString();
+                document.getElementById('adminTotal').textContent = adminTotal.toLocaleString();
+                document.getElementById('otherTotal').textContent = otherTotal.toLocaleString();
+                
+                const subtotal = staffTotal + techTotal + spotlightTotal + heightTotal + overtimeTotal + adminTotal + otherTotal;
+                document.getElementById('subtotal').textContent = `NT$${subtotal.toLocaleString()}`;
+                document.getElementById('total').textContent = `NT$${subtotal.toLocaleString()}`;
+            }
+            
+            // 監聽數量變化
+            document.getElementById('staffCount').addEventListener('input', calculateTotals);
+            document.getElementById('techCount').addEventListener('input', calculateTotals);
+            document.getElementById('spotlightCount').addEventListener('input', calculateTotals);
+            document.getElementById('heightCount').addEventListener('input', calculateTotals);
+            document.getElementById('overtimeCount').addEventListener('input', calculateTotals);
+            document.getElementById('otherPrice').addEventListener('input', calculateTotals);
+            
+            // 新增人員按鈕
+            document.getElementById('addPersonBtn').addEventListener('click', function() {
+                const container = document.getElementById('laborReportContainer');
+                const personTemplate = `
+                    <div class="labor-person bg-gray-50 p-4 rounded-lg mb-4">
+                        <div class="grid grid-cols-4 gap-4 mb-3">
+                            <div>
+                                <label class="block text-xl font-medium text-gray-700 mb-1">人員姓名</label>
+                                <input type="text" placeholder="請輸入姓名" class="w-full text-xl">
+                            </div>
+                            <div>
+                                <label class="block text-xl font-medium text-gray-700 mb-1">出生年月日</label>
+                                <input type="text" placeholder="例：1990/01/01" class="w-full text-xl">
+                            </div>
+                            <div>
+                                <label class="block text-xl font-medium text-gray-700 mb-1">身分證字號</label>
+                                <input type="text" placeholder="請輸入身分證字號" class="w-full text-xl">
+                            </div>
+                            <div>
+                                <label class="block text-xl font-medium text-gray-700 mb-1">連絡電話</label>
+                                <input type="text" placeholder="請輸入電話" class="w-full text-xl">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xl font-medium text-gray-700 mb-1">戶籍地址</label>
+                                <input type="text" placeholder="戶籍地址" class="w-full text-xl">
+                            </div>
+                            <div>
+                                <label class="block text-xl font-medium text-gray-700 mb-1">勞報金額</label>
+                                <div class="flex items-center">
+                                    <input type="number" placeholder="勞報金額" class="w-full text-xl">
+                                    <span class="ml-2 text-xl">元</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-end items-center mt-2">
+                                <button type="button" class="remove-person text-red-500 hover:text-red-700 text-xl">
+                                    移除
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = personTemplate;
+                const newPerson = tempDiv.firstElementChild;
+                
+                newPerson.querySelector('.remove-person').addEventListener('click', function() {
+                    container.removeChild(newPerson);
+                });
+                
+                container.appendChild(newPerson);
+            });
+            
+            // 設置日期按鈕
+            document.getElementById('setDateBtn').addEventListener('click', function() {
+                setCurrentDate();
+                alert('已設置為當前日期！');
+            });
+            
+            // 重置表單按鈕
+            document.getElementById('resetFormBtn').addEventListener('click', function() {
+                if (confirm('確定要重置表單嗎？所有已填寫的資料將被清空。')) {
+                    // 重置表單輸入
+                    const inputs = document.querySelectorAll('input[type="text"], input[type="number"], textarea');
+                    inputs.forEach(input => {
+                        input.value = '';
+                    });
+                    
+                    // 重置計算
+                    document.getElementById('staffCount').value = 0;
+                    document.getElementById('techCount').value = 0;
+                    document.getElementById('spotlightCount').value = 0;
+                    document.getElementById('heightCount').value = 0;
+                    document.getElementById('overtimeCount').value = 0;
+                    document.getElementById('otherPrice').value = 0;
+                    calculateTotals();
+                    
+                    // 設置當前日期
+                    setCurrentDate();
+                    
+                    // 清除勞報人員資料，只保留前兩個
+                    const container = document.getElementById('laborReportContainer');
+                    const persons = container.querySelectorAll('.labor-person');
+                    
+                    // 保留前兩個，刪除其餘的
+                    for (let i = 2; i < persons.length; i++) {
+                        container.removeChild(persons[i]);
+                    }
+                    
+                    alert('表單已重置！');
+                }
+            });
+            
+            // 生成PDF按鈕
+            document.getElementById('generatePdfBtn').addEventListener('click', function() {
+                // 隱藏按鈕區域
+                const buttons = document.querySelectorAll('.no-print');
+                buttons.forEach(btn => {
+                    btn.style.display = 'none';
+                });
+                
+                // 使用html2canvas和jsPDF生成PDF
+                window.html2canvas = html2canvas;
+                window.jspdf = window.jspdf;
+                
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF('p', 'mm', 'a4');
+                const form = document.querySelector('.form-container');
+                
+                html2canvas(form, {
+                    scale: 1,
+                    useCORS: true,
+                    logging: false
+                }).then(canvas => {
+                    const imgData = canvas.toDataURL('image/png');
+                    const imgWidth = 210; // A4寬度
+                    const pageHeight = 297; // A4高度
+                    const imgHeight = canvas.height * imgWidth / canvas.width;
+                    let heightLeft = imgHeight;
+                    let position = 0;
+                    
+                    doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                    
+                    while (heightLeft >= 0) {
+                        position = heightLeft - imgHeight;
+                        doc.addPage();
+                        doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                        heightLeft -= pageHeight;
+                    }
+                    
+                    // 生成檔案名稱
+                    const now = new Date();
+                    const fileName = `LUMASONIX_請款單_${now.getFullYear()}${(now.getMonth()+1).toString().padStart(2, '0')}${now.getDate().toString().padStart(2, '0')}.pdf`;
+                    
+                    doc.save(fileName);
+                    
+                    // 恢復按鈕顯示
+                    buttons.forEach(btn => {
+                        btn.style.display = 'flex';
+                    });
+                });
+            });
+            
+            // 初始計算
+            calculateTotals();
+            
+            // 限制只能輸入數字
+            const numberInputs = document.querySelectorAll('input[maxlength]');
+            numberInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    this.value = this.value.replace(/[^\d]/g, '');
+                });
+            });
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'945bb26fe628de77',t:'MTc0ODI0NTk4OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;"></iframe><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;"></iframe><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;"></iframe><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;"></iframe><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;"></iframe>
-
-
-
-
-</body></html>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'94a7bba9815ade77',t:'MTc0OTA0MzI4My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
