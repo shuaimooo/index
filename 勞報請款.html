@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LUMASONIX 技術人員請款單</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -13,398 +12,820 @@
             font-family: 'Noto Sans TC', sans-serif;
             background-color: #f5f7fa;
             font-size: 16px;
+            margin: 0;
+            padding: 0;
+            color: #333333;
         }
+        
+        /* 固定A4尺寸 */
         .form-container {
-            width: 210mm; /* A4 width */
-            min-height: 297mm; /* A4 height */
-            margin: 0 auto;
+            width: 210mm;
+            min-height: 297mm;
+            margin: 20px auto;
             background-color: white;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 0;
             position: relative;
+            overflow: hidden;
         }
-        .header-black {
+        
+        .page {
+            width: 210mm;
+            height: 297mm;
+            position: relative;
+            page-break-after: always;
+            overflow: hidden;
+        }
+        
+        /* 第一頁字體縮小到text-sm */
+        #page1 {
+            font-size: 10px; /* text-sm 相當於 0.875rem 或約 14px，但我們從12px再縮小到10px */
+        }
+        
+        /* 基本資訊和活動明細區塊使用較大字體 */
+        .text-xl {
+            font-size: 20px !important;
+        }
+        
+        #page1 .card-header.text-xl,
+        #page2 .card-header.text-xl {
+            font-size: 20px !important;
+            padding: 10px 15px;
+        }
+        
+        #page1 .card-body.text-xl-content .form-control,
+        #page1 .card-body.text-xl-content .label,
+        #page1 .card-body.text-xl-content p,
+        #page1 .card-body.text-xl-content span,
+        #page2 .card-body.text-xl-content .form-control,
+        #page2 .card-body.text-xl-content .label,
+        #page2 .card-body.text-xl-content p,
+        #page2 .card-body.text-xl-content span {
+            font-size: 20px !important;
+        }
+        
+        #page1 .card-body.text-xl-content table,
+        #page1 .card-body.text-xl-content th,
+        #page1 .card-body.text-xl-content td,
+        #page1 .card-body.text-xl-content input,
+        #page2 .card-body.text-xl-content table,
+        #page2 .card-body.text-xl-content th,
+        #page2 .card-body.text-xl-content td,
+        #page2 .card-body.text-xl-content input {
+            font-size: 18px !important;
+        }
+        
+        #page1 .card-header {
+            font-size: 11px; /* 從13px減小到11px */
+            padding: 6px 12px; /* 從8px減小到6px */
+        }
+        
+        #page1 .form-control {
+            font-size: 10px; /* 從12px減小到10px */
+            padding: 4px 8px; /* 從6px減小到4px */
+        }
+        
+        #page1 .label {
+            font-size: 10px; /* 從12px減小到10px */
+            margin-bottom: 2px; /* 從3px減小到2px */
+        }
+        
+        #page1 table {
+            font-size: 9px; /* 從11px減小到9px */
+        }
+        
+        #page1 th, #page1 td {
+            padding: 4px 6px; /* 從5px減小到4px */
+        }
+        
+        #page1 .card-body {
+            padding: 6px; /* 從8px減小到6px */
+        }
+        
+        #page1 .form-group {
+            margin-bottom: 4px; /* 從6px減小到4px */
+        }
+        
+        #page1 .time-input input {
+            text-lg
+        }
+        
+        #page1 .time-input .year-input {
+           text-lg
+        }
+        
+        #page1 .time-input span {
+           text-lg
+        }
+        
+        .header {
             background-color: #000000;
+            background-image: linear-gradient(135deg, #000000 0%, #333333 50%, #555555 100%);
             color: white;
             padding: 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        input, select {
+        
+        .header h1, .header h2 {
+            font-size: 24px;
+            margin: 0;
+            color: white;
+        }
+        
+        .header p {
+            font-size: 16px;
+            margin: 5px 0 0 0;
+            color: white;
+        }
+        
+        .content {
+            padding: 20px;
+            color: #333333;
+        }
+        
+        input, select, textarea {
             border: 1px solid #e2e8f0;
-            padding: 0.5rem;
-            border-radius: 0.25rem;
+            padding: 8px;
+            border-radius: 4px;
             width: 100%;
-            font-size: 1.125rem;
+            box-sizing: border-box;
+            font-size: 16px;
+            color: #333333;
+            background-color: #ffffff;
         }
-        input:focus, select:focus {
+        
+        input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: #3a1c71;
-            box-shadow: 0 0 0 3px rgba(58, 28, 113, 0.2);
+            border-color: #000000;
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2);
         }
+        
         table {
             width: 100%;
             border-collapse: collapse;
+            margin: 0 auto;
+            table-layout: fixed;
         }
+        
         th, td {
-            padding: 0.75rem;
-            text-align: left;
+            padding: 10px;
+            text-align: center;
             border-bottom: 1px solid #e2e8f0;
-            font-size: 1.125rem;
+            font-size: 16px;
+            color: #333333;
         }
+        
         th {
             background-color: #f8fafc;
             font-weight: 500;
+            color: #333333;
         }
+        
         .btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.25rem;
+            padding: 10px 20px;
+            border-radius: 4px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s;
-            font-size: 1.125rem;
+            border: none;
+            font-size: 16px;
         }
+        
         .btn-primary {
-            background-color: #3a1c71;
+            background-color: #000000;
             color: white;
         }
+        
         .btn-primary:hover {
-            background-color: #2d1657;
+            background-color: #333333;
         }
+        
         .btn-secondary {
             background-color: #e2e8f0;
             color: #4a5568;
         }
+        
         .btn-secondary:hover {
             background-color: #cbd5e0;
         }
+        
         .btn-danger {
             background-color: #e53e3e;
             color: white;
         }
+        
         .btn-danger:hover {
             background-color: #c53030;
         }
+        
+        .section {
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: #000000;
+            border-bottom: 2px solid #000000;
+            padding-bottom: 5px;
+        }
+        
+        .bg-gray {
+            background-color: #f8fafc;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #000000;
+            color: #333333;
+        }
+        
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .grid-4 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .label {
+            font-size: 16px;
+            margin-bottom: 5px;
+            display: block;
+            color: #4a5568;
+        }
+        
+        /* 新的時間輸入樣式 */
+        .time-input {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: nowrap;
+        }
+        
+        .time-input input {
+            width: 40px;
+            text-align: center;
+            padding: 6px 2px;
+            margin: 0 2px;
+        }
+        
+        .time-input input.year-input {
+            width: 50px;
+        }
+        
+        .time-input span {
+            white-space: nowrap;
+            color: #333333;
+            margin: 0 2px;
+            font-size: 14px;
+        }
+        
+        .time-input .separator {
+            margin: 0 8px;
+            font-weight: bold;
+            color: #000000;
+        }
+        
+        .labor-person {
+            background-color: #f8fafc;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border-left: 4px solid #d76d77;
+        }
+        
+        .footer {
+            background-color: #000000;
+            background-image: linear-gradient(135deg, #000000 0%, #333333 50%, #555555 100%);
+            padding: 15px;
+            text-align: center;
+            font-size: 16px;
+            color: white;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        .footer p {
+            color: white;
+            margin: 5px 0;
+        }
+        
+        .download-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background-color: #000000;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .download-btn:hover {
+            background-color: #333333;
+        }
+        
+        .text-right {
+            text-align: right;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        .flex-center {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        /* 第五版特有樣式 */
+        .card {
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .card-header {
+            background-color: #000000;
+            color: white;
+            padding: 12px 15px;
+            font-weight: 500;
+        }
+        
+        .card-body {
+            padding: 15px;
+            background-color: white;
+            color: #333333;
+        }
+        
+        .highlight {
+            color: #d76d77;
+            font-weight: 500;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            background-color: #000000;
+            color: white;
+            margin-left: 5px;
+        }
+        
+        .badge-primary {
+            background-color: #000000;
+            color: white;
+        }
+        
+        .badge-secondary {
+            background-color: #d76d77;
+            color: white;
+        }
+        
+        .badge-success {
+            background-color: #38a169;
+            color: white;
+        }
+        
+        .badge-warning {
+            background-color: #d69e2e;
+            color: white;
+        }
+        
+        .badge-danger {
+            background-color: #e53e3e;
+            color: white;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-control {
+            display: block;
+            width: 100%;
+            padding: 8px 12px;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #4a5568;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+        
+        .form-control:focus {
+            border-color: #000000;
+            outline: 0;
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+        
+        .table-hover tbody tr:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+        
+        .table-bordered {
+            border: 1px solid #e2e8f0;
+        }
+        
+        .table-bordered th,
+        .table-bordered td {
+            border: 1px solid #e2e8f0;
+        }
+        
+        .contact-info {
+            padding: 10px 0;
+        }
+        
+        .contact-info p {
+            margin: 5px 0;
+        }
+        
+        /* 第一頁表格特別調整 */
+        #page1 .table-bordered th,
+        #page1 .table-bordered td {
+            padding: 3px; /* 從4px減小到3px */
+            font-size: 9px; /* 從11px減小到9px */
+        }
+        
+        #page1 .table-bordered input {
+            padding: 1px; /* 從2px減小到1px */
+            font-size: 9px; /* 從11px減小到9px */
+        }
+        
         @media print {
             body {
                 background-color: white;
-            }
-            .form-container {
-                box-shadow: none;
                 margin: 0;
                 padding: 0;
             }
-            .no-print {
-                display: none;
+            
+            .page {
+                width: 210mm;
+                height: 297mm;
+                margin: 0;
+                box-shadow: none;
+                page-break-after: always;
             }
-        }
-        .time-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
+            
+            .no-print {
+                display: none !important;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="form-container my-8">
-        <div class="header-black">
-            <div class="text-left">
-                <h1 class="text-3xl font-bold">LUMASONIX x PROFESSIONAL</h1>
-                <p class="text-xl mt-2">專業技術支援 x 人力媒合行銷</p>
+    <div id="invoice">
+        <!-- 第一頁：基本資訊、時間資訊、活動支援明細 -->
+        <div class="page" id="page1">
+            <div class="header">
+                <div>
+                    <h1>LUMASONIX x PROFESSIONAL</h1>
+                    <p>專業技術支援 x 人力媒合行銷</p>
+                </div>
+                <div>
+                    <h2>技術人員請款單</h2>
+                </div>
             </div>
-            <div class="text-right">
-                <h2 class="text-3xl font-bold">技術人員請款單</h2>
+
+            <div class="content">
+                <!-- 基本資訊和聯絡資訊並排 -->
+                <div class="card">
+                    <div class="card-header text-xl">基本資訊與聯絡資訊</div>
+                    <div class="card-body text-xl-content">
+                        <div class="grid-2">
+                            <!-- 左側：基本資訊 -->
+                            <div>
+                                <div class="form-group">
+                                    <label class="label">廠商名稱</label>
+                                    <input type="text" id="vendorName" class="form-control" placeholder="請輸入廠商名稱">
+                                </div>
+                                <div class="form-group">
+                                    <label class="label">活動地點</label>
+                                    <input type="text" id="eventLocation" class="form-control" placeholder="請輸入活動地點">
+                                </div>
+                            </div>
+                            
+                            <!-- 右側：聯絡資訊 -->
+                            <div class="contact-info">
+                                <p><span class="highlight">負責人：</span>蘇裕庭</p>
+                                <p><span class="highlight">連絡電話：</span>0926169899</p>
+                                <p><span class="highlight">電子郵件：</span>lumasonix@gmail.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 時間資訊 -->
+                <div class="card">
+                    <div class="card-header text-xl">時間資訊</div>
+                    <div class="card-body text-sm content">
+                        <!-- 第一天時間 -->
+                        <div class="form-group">
+                            <label class="label">第一天時間</label>
+                            <div class="time-input">
+                                <input type="text" id="startYear1" class="year-input" maxlength="4" placeholder="年">
+                                <span>年</span>
+                                <input type="text" id="startMonth1" maxlength="2" placeholder="月">
+                                <span>月</span>
+                                <input type="text" id="startDay1" maxlength="2" placeholder="日">
+                                <span>日</span>
+                                <input type="text" id="startHour1" maxlength="2" placeholder="時">
+                                <span>時</span>
+                                <input type="text" id="startMinute1" maxlength="2" placeholder="分">
+                                <span>分</span>
+                                <span class="separator">至</span>
+                                <input type="text" id="endYear1" class="year-input" maxlength="4" placeholder="年">
+                                <span>年</span>
+                                <input type="text" id="endMonth1" maxlength="2" placeholder="月">
+                                <span>月</span>
+                                <input type="text" id="endDay1" maxlength="2" placeholder="日">
+                                <span>日</span>
+                                <input type="text" id="endHour1" maxlength="2" placeholder="時">
+                                <span>時</span>
+                                <input type="text" id="endMinute1" maxlength="2" placeholder="分">
+                                <span>分</span>
+                            </div>
+                        </div>
+                        
+                        <!-- 第二天時間 -->
+                        <div class="form-group">
+                            <label class="label">第二天時間</label>
+                            <div class="time-input">
+                                <input type="text" id="startYear2" class="year-input" maxlength="4" placeholder="年">
+                                <span>年</span>
+                                <input type="text" id="startMonth2" maxlength="2" placeholder="月">
+                                <span>月</span>
+                                <input type="text" id="startDay2" maxlength="2" placeholder="日">
+                                <span>日</span>
+                                <input type="text" id="startHour2" maxlength="2" placeholder="時">
+                                <span>時</span>
+                                <input type="text" id="startMinute2" maxlength="2" placeholder="分">
+                                <span>分</span>
+                                <span class="separator">至</span>
+                                <input type="text" id="endYear2" class="year-input" maxlength="4" placeholder="年">
+                                <span>年</span>
+                                <input type="text" id="endMonth2" maxlength="2" placeholder="月">
+                                <span>月</span>
+                                <input type="text" id="endDay2" maxlength="2" placeholder="日">
+                                <span>日</span>
+                                <input type="text" id="endHour2" maxlength="2" placeholder="時">
+                                <span>時</span>
+                                <input type="text" id="endMinute2" maxlength="2" placeholder="分">
+                                <span>分</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 活動支援明細 -->
+                <div class="card">
+                    <div class="card-header text-xl">活動支援明細</div>
+                    <div class="card-body text-xl-content">
+                        <table class="table-striped table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th width="20%">品項</th>
+                                    <th width="15%">數量</th>
+                                    <th width="15%">單價 (NT$)</th>
+                                    <th width="35%">工作內容</th>
+                                    <th width="15%">小計 (NT$)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>人事支援</td>
+                                    <td><input type="number" id="staffCount" value="0" min="0" style="width:80px; text-align:center;"></td>
+                                    <td>2,500</td>
+                                    <td>進場、演出、撤場</td>
+                                    <td id="staffTotal" class="text-center">0</td>
+                                </tr>
+                                <tr>
+                                    <td>燈/音/視控</td>
+                                    <td><input type="number" id="techCount" value="0" min="0" style="width:80px; text-align:center;"></td>
+                                    <td>1,000</td>
+                                    <td>演出前一日彩排，將視為一場演出，另行計費。</td>
+                                    <td id="techTotal" class="text-center">0</td>
+                                </tr>
+                                <tr>
+                                    <td>追光燈操作</td>
+                                    <td><input type="number" id="spotlightCount" value="0" min="0" style="width:80px; text-align:center;"></td>
+                                    <td>1,000</td>
+                                    <td>演出前一日彩排，將視為一場演出，另行計費。</td>
+                                    <td id="spotlightTotal" class="text-center">0</td>
+                                </tr>
+                                <tr>
+                                    <td>高空作業</td>
+                                    <td><input type="number" id="heightCount" value="0" min="0" style="width:80px; text-align:center;"></td>
+                                    <td>1,000</td>
+                                    <td>作業高度達layher第 6 格以上(約9米)</td>
+                                    <td id="heightTotal" class="text-center">0</td>
+                                </tr>
+                                <tr>
+                                    <td>加班費用</td>
+                                    <td><input type="number" id="overtimeCount" value="0" min="0" style="width:80px; text-align:center;"></td>
+                                    <td>350</td>
+                                    <td>依實際加班時數計算</td>
+                                    <td id="overtimeTotal" class="text-center">0</td>
+                                </tr>
+                                <tr>
+                                    <td>行政執行費</td>
+                                    <td class="text-center">一式</td>
+                                    <td>10%</td>
+                                    <td>人事支援 x 10%</td>
+                                    <td id="adminTotal" class="text-center">0</td>
+                                </tr>
+                                <tr>
+                                    <td>其他</td>
+                                    <td class="text-center">一式</td>
+                                    <td><input type="number" id="otherPrice" value="0" min="0" style="width:80px; text-align:center;"></td>
+                                    <td><input type="text" id="otherDesc" placeholder="其他項目描述"></td>
+                                    <td id="otherTotal" class="text-center">0</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="4" class="text-right">未稅金額:</td>
+                                    <td id="subtotal" class="text-center highlight">NT$0</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-right">總計金額:</td>
+                                    <td id="total" class="text-center highlight">NT$0</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer">
+                <p>LUMASONIX x PROFESSIONAL | 專業技術支援 x 人力媒合行銷</p>
+                <p>電話: 0926-169-899 | 電子郵件: lumasonix@gmail.com</p>
             </div>
         </div>
 
-        <form id="invoiceForm" class="p-6">
-            <!-- 基本資訊 -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <!-- 第二頁：匯款資訊、勞報資料檢附、備註、請款日期 -->
+        <div class="page" id="page2">
+            <div class="header">
                 <div>
-                    <label class="block text-xl font-medium text-gray-700 mb-1">廠商名稱</label>
-                    <input type="text" id="vendorName" placeholder="請輸入廠商名稱" class="w-full text-xl">
+                    <h1>LUMASONIX x PROFESSIONAL</h1>
+                    <p>專業技術支援 x 人力媒合行銷</p>
                 </div>
                 <div>
-                    <label class="block text-xl font-medium text-gray-700 mb-1">活動地點</label>
-                    <input type="text" id="eventLocation" placeholder="請輸入活動地點" class="w-full text-xl">
+                    <h2>技術人員請款單</h2>
                 </div>
             </div>
 
-           <!-- 時間資訊 -->
-            <div class="bg-gray-50 p-4 rounded-lg mb-6">
-                <div class="grid grid-cols-2 gap-4">
-                    <!-- 左側：上班時間 -->
-                    <div>
-                        <label class="block text-xl font-medium text-gray-700 mb-2">上班時間</label>
-                        <div class="flex items-center gap-1 mb-3">
-                            <input type="text" id="startYear1" class="w-12 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="4" placeholder="">
-                            <span class="text-sm">年</span>
-                            <input type="text" id="startMonth1" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="2" placeholder="">
-                            <span class="text-sm">月</span>
-                            <input type="text" id="startDay1" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="2" placeholder="">
-                            <span class="text-sm">日</span>
-                            <input type="text" id="startHour1" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="2" placeholder="">
-                            <span class="text-sm">時</span>
-                            <input type="text" id="startMinute1" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="2" placeholder="">
-                            <span class="text-sm">分</span>
-                            <span class="text-sm ml-2">至</span>
-                        </div>
-                        <div class="flex items-center gap-1">
-                            <input type="text" id="startYear2" class="w-12 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="4" placeholder="">
-                            <span class="text-SM">年</span>
-                            <input type="text" id="startMonth2" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="2" placeholder="">
-                            <span class="text-sm">月</span>
-                            <input type="text" id="startDay2" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="2" placeholder="">
-                            <span class="text-sm">日</span>
-                            <input type="text" id="startHour2" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="2" placeholder="">
-                            <span class="text-sm">時</span>
-<input type="text" id="startHour2" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="2" placeholder="">
-                            
-                            <span class="text-sm">分</span>
-<span class="text-sm ml-2">至</span>
-
-                            
-                        </div>
+            <div class="content">
+                <!-- 匯款資訊 -->
+                <div class="card">
+                    <div class="card-header text-xl">匯款資訊</div>
+                    <div class="card-body text-xl-content">
+                        <p><span class="highlight">帳號戶名：</span>蘇裕庭</p>
+                        <p><span class="highlight">匯款代碼：</span>808(玉山銀行中路特區分行)</p>
+                        <p><span class="highlight">匯款帳號：</span>0842-979-176643</P>
                     </div>
-                    
-                    <!-- 右側：下班時間 -->
-                    <div>
-                        <label class="block text-xl font-medium text-gray-700 mb-2">下班時間</label>
-                       <div class="flex items-center gap-1 mb-3">
-                            <input type="text" id="startYear1" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="4" placeholder="">
-                            <span class="text-sm">年</span>
-                            <input type="text" id="startMonth1" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="2" placeholder="">
-                            <span class="text-sm">月</span>
-                            <input type="text" id="startDay1" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="2" placeholder="">
-                            <span class="text-sm">日</span>
-                            <input type="text" id="startHour1" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="2" placeholder="">
-                            <span class="text-sm">時</span>
-                            <input type="text" id="startMinute1" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="2" placeholder="">
-                            <span class="text-sm">分</span>
-                            
-                        </div>
-                        <div class="flex items-center gap-1">
-                            <input type="text" id="startYear2" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="4" placeholder="">
-                            <span class="text-SM">年</span>
-                            <input type="text" id="startMonth2" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="2" placeholder="">
-                            <span class="text-sm">月</span>
-                            <input type="text" id="startDay2" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="2" placeholder="">
-                            <span class="text-sm">日</span>
-                            <input type="text" id="startHour2" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="2" placeholder="">
-                            <span class="text-sm">時</span>
-<input type="text" id="startHour2" class="w-10 h-8 px-2 py-1 border border-gray-300 rounded text-center text-sm" maxlength="2" placeholder="">
-                            
-                            <span class="text-sm">分</span>
-                          
-                        
-                    </div></div>
                 </div>
-            </div>
 
+                <!-- 勞報資料檢附 -->
+                <div class="card">
+                    <div class="card-header text-xl">勞報資料檢附</div>
+                    <div class="card-body text-xl-content">
+                        <div id="laborReportContainer">
+                            <!-- 第一位人員 -->
+                            <div class="labor-person">
+                                <div class="grid-4">
+                                    <div class="form-group">
+                                        <label class="label">人員姓名</label>
+                                        <input type="text" class="form-control" placeholder="請輸入姓名">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="label">出生年月日</label>
+                                        <input type="text" class="form-control" placeholder="例：1990/01/01">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="label">身分證字號</label>
+                                        <input type="text" class="form-control" placeholder="請輸入身分證字號">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="label">連絡電話</label>
+                                        <input type="text" class="form-control" placeholder="請輸入電話">
+                                    </div>
+                                </div>
+                                <div class="grid-2" style="margin-top:10px;">
+                                    <div class="form-group">
+                                        <label class="label">戶籍地址</label>
+                                        <input type="text" class="form-control" placeholder="戶籍地址">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="label">勞報金額</label>
+                                        <div style="display:flex; align-items:center;">
+                                            <input type="number" class="form-control" placeholder="勞報金額" style="flex:1;">
+                                            <span style="margin-left:5px; color:#333333;">元</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-            <!-- 活動支援明細 -->
-            <div class="mb-6">
-                <h3 class="text-xl font-medium mb-3">活動支援明細</h3>
-                <div class="overflow-x-auto">
-                    <table class="min-w-full">
-                        <thead>
-                            <tr>
-                                <th class="text-xl">品項</th>
-                                <th class="text-xl">數量</th>
-                                <th class="text-xl">單價 (NT$)</th>
-                                <th class="text-xl">工作內容</th>
-                                <th class="text-xl">小計 (NT$)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="text-xl">人事支援</td>
-                                <td><input type="number" id="staffCount" value="0" min="0" class="w-20 text-xl"></td>
-                                <td class="text-xl">2,500</td>
-                                <td class="text-xl">進場、演出、撤場</td>
-                                <td id="staffTotal" class="text-xl">0.0</td>
-                            </tr>
-                            <tr>
-                                <td class="text-xl">燈/音/視控</td>
-                                <td><input type="number" id="techCount" value="0" min="0" class="w-20 text-xl"></td>
-                                <td class="text-xl">1,000</td>
-                                <td class="text-xl">演出前一日彩排，將視為一場演出，另行計費。</td>
-                                <td id="techTotal" class="text-xl">0.0</td>
-                            </tr>
-                            <tr>
-                                <td class="text-xl">追光燈操作</td>
-                                <td><input type="number" id="spotlightCount" value="0" min="0" class="w-20 text-xl"></td>
-                                <td class="text-xl">1,000</td>
-                                <td class="text-xl">演出前一日彩排，將視為一場演出，另行計費。</td>
-                                <td id="spotlightTotal" class="text-xl">0.0</td>
-                            </tr>
-                            <tr>
-                                <td class="text-xl">高空作業</td>
-                                <td><input type="number" id="heightCount" value="0" min="0" class="w-20 text-xl"></td>
-                                <td class="text-xl">1,000</td>
-                                <td class="text-xl">作業高度達layher第 6 格以上(約9米)</td>
-                                <td id="heightTotal" class="text-xl">0.0</td>
-                            </tr>
-                            <tr>
-                                <td class="text-xl">加班費用</td>
-                                <td><input type="number" id="overtimeCount" value="0" min="0" class="w-20 text-xl"></td>
-                                <td class="text-xl">350</td>
-                                <td class="text-xl">依實際加班時數計算</td>
-                                <td id="overtimeTotal" class="text-xl">0.0</td>
-                            </tr>
-                            <tr>
-                                <td class="text-xl">行政執行費</td>
-                                <td class="text-xl">一式</td>
-                                <td class="text-xl">10%</td>
-                                <td class="text-xl">人事支援 x 10%</td>
-                                <td id="adminTotal" class="text-xl">0.0</td>
-                            </tr>
-                            <tr>
-                                <td class="text-xl">其他</td>
-                                <td class="text-xl">一式</td>
-                                <td><input type="number" id="otherPrice" value="0" min="0" class="w-20 text-xl"></td>
-                                <td><input type="text" id="otherDesc" placeholder="其他項目描述" class="w-full text-xl"></td>
-                                <td id="otherTotal" class="text-xl">0.0</td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr class="font-medium">
-                                <td colspan="4" class="text-right text-xl">未稅金額:</td>
-                                <td id="subtotal" class="text-xl">NT$0.0</td>
-                            </tr>
-                            <tr class="font-bold">
-                                <td colspan="4" class="text-right text-xl">總計金額:</td>
-                                <td id="total" class="text-xl">NT$0.0</td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-            </div>
-
-           <!-- 匯款資訊 -->
-            <div class="bg-gray-50 p-4 rounded-lg mb-6">
-                <h3 class="text-xl font-medium mb-2">【匯款資訊】</h3>
-                <p class="text-xl">帳號戶名：蘇裕庭</p>
-                <p class="text-xl">匯款代碼：808(玉山銀行中路特區分行)</p>
-                <p class="text-xl">匯款帳號：0842-979-176643</p>
-
-            </div>
-
-            <!-- 勞報資料檢附 -->
-            <div class="mb-6">
-                <h3 class="text-xl font-medium mb-3">勞報資料檢附</h3>
-                <div id="laborReportContainer">
-                    <!-- 第一位人員 -->
-                    <div class="labor-person bg-gray-50 p-4 rounded-lg mb-4">
-                        <div class="grid grid-cols-4 gap-4 mb-3">
-                            <div>
-                                <label class="block text-xl font-medium text-gray-700 mb-1">人員姓名</label>
-                                <input type="text" placeholder="請輸入姓名" class="w-full text-xl">
-                            </div>
-                            <div>
-                                <label class="block text-xl font-medium text-gray-700 mb-1">出生年月日</label>
-                                <input type="text" placeholder="例：1990/01/01" class="w-full text-xl">
-                            </div>
-                            <div>
-                                <label class="block text-xl font-medium text-gray-700 mb-1">身分證字號</label>
-                                <input type="text" placeholder="請輸入身分證字號" class="w-full text-xl">
-                            </div>
-                            <div>
-                                <label class="block text-xl font-medium text-gray-700 mb-1">連絡電話</label>
-                                <input type="text" placeholder="請輸入電話" class="w-full text-xl">
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xl font-medium text-gray-700 mb-1">戶籍地址</label>
-                                <input type="text" placeholder="戶籍地址" class="w-full text-xl">
-                            </div>
-                            <div>
-                                <label class="block text-xl font-medium text-gray-700 mb-1">勞報金額</label>
-                                <div class="flex items-center">
-                                    <input type="number" placeholder="勞報金額" class="w-full text-xl">
-                                    <span class="ml-2 text-xl">元</span>
+                            <!-- 第二位人員 -->
+                            <div class="labor-person">
+                                <div class="grid-4">
+                                    <div class="form-group">
+                                        <label class="label">人員姓名</label>
+                                        <input type="text" class="form-control" placeholder="請輸入姓名">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="label">出生年月日</label>
+                                        <input type="text" class="form-control" placeholder="例：1990/01/01">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="label">身分證字號</label>
+                                        <input type="text" class="form-control" placeholder="請輸入身分證字號">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="label">連絡電話</label>
+                                        <input type="text" class="form-control" placeholder="請輸入電話">
+                                    </div>
+                                </div>
+                                <div class="grid-2" style="margin-top:10px;">
+                                    <div class="form-group">
+                                        <label class="label">戶籍地址</label>
+                                        <input type="text" class="form-control" placeholder="戶籍地址">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="label">勞報金額</label>
+                                        <div style="display:flex; align-items:center;">
+                                            <input type="number" class="form-control" placeholder="勞報金額" style="flex:1;">
+                                            <span style="margin-left:5px; color:#333333;">元</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- 第二位人員 -->
-                    <div class="labor-person bg-gray-50 p-4 rounded-lg mb-4">
-                        <div class="grid grid-cols-4 gap-4 mb-3">
-                            <div>
-                                <label class="block text-xl font-medium text-gray-700 mb-1">人員姓名</label>
-                                <input type="text" placeholder="請輸入姓名" class="w-full text-xl">
-                            </div>
-                            <div>
-                                <label class="block text-xl font-medium text-gray-700 mb-1">出生年月日</label>
-                                <input type="text" placeholder="例：1990/01/01" class="w-full text-xl">
-                            </div>
-                            <div>
-                                <label class="block text-xl font-medium text-gray-700 mb-1">身分證字號</label>
-                                <input type="text" placeholder="請輸入身分證字號" class="w-full text-xl">
-                            </div>
-                            <div>
-                                <label class="block text-xl font-medium text-gray-700 mb-1">連絡電話</label>
-                                <input type="text" placeholder="請輸入電話" class="w-full text-xl">
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xl font-medium text-gray-700 mb-1">戶籍地址</label>
-                                <input type="text" placeholder="戶籍地址" class="w-full text-xl">
-                            </div>
-                            <div>
-                                <label class="block text-xl font-medium text-gray-700 mb-1">勞報金額</label>
-                                <div class="flex items-center">
-                                    <input type="number" placeholder="勞報金額" class="w-full text-xl">
-                                    <span class="ml-2 text-xl">元</span>
-                                </div>
-                            </div>
-                        </div>
+                        <button type="button" id="addPersonBtn" class="btn btn-secondary no-print" style="margin-top:10px;">
+                            + 新增人員
+                        </button>
                     </div>
                 </div>
 
-                <button type="button" id="addPersonBtn" class="btn btn-secondary mt-2">
-                    + 新增人員
-                </button>
+           
+            <div class="footer">
+                <p>LUMASONIX x PROFESSIONAL | 專業技術支援 x 人力媒合行銷</p>
+                <p>電話: 0926-169-899 | 電子郵件: lumasonix@gmail.com</p>
             </div>
-
-            <!-- 備註 -->
-            <div class="mb-6">
-                <label class="block text-xl font-medium text-gray-700 mb-1">備註</label>
-                <textarea id="notes" rows="3" placeholder="請輸入備註事項..." class="w-full border rounded-md p-2 text-xl"></textarea>
-            </div>
-
-            <!-- 聯絡資訊 -->
-            <div class="bg-gray-50 p-4 rounded-lg mb-6">
-                <h3 class="text-xl font-medium mb-2">聯絡資訊</h3>
-                <p class="text-xl">負責人：蘇裕庭</p>
-                <p class="text-xl">連絡電話：0926169899</p>
-            </div>
-
-            <!-- 按鈕區域 -->
-            <div class="flex justify-center space-x-4 mt-8 no-print">
-                <button type="button" id="generatePdfBtn" class="btn btn-primary text-xl px-6">
-                    下載生成PDF
-                </button>
-                <button type="button" id="setDateBtn" class="btn btn-secondary text-xl px-6">
-                    設置日期
-                </button>
-                <button type="button" id="resetFormBtn" class="btn btn-danger text-xl px-6">
-                    重置表單
-                </button>
-            </div>
-        </form>
-
-        <div class="bg-gray-100 p-4 text-center text-xl text-gray-600">
-            <p>LUMASONIX x PROFESSIONAL | 專業技術支援 x 人力媒合行銷</p>
-            <p>電話: 0926-169-899 | 電子郵件: lumasonix@gmail.com</p>
         </div>
     </div>
 
-   <script>
+    <!-- 按鈕區域 -->
+    <div class="flex-center no-print" style="margin: 20px auto; max-width: 210mm;">
+        <button type="button" onclick="generatePDF()" class="btn btn-primary">
+            下載生成PDF
+        </button>
+        <button type="button" onclick="setCurrentDate()" class="btn btn-secondary">
+            設置日期
+        </button>
+        <button type="button" onclick="resetForm()" class="btn btn-danger">
+            重置表單
+        </button>
+    </div>
+
+    <!-- 固定的下載按鈕 -->
+    <button onclick="generatePDF()" class="download-btn no-print">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        下載PDF
+    </button>
+
+    <script>
         // 設置當前日期作為默認值
         function setCurrentDate() {
             const now = new Date();
@@ -421,19 +842,19 @@
             document.getElementById('startHour1').value = hours;
             document.getElementById('startMinute1').value = minutes;
             
-            // 設置上班時間2
-            document.getElementById('startYear2').value = year;
-            document.getElementById('startMonth2').value = month;
-            document.getElementById('startDay2').value = day;
-            document.getElementById('startHour2').value = hours;
-            document.getElementById('startMinute2').value = minutes;
-            
             // 設置下班時間1
             document.getElementById('endYear1').value = year;
             document.getElementById('endMonth1').value = month;
             document.getElementById('endDay1').value = day;
             document.getElementById('endHour1').value = hours;
             document.getElementById('endMinute1').value = minutes;
+            
+            // 設置上班時間2
+            document.getElementById('startYear2').value = year;
+            document.getElementById('startMonth2').value = month;
+            document.getElementById('startDay2').value = day;
+            document.getElementById('startHour2').value = hours;
+            document.getElementById('startMinute2').value = minutes;
             
             // 設置下班時間2
             document.getElementById('endYear2').value = year;
@@ -524,39 +945,47 @@
                 btn.style.display = 'none';
             });
             
-            // 使用html2canvas和jsPDF生成PDF
-            html2canvas(document.querySelector('.form-container'), {
-                scale: 1,
+            // 使用jsPDF生成多頁PDF
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: 'a4'
+            });
+            
+            // 處理第一頁
+            html2canvas(document.getElementById('page1'), {
+                scale: 2,
                 useCORS: true,
-                logging: false
-            }).then(canvas => {
-                const imgData = canvas.toDataURL('image/png');
-                const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
-                const imgWidth = 210; // A4寬度
-                const pageHeight = 297; // A4高度
-                const imgHeight = canvas.height * imgWidth / canvas.width;
-                let heightLeft = imgHeight;
-                let position = 0;
+                logging: false,
+                windowWidth: 210 * 3.78,
+                windowHeight: 297 * 3.78
+            }).then(canvas1 => {
+                const imgData1 = canvas1.toDataURL('image/png');
+                pdf.addImage(imgData1, 'PNG', 0, 0, 210, 297);
                 
-                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                heightLeft -= pageHeight;
-                
-                while (heightLeft >= 0) {
-                    position = heightLeft - imgHeight;
+                // 處理第二頁
+                html2canvas(document.getElementById('page2'), {
+                    scale: 2,
+                    useCORS: true,
+                    logging: false,
+                    windowWidth: 210 * 3.78,
+                    windowHeight: 297 * 3.78
+                }).then(canvas2 => {
+                    const imgData2 = canvas2.toDataURL('image/png');
                     pdf.addPage();
-                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                    heightLeft -= pageHeight;
-                }
-                
-                // 生成檔案名稱
-                const now = new Date();
-                const fileName = `LUMASONIX_請款單_${now.getFullYear()}${(now.getMonth()+1).toString().padStart(2, '0')}${now.getDate().toString().padStart(2, '0')}.pdf`;
-                
-                pdf.save(fileName);
-                
-                // 恢復按鈕顯示
-                buttons.forEach(btn => {
-                    btn.style.display = 'flex';
+                    pdf.addImage(imgData2, 'PNG', 0, 0, 210, 297);
+                    
+                    // 生成檔案名稱
+                    const now = new Date();
+                    const fileName = `LUMASONIX_請款單_${now.getFullYear()}${(now.getMonth()+1).toString().padStart(2, '0')}${now.getDate().toString().padStart(2, '0')}.pdf`;
+                    
+                    pdf.save(fileName);
+                    
+                    // 恢復按鈕顯示
+                    buttons.forEach(btn => {
+                        btn.style.display = '';
+                    });
                 });
             });
         }
@@ -565,42 +994,42 @@
         function addPerson() {
             const container = document.getElementById('laborReportContainer');
             const personTemplate = `
-                <div class="labor-person bg-gray-50 p-4 rounded-lg mb-4">
-                    <div class="grid grid-cols-4 gap-4 mb-3">
-                        <div>
-                            <label class="block text-xl font-medium text-gray-700 mb-1">人員姓名</label>
-                            <input type="text" placeholder="請輸入姓名" class="w-full text-xl">
+                <div class="labor-person">
+                    <div class="grid-4">
+                        <div class="form-group">
+                            <label class="label">人員姓名</label>
+                            <input type="text" class="form-control" placeholder="請輸入姓名">
                         </div>
-                        <div>
-                            <label class="block text-xl font-medium text-gray-700 mb-1">出生年月日</label>
-                            <input type="text" placeholder="例：1990/01/01" class="w-full text-xl">
+                        <div class="form-group">
+                            <label class="label">出生年月日</label>
+                            <input type="text" class="form-control" placeholder="例：1990/01/01">
                         </div>
-                        <div>
-                            <label class="block text-xl font-medium text-gray-700 mb-1">身分證字號</label>
-                            <input type="text" placeholder="請輸入身分證字號" class="w-full text-xl">
+                        <div class="form-group">
+                            <label class="label">身分證字號</label>
+                            <input type="text" class="form-control" placeholder="請輸入身分證字號">
                         </div>
-                        <div>
-                            <label class="block text-xl font-medium text-gray-700 mb-1">連絡電話</label>
-                            <input type="text" placeholder="請輸入電話" class="w-full text-xl">
+                        <div class="form-group">
+                            <label class="label">連絡電話</label>
+                            <input type="text" class="form-control" placeholder="請輸入電話">
                         </div>
                     </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xl font-medium text-gray-700 mb-1">戶籍地址</label>
-                            <input type="text" placeholder="戶籍地址" class="w-full text-xl">
+                    <div class="grid-2" style="margin-top:10px;">
+                        <div class="form-group">
+                            <label class="label">戶籍地址</label>
+                            <input type="text" class="form-control" placeholder="戶籍地址">
                         </div>
-                        <div>
-                            <label class="block text-xl font-medium text-gray-700 mb-1">勞報金額</label>
-                            <div class="flex items-center">
-                                <input type="number" placeholder="勞報金額" class="w-full text-xl">
-                                <span class="ml-2 text-xl">元</span>
+                        <div class="form-group">
+                            <label class="label">勞報金額</label>
+                            <div style="display:flex; align-items:center;">
+                                <input type="number" class="form-control" placeholder="勞報金額" style="flex:1;">
+                                <span style="margin-left:5px; color:#333333;">元</span>
                             </div>
                         </div>
-                        <div class="flex justify-end items-center mt-2">
-                            <button type="button" onclick="this.parentNode.parentNode.parentNode.remove()" class="text-red-500 hover:text-red-700 text-xl">
-                                移除
-                            </button>
-                        </div>
+                    </div>
+                    <div style="text-align:right; margin-top:10px;" class="no-print">
+                        <button type="button" onclick="this.parentNode.parentNode.remove()" class="btn btn-danger" style="padding:5px 10px; font-size:14px;">
+                            移除
+                        </button>
                     </div>
                 </div>
             `;
@@ -638,5 +1067,5 @@
             });
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'94a7bba9815ade77',t:'MTc0OTA0MzI4My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'94aa4015b3f0f06f',t:'MTc0OTA2OTY3OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
