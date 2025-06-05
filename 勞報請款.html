@@ -664,14 +664,14 @@
                                     <td><input type="number" id="staffCount" value="0" min="0" style="width:80px; text-align:center;"></td>
                                     <td>2,500</td>
                                     <td>進場、演出、撤場</td>
-                                    <td id="staffTotal" class="text-center">12,500</td>
+                                    <td id="staffTotal" class="text-center">5,000</td>
                                 </tr>
                                 <tr>
                                     <td>燈/音/視控</td>
                                     <td><input type="number" id="techCount" value="0" min="0" style="width:80px; text-align:center;"></td>
                                     <td>1,000</td>
                                     <td>演出前一日彩排，將視為一場演出，另行計費。</td>
-                                    <td id="techTotal" class="text-center">0</td>
+                                    <td id="techTotal" class="text-center">2,000</td>
                                 </tr>
                                 <tr>
                                     <td>追光燈操作</td>
@@ -692,14 +692,14 @@
                                     <td><input type="number" id="overtimeCount" value="0" min="0" style="width:80px; text-align:center;"></td>
                                     <td>350</td>
                                     <td>依實際加班時數計算</td>
-                                    <td id="overtimeTotal" class="text-center">0</td>
+                                    <td id="overtimeTotal" class="text-center">350</td>
                                 </tr>
                                 <tr>
                                     <td>行政執行費</td>
                                     <td class="text-center">一式</td>
                                     <td>10%</td>
                                     <td>人事支援 x 10%</td>
-                                    <td id="adminTotal" class="text-center">1,250</td>
+                                    <td id="adminTotal" class="text-center">500</td>
                                 </tr>
                                 <tr>
                                     <td>其他</td>
@@ -712,11 +712,11 @@
                             <tfoot>
                                 <tr>
                                     <td colspan="4" class="text-right">未稅金額:</td>
-                                    <td id="subtotal" class="text-center highlight">NT$13,750</td>
+                                    <td id="subtotal" class="text-center highlight">NT$7,850</td>
                                 </tr>
                                 <tr>
                                     <td colspan="4" class="text-right">總計金額:</td>
-                                    <td id="total" class="text-center highlight">NT$13,750</td>
+                                    <td id="total" class="text-center highlight">NT$7,850</td>
                                 </tr>
                             </tfoot>
                         </table>
@@ -778,13 +778,13 @@
                                 <div class="grid-2" style="margin-top:10px;">
                                     <div class="form-group">
                                         <label class="label text-sm">戶籍地址</label>
-                                        <input type="text" class="form-control" placeholder="戶籍地址">
+                                        <input type="text" class="form-control" placeholder="戶籍地址" style="width: 500px;">
                                     </div>
                                     <div class="form-group">
                                         <label class="label">勞報金額</label>
                                         <div style="display:flex; align-items:center;">
-                                            <input type="number" class="form-control" placeholder="勞報金額" style="flex:1;">
-                                            <span style="margin-left:5px; color:#333333;">元</span>
+                                            <input type="number" class="form-control" placeholder="勞報金額" style="width: 120px;">元<div></div>
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -795,38 +795,38 @@
                                 <div class="grid-4">
                                     <div class="form-group">
                                         <label class="label">人員姓名</label>
-                                        <input type="text" class="form-control" placeholder="請輸入姓名">
+                                        <input type="text" class="form-control" placeholder="">
                                     </div>
                                     <div class="form-group">
                                         <label class="label">出生年月日</label>
-                                        <input type="text" class="form-control" placeholder="例：1990/01/01">
+                                        <input type="text" class="form-control" placeholder="">
                                     </div>
                                     <div class="form-group">
                                         <label class="label">身分證字號</label>
-                                        <input type="text" class="form-control" placeholder="請輸入身分證字號">
+                                        <input type="text" class="form-control" placeholder="">
                                     </div>
                                     <div class="form-group">
                                         <label class="label">連絡電話</label>
-                                        <input type="text" class="form-control" placeholder="請輸入電話">
+                                        <input type="text" class="form-control" placeholder="">
                                     </div>
                                 </div>
                                 <div class="grid-2" style="margin-top:10px;">
                                     <div class="form-group">
                                         <label class="label">戶籍地址</label>
-                                        <input type="text" class="form-control" placeholder="戶籍地址">
+                                        <input type="text" class="form-control" placeholder="" style="width: 500px;">
                                     </div>
                                     <div class="form-group">
                                         <label class="label">勞報金額</label>
                                         <div style="display:flex; align-items:center;">
-                                            <input type="number" class="form-control" placeholder="勞報金額" style="flex:1;">
-                                            <span style="margin-left:5px; color:#333333;">元</span>
+                                            <input type="number" class="form-control" placeholder="" style="width: 120px;">
+                                            <span style="margin-left:20 px; color:#333333;">元</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <button type="button" id="addPersonBtn" class="btn btn-secondary no-print" style="margin-top:10px;">
+                        <button type="button" id="addPersonBtn" class="btn btn-secondary no-print" style="margin-top: 10px;">
                             + 新增人員
                         </button>
                     </div>
@@ -856,7 +856,7 @@
     </div>
 
     <!-- 固定的下載按鈕 -->
-    <button onclick="generatePDF()" class="download-btn no-print">
+    <button onclick="generatePDF()" class="download-btn no-print" style="">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
             <polyline points="7 10 12 15 17 10"></polyline>
@@ -1028,36 +1028,38 @@
             const container = document.getElementById('laborReportContainer');
             const personTemplate = `
                 <div class="labor-person">
-                    <div class="grid-4">
-                        <div class="form-group">
-                            <label class="label">人員姓名</label>
-                            <input type="text" class="form-control" placeholder="請輸入姓名">
-                        </div>
-                        <div class="form-group">
-                            <label class="label">出生年月日</label>
-                            <input type="text" class="form-control" placeholder="例：1990/01/01">
-                        </div>
-                        <div class="form-group">
-                            <label class="label">身分證字號</label>
-                            <input type="text" class="form-control" placeholder="請輸入身分證字號">
-                        </div>
-                        <div class="form-group">
-                            <label class="label">連絡電話</label>
-                            <input type="text" class="form-control" placeholder="請輸入電話">
-                        </div>
-                    </div>
-                    <div class="grid-2" style="margin-top:10px;">
-                        <div class="form-group">
-                            <label class="label">戶籍地址</label>
-                            <input type="text" class="form-control" placeholder="戶籍地址">
-                        </div>
-                        <div class="form-group">
-                            <label class="label">勞報金額</label>
-                            <div style="display:flex; align-items:center;">
-                                <input type="number" class="form-control" placeholder="勞報金額" style="flex:1;">
-                                <span style="margin-left:5px; color:#333333;">元</span>
+                                <div class="grid-4">
+                                    <div class="form-group">
+                                        <label class="label text-sm">人員姓名</label>
+                                        <input type="text" class="form-control" placeholder="">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="label text-sm">出生年月日</label>
+                                        <input type="text" class="form-control" placeholder="">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="label text-sm">身分證字號</label>
+                                        <input type="text" class="form-control" placeholder="">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="label text-sm">連絡電話</label>
+                                        <input type="text" class="form-control" placeholder="">
+                                    </div>
+                                </div>
+                                <div class="grid-2" style="margin-top:10px;">
+                                    <div class="form-group">
+                                        <label class="label text-sm">戶籍地址</label>
+                                        <input type="text" class="form-control" placeholder="" style="width: 500px;">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="label">勞報金額</label>
+                                        <div style="display:flex; align-items:center;">
+                                            <input type="number" class="form-control" placeholder="" style="width: 120px;">元<div></div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
                     </div>
                     <div style="text-align:right; margin-top:10px;" class="no-print">
                         <button type="button" onclick="this.parentNode.parentNode.remove()" class="btn btn-danger" style="padding:5px 10px; font-size:14px;">
@@ -1100,6 +1102,7 @@
             });
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'94ab96dbf2ccf087',t:'MTc0OTA4MzcxOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;"></iframe>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'94ab96dbf2ccf087',t:'MTc0OTA4MzcxOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;"></iframe><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;"></iframe>
+
 
 </body></html>
