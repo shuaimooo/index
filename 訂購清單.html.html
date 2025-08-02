@@ -1,0 +1,1277 @@
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生鮮雞肉供應商</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .category-card {
+            transition: all 0.3s ease;
+        }
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        .product-item {
+            border-left: 4px solid #f59e0b;
+            transition: all 0.3s ease;
+        }
+        .product-item:hover {
+            border-left-color: #d97706;
+            background-color: #fef3c7;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-orange-50 to-yellow-50 min-h-screen">
+    <!-- 頁首 -->
+    <header class="bg-gradient-to-r from-orange-600 to-red-600 text-white py-8 shadow-lg">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl font-bold mb-4">🐔 生鮮雞肉供應商</h1>
+            <p class="text-xl opacity-90">優質雞肉</p>
+        </div>
+    </header>
+
+    <!-- 雞種介紹 -->
+    <section class="py-12 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-8 text-gray-800">🐓 雞種介紹</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="bg-gradient-to-br from-yellow-100 to-orange-100 p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="text-4xl mr-4">🐔</div>
+                        <h3 class="font-bold text-xl">紅羽土雞</h3>
+                    </div>
+                    <div class="text-left space-y-2">
+                        <p class="text-gray-700"><strong>品種特色：</strong>紅羽土雞，紅色單冠，嘴腳黑色</p>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-br from-gray-100 to-gray-200 p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="text-4xl mr-4">🖤</div>
+                        <h3 class="font-bold text-xl">烏骨雞</h3>
+                    </div>
+                    <div class="text-left space-y-2">
+                        <p class="text-gray-700"><strong>品種特色：</strong>白色絲毛，皮膚灰黑，骨骼黑色</p>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-br from-red-100 to-pink-100 p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="text-4xl mr-4">🐓</div>
+                        <h3 class="font-bold text-xl">文昌雞</h3>
+                    </div>
+                    <div class="text-left space-y-2">
+                        <p class="text-gray-700"><strong>品種特色：</strong>免疫力強，放山舍飼皆宜</p>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-br from-green-100 to-emerald-100 p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="text-4xl mr-4">🏡</div>
+                        <h3 class="font-bold text-xl">古早雞</h3>
+                    </div>
+                    <div class="text-left space-y-2">
+                        <p class="text-gray-700"><strong>品種特色：</strong>傳統品種，公雞需野放飼養</p>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-br from-purple-100 to-indigo-100 p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="text-4xl mr-4">💎</div>
+                        <h3 class="font-bold text-xl">珍珠雞</h3>
+                    </div>
+                    <div class="text-left space-y-2">
+                        <p class="text-gray-700"><strong>品種特色：</strong>營養豐富，肉質細緻</p>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-br from-blue-100 to-cyan-100 p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="text-4xl mr-4">🏔️</div>
+                        <h3 class="font-bold text-xl">放山土雞</h3>
+                    </div>
+                    <div class="text-left space-y-2">
+                        <p class="text-gray-700"><strong>品種特色：</strong>自然放養，運動量充足</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 產品分類導引 -->
+    <section class="py-12 bg-gradient-to-r from-orange-100 to-yellow-100">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">產品分類</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="category-card bg-white rounded-xl p-8 text-center shadow-lg cursor-pointer" onclick="showCategory('fresh')">
+                    <div class="text-6xl mb-4">🥩</div>
+                    <h3 class="text-2xl font-bold mb-4 text-green-600">生鮮雞肉</h3>
+                    <p class="text-gray-600">新鮮現宰，整隻供應</p>
+                </div>
+                <div class="category-card bg-white rounded-xl p-8 text-center shadow-lg cursor-pointer" onclick="showCategory('cooked')">
+                    <div class="text-6xl mb-4">🍗</div>
+                    <h3 class="text-2xl font-bold mb-4 text-orange-600">熟食雞肉</h3>
+                    <p class="text-gray-600">即食美味，多種口味</p>
+                </div>
+                <div class="category-card bg-white rounded-xl p-8 text-center shadow-lg cursor-pointer" onclick="showCategory('frozen')">
+                    <div class="text-6xl mb-4">❄️</div>
+                    <h3 class="text-2xl font-bold mb-4 text-blue-600">冷凍分切</h3>
+                    <p class="text-gray-600">精準分切，規格齊全</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 生鮮雞肉 -->
+    <section id="fresh" class="py-12 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-8 text-green-600">🥩 生鮮雞肉 - 整隻規格</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="product-item bg-green-50 p-6 rounded-lg">
+                    <!-- 圖片區域 -->
+                    <div class="w-full h-48 bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
+                        <span class="text-gray-500">產品圖片</span>
+                    </div>
+                    <div class="flex items-center mb-4">
+                        <div class="text-3xl mr-3">🐔</div>
+                        <h3 class="text-xl font-bold">紅羽土雞</h3>
+                    </div>
+                    <p class="text-gray-700 mb-2"><strong>重量規格：</strong>3公斤 ~ 3.6公斤</p>
+                    <p class="text-gray-600 mb-3"><strong>肉質特色：</strong>肉質鮮嫩，口感佳，湯頭清甜，膠質豐富</p>
+                    <p class="text-sm text-green-600 font-semibold">適合料理：白切雞、雞湯、燉補、滷雞</p>
+                    <!-- 數量選擇 -->
+                    <div class="mt-4 pt-4 border-t border-green-200 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-700 font-medium">數量：</span>
+                            <div class="flex items-center space-x-3">
+                                <button onclick="changeQuantity(this, -1)" class="w-8 h-8 bg-green-600 hover:bg-green-700 text-white rounded-full flex items-center justify-center font-bold transition duration-200">-</button>
+                                <span class="quantity-display w-12 text-center font-bold text-lg">0</span>
+                                <button onclick="changeQuantity(this, 1)" class="w-8 h-8 bg-green-600 hover:bg-green-700 text-white rounded-full flex items-center justify-center font-bold transition duration-200">+</button>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-700 font-medium">指定重量：</span>
+                            <div class="flex items-center space-x-2">
+                                <input type="number" step="0.1" min="0" placeholder="0.0" class="w-16 px-2 py-1 border border-gray-300 rounded text-center text-sm">
+                                <span class="text-gray-600 text-sm">公斤</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-item bg-green-50 p-6 rounded-lg">
+                    <!-- 圖片區域 -->
+                    <div class="w-full h-48 bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
+                        <span class="text-gray-500">產品圖片</span>
+                    </div>
+                    <div class="flex items-center mb-4">
+                        <div class="text-3xl mr-3">🖤</div>
+                        <h3 class="text-xl font-bold">烏骨雞</h3>
+                    </div>
+                    <p class="text-gray-700 mb-2"><strong>重量規格：</strong>0.9公斤 ~ 1.5公斤</p>
+                    <p class="text-gray-600 mb-3"><strong>肉質特色：</strong>營養價值高，肉質細嫩，藥膳聖品</p>
+                    <p class="text-sm text-green-600 font-semibold">適合料理：四物雞湯、人參雞湯、燉全雞、藥膳補品</p>
+                    <!-- 數量選擇 -->
+                    <div class="mt-4 pt-4 border-t border-green-200 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-700 font-medium">數量：</span>
+                            <div class="flex items-center space-x-3">
+                                <button onclick="changeQuantity(this, -1)" class="w-8 h-8 bg-green-600 hover:bg-green-700 text-white rounded-full flex items-center justify-center font-bold transition duration-200">-</button>
+                                <span class="quantity-display w-12 text-center font-bold text-lg">0</span>
+                                <button onclick="changeQuantity(this, 1)" class="w-8 h-8 bg-green-600 hover:bg-green-700 text-white rounded-full flex items-center justify-center font-bold transition duration-200">+</button>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-700 font-medium">指定重量：</span>
+                            <div class="flex items-center space-x-2">
+                                <input type="number" step="0.1" min="0" placeholder="0.0" class="w-16 px-2 py-1 border border-gray-300 rounded text-center text-sm">
+                                <span class="text-gray-600 text-sm">公斤</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-item bg-green-50 p-6 rounded-lg">
+                    <!-- 圖片區域 -->
+                    <div class="w-full h-48 bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
+                        <span class="text-gray-500">產品圖片</span>
+                    </div>
+                    <div class="flex items-center mb-4">
+                        <div class="text-3xl mr-3">🐓</div>
+                        <h3 class="text-xl font-bold">文昌雞</h3>
+                    </div>
+                    <p class="text-gray-700 mb-2"><strong>重量規格：</strong>2.7公斤 ~ 3.6公斤</p>
+                    <p class="text-gray-600 mb-3"><strong>肉質特色：</strong>皮薄肉嫩，肉質細緻，口感滑嫩</p>
+                    <p class="text-sm text-green-600 font-semibold">適合料理：海南雞飯、白切雞、口水雞、蒸雞</p>
+                    <!-- 數量選擇 -->
+                    <div class="mt-4 pt-4 border-t border-green-200 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-700 font-medium">數量：</span>
+                            <div class="flex items-center space-x-3">
+                                <button onclick="changeQuantity(this, -1)" class="w-8 h-8 bg-green-600 hover:bg-green-700 text-white rounded-full flex items-center justify-center font-bold transition duration-200">-</button>
+                                <span class="quantity-display w-12 text-center font-bold text-lg">0</span>
+                                <button onclick="changeQuantity(this, 1)" class="w-8 h-8 bg-green-600 hover:bg-green-700 text-white rounded-full flex items-center justify-center font-bold transition duration-200">+</button>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-700 font-medium">指定重量：</span>
+                            <div class="flex items-center space-x-2">
+                                <input type="number" step="0.1" min="0" placeholder="0.0" class="w-16 px-2 py-1 border border-gray-300 rounded text-center text-sm">
+                                <span class="text-gray-600 text-sm">公斤</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-item bg-green-50 p-6 rounded-lg">
+                    <!-- 圖片區域 -->
+                    <div class="w-full h-48 bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
+                        <span class="text-gray-500">產品圖片</span>
+                    </div>
+                    <div class="flex items-center mb-4">
+                        <div class="text-3xl mr-3">🏡</div>
+                        <h3 class="text-xl font-bold">古早雞</h3>
+                    </div>
+                    <p class="text-gray-700 mb-2"><strong>重量規格：</strong>1.2公斤 ~ 4公斤</p>
+                    <p class="text-gray-600 mb-3"><strong>肉質特色：</strong>肉質鮮美滑口帶甜味，傳統風味濃郁</p>
+                    <p class="text-sm text-green-600 font-semibold">適合料理：白斬雞、燉補湯品、傳統料理、補身燉品</p>
+                    <!-- 數量選擇 -->
+                    <div class="mt-4 pt-4 border-t border-green-200 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-700 font-medium">數量：</span>
+                            <div class="flex items-center space-x-3">
+                                <button onclick="changeQuantity(this, -1)" class="w-8 h-8 bg-green-600 hover:bg-green-700 text-white rounded-full flex items-center justify-center font-bold transition duration-200">-</button>
+                                <span class="quantity-display w-12 text-center font-bold text-lg">0</span>
+                                <button onclick="changeQuantity(this, 1)" class="w-8 h-8 bg-green-600 hover:bg-green-700 text-white rounded-full flex items-center justify-center font-bold transition duration-200">+</button>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-700 font-medium">指定重量：</span>
+                            <div class="flex items-center space-x-2">
+                                <input type="number" step="0.1" min="0" placeholder="0.0" class="w-16 px-2 py-1 border border-gray-300 rounded text-center text-sm">
+                                <span class="text-gray-600 text-sm">公斤</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-item bg-green-50 p-6 rounded-lg">
+                    <!-- 圖片區域 -->
+                    <div class="w-full h-48 bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
+                        <span class="text-gray-500">產品圖片</span>
+                    </div>
+                    <div class="flex items-center mb-4">
+                        <div class="text-3xl mr-3">💎</div>
+                        <h3 class="text-xl font-bold">珍珠雞</h3>
+                    </div>
+                    <p class="text-gray-700 mb-2"><strong>重量規格：</strong>3公斤 ~ 4.5公斤</p>
+                    <p class="text-gray-600 mb-3"><strong>肉質特色：</strong>肉質細緻，營養價值高，口感鮮美</p>
+                    <p class="text-sm text-green-600 font-semibold">適合料理：精緻料理、燉湯、烤雞、高級宴席</p>
+                    <!-- 數量選擇 -->
+                    <div class="mt-4 pt-4 border-t border-green-200 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-700 font-medium">數量：</span>
+                            <div class="flex items-center space-x-3">
+                                <button onclick="changeQuantity(this, -1)" class="w-8 h-8 bg-green-600 hover:bg-green-700 text-white rounded-full flex items-center justify-center font-bold transition duration-200">-</button>
+                                <span class="quantity-display w-12 text-center font-bold text-lg">0</span>
+                                <button onclick="changeQuantity(this, 1)" class="w-8 h-8 bg-green-600 hover:bg-green-700 text-white rounded-full flex items-center justify-center font-bold transition duration-200">+</button>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-700 font-medium">指定重量：</span>
+                            <div class="flex items-center space-x-2">
+                                <input type="number" step="0.1" min="0" placeholder="0.0" class="w-16 px-2 py-1 border border-gray-300 rounded text-center text-sm">
+                                <span class="text-gray-600 text-sm">公斤</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-item bg-green-50 p-6 rounded-lg">
+                    <!-- 圖片區域 -->
+                    <div class="w-full h-48 bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
+                        <span class="text-gray-500">產品圖片</span>
+                    </div>
+                    <div class="flex items-center mb-4">
+                        <div class="text-3xl mr-3">🏔️</div>
+                        <h3 class="text-xl font-bold">放山土雞</h3>
+                    </div>
+                    <p class="text-gray-700 mb-2"><strong>重量規格：</strong>2.1公斤 ~ 3公斤</p>
+                    <p class="text-gray-600 mb-3"><strong>肉質特色：</strong>肉質結實有嚼勁，風味濃郁，運動量充足</p>
+                    <p class="text-sm text-green-600 font-semibold">適合料理：土雞城料理、燒烤、紅燒、炒菜</p>
+                    <!-- 數量選擇 -->
+                    <div class="mt-4 pt-4 border-t border-green-200 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-700 font-medium">數量：</span>
+                            <div class="flex items-center space-x-3">
+                                <button onclick="changeQuantity(this, -1)" class="w-8 h-8 bg-green-600 hover:bg-green-700 text-white rounded-full flex items-center justify-center font-bold transition duration-200">-</button>
+                                <span class="quantity-display w-12 text-center font-bold text-lg">0</span>
+                                <button onclick="changeQuantity(this, 1)" class="w-8 h-8 bg-green-600 hover:bg-green-700 text-white rounded-full flex items-center justify-center font-bold transition duration-200">+</button>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-700 font-medium">指定重量：</span>
+                            <div class="flex items-center space-x-2">
+                                <input type="number" step="0.1" min="0" placeholder="0.0" class="w-16 px-2 py-1 border border-gray-300 rounded text-center text-sm">
+                                <span class="text-gray-600 text-sm">公斤</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 熟食雞肉 -->
+    <section id="cooked" class="py-12 bg-orange-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-8 text-orange-600">🍗 熟食雞肉 - 整隻規格</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="product-item bg-orange-100 p-6 rounded-lg">
+                    <!-- 圖片區域 -->
+                    <div class="w-full h-48 bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
+                        <span class="text-gray-500">產品圖片</span>
+                    </div>
+                    <div class="flex items-center mb-4">
+                        <div class="text-3xl mr-3">🎋</div>
+                        <h3 class="text-xl font-bold">甘蔗雞</h3>
+                    </div>
+                    <p class="text-gray-700 mb-2"><strong>規格重量：</strong>1.8公斤 ~ 2.7公斤</p>
+                    <p class="text-gray-600 mb-3">甘蔗燻製，香甜回甘</p>
+                    <p class="text-sm text-orange-600 font-semibold">特色：天然甘蔗香氣，肉質香甜</p>
+                    <!-- 數量選擇 -->
+                    <div class="mt-4 pt-4 border-t border-orange-200 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-700 font-medium">數量：</span>
+                            <div class="flex items-center space-x-3">
+                                <button onclick="changeQuantity(this, -1)" class="w-8 h-8 bg-orange-600 hover:bg-orange-700 text-white rounded-full flex items-center justify-center font-bold transition duration-200">-</button>
+                                <span class="quantity-display w-12 text-center font-bold text-lg">0</span>
+                                <button onclick="changeQuantity(this, 1)" class="w-8 h-8 bg-orange-600 hover:bg-orange-700 text-white rounded-full flex items-center justify-center font-bold transition duration-200">+</button>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-700 font-medium">指定重量：</span>
+                            <div class="flex items-center space-x-2">
+                                <input type="number" step="0.1" min="0" placeholder="0.0" class="w-16 px-2 py-1 border border-gray-300 rounded text-center text-sm">
+                                <span class="text-gray-600 text-sm">公斤</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-item bg-orange-100 p-6 rounded-lg">
+                    <!-- 圖片區域 -->
+                    <div class="w-full h-48 bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
+                        <span class="text-gray-500">產品圖片</span>
+                    </div>
+                    <div class="flex items-center mb-4">
+                        <div class="text-3xl mr-3">🧂</div>
+                        <h3 class="text-xl font-bold">鹹水雞</h3>
+                    </div>
+                    <p class="text-gray-700 mb-2"><strong>規格重量：</strong>1.8公斤 ~ 2.7公斤</p>
+                    <p class="text-gray-600 mb-3">傳統鹹水滷製，風味獨特</p>
+                    <p class="text-sm text-orange-600 font-semibold">特色：鹹香入味，冷熱皆宜</p>
+                    <!-- 數量選擇 -->
+                    <div class="mt-4 pt-4 border-t border-orange-200 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-700 font-medium">數量：</span>
+                            <div class="flex items-center space-x-3">
+                                <button onclick="changeQuantity(this, -1)" class="w-8 h-8 bg-orange-600 hover:bg-orange-700 text-white rounded-full flex items-center justify-center font-bold transition duration-200">-</button>
+                                <span class="quantity-display w-12 text-center font-bold text-lg">0</span>
+                                <button onclick="changeQuantity(this, 1)" class="w-8 h-8 bg-orange-600 hover:bg-orange-700 text-white rounded-full flex items-center justify-center font-bold transition duration-200">+</button>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-700 font-medium">指定重量：</span>
+                            <div class="flex items-center space-x-2">
+                                <input type="number" step="0.1" min="0" placeholder="0.0" class="w-16 px-2 py-1 border border-gray-300 rounded text-center text-sm">
+                                <span class="text-gray-600 text-sm">公斤</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-item bg-orange-100 p-6 rounded-lg">
+                    <!-- 圖片區域 -->
+                    <div class="w-full h-48 bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
+                        <span class="text-gray-500">產品圖片</span>
+                    </div>
+                    <div class="flex items-center mb-4">
+                        <div class="text-3xl mr-3">💨</div>
+                        <h3 class="text-xl font-bold">煙燻雞</h3>
+                    </div>
+                    <p class="text-gray-700 mb-2"><strong>規格重量：</strong>1.8公斤 ~ 2.7公斤</p>
+                    <p class="text-gray-600 mb-3">木材煙燻，香氣濃郁</p>
+                    <p class="text-sm text-orange-600 font-semibold">特色：煙燻香氣，層次豐富</p>
+                    <!-- 數量選擇 -->
+                    <div class="mt-4 pt-4 border-t border-orange-200 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-700 font-medium">數量：</span>
+                            <div class="flex items-center space-x-3">
+                                <button onclick="changeQuantity(this, -1)" class="w-8 h-8 bg-orange-600 hover:bg-orange-700 text-white rounded-full flex items-center justify-center font-bold transition duration-200">-</button>
+                                <span class="quantity-display w-12 text-center font-bold text-lg">0</span>
+                                <button onclick="changeQuantity(this, 1)" class="w-8 h-8 bg-orange-600 hover:bg-orange-700 text-white rounded-full flex items-center justify-center font-bold transition duration-200">+</button>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-700 font-medium">指定重量：</span>
+                            <div class="flex items-center space-x-2">
+                                <input type="number" step="0.1" min="0" placeholder="0.0" class="w-16 px-2 py-1 border border-gray-300 rounded text-center text-sm">
+                                <span class="text-gray-600 text-sm">公斤</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 冷凍分切 -->
+    <section id="frozen" class="py-12 bg-blue-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-8 text-blue-600">❄️ 冷凍分切 - 精準規格</h2>
+            
+            <!-- 腿排規格 -->
+            <div class="mb-12">
+                <div class="bg-blue-100 p-6 rounded-lg">
+                    <div class="flex flex-col lg:flex-row gap-6">
+                        <!-- 圖片區域 -->
+                        <div class="lg:w-1/3">
+                            <div class="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center mb-4">
+                                <span class="text-gray-500">腿排產品圖片</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-blue-700 text-center">🍖 腿排規格</h3>
+                            <p class="text-gray-600 text-center">(大腿與小腿連接部位)</p>
+                        </div>
+                        <!-- 規格細分 -->
+                        <div class="lg:w-2/3">
+                            <div class="grid md:grid-cols-3 gap-4">
+                                <div class="product-item bg-white p-4 rounded-lg text-center">
+                                    <h4 class="text-xl font-bold text-blue-700 mb-2">TS3</h4>
+                                    <p class="text-gray-600 mb-3">約300-350g</p>
+                                    <!-- 數量選擇 -->
+                                    <div class="flex items-center justify-center space-x-2 mt-3">
+                                        <button onclick="changeQuantity(this, -1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">-</button>
+                                        <span class="quantity-display w-8 text-center font-bold">0</span>
+                                        <span class="text-xs text-gray-600">斤</span>
+                                        <button onclick="changeQuantity(this, 1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">+</button>
+                                    </div>
+                                </div>
+                                <div class="product-item bg-white p-4 rounded-lg text-center">
+                                    <h4 class="text-xl font-bold text-blue-700 mb-2">TS4</h4>
+                                    <p class="text-gray-600 mb-3">約350-400g</p>
+                                    <!-- 數量選擇 -->
+                                    <div class="flex items-center justify-center space-x-2 mt-3">
+                                        <button onclick="changeQuantity(this, -1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">-</button>
+                                        <span class="quantity-display w-8 text-center font-bold">0</span>
+                                        <span class="text-xs text-gray-600">斤</span>
+                                        <button onclick="changeQuantity(this, 1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">+</button>
+                                    </div>
+                                </div>
+                                <div class="product-item bg-white p-4 rounded-lg text-center">
+                                    <h4 class="text-xl font-bold text-blue-700 mb-2">TS5</h4>
+                                    <p class="text-gray-600 mb-3">約400-450g</p>
+                                    <!-- 數量選擇 -->
+                                    <div class="flex items-center justify-center space-x-2 mt-3">
+                                        <button onclick="changeQuantity(this, -1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">-</button>
+                                        <span class="quantity-display w-8 text-center font-bold">0</span>
+                                        <span class="text-xs text-gray-600">斤</span>
+                                        <button onclick="changeQuantity(this, 1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 骨腿規格 -->
+            <div class="mb-12">
+                <div class="bg-blue-100 p-6 rounded-lg">
+                    <div class="flex flex-col lg:flex-row gap-6">
+                        <!-- 圖片區域 -->
+                        <div class="lg:w-1/3">
+                            <div class="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center mb-4">
+                                <span class="text-gray-500">骨腿產品圖片</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-blue-700 text-center">🦴 骨腿規格</h3>
+                            <p class="text-gray-600 text-center">(雞大腿帶骨部位)</p>
+                        </div>
+                        <!-- 規格細分 -->
+                        <div class="lg:w-2/3">
+                            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <div class="product-item bg-white p-4 rounded-lg text-center">
+                                    <h4 class="text-xl font-bold text-blue-700 mb-2">T5</h4>
+                                    <p class="text-gray-600 mb-3">約180-220g</p>
+                                    <!-- 數量選擇 -->
+                                    <div class="flex items-center justify-center space-x-2 mt-3">
+                                        <button onclick="changeQuantity(this, -1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">-</button>
+                                        <span class="quantity-display w-8 text-center font-bold">0</span>
+                                        <span class="text-xs text-gray-600">斤</span>
+                                        <button onclick="changeQuantity(this, 1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">+</button>
+                                    </div>
+                                </div>
+                                <div class="product-item bg-white p-4 rounded-lg text-center">
+                                    <h4 class="text-xl font-bold text-blue-700 mb-2">T6</h4>
+                                    <p class="text-gray-600 mb-3">約220-260g</p>
+                                    <!-- 數量選擇 -->
+                                    <div class="flex items-center justify-center space-x-2 mt-3">
+                                        <button onclick="changeQuantity(this, -1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">-</button>
+                                        <span class="quantity-display w-8 text-center font-bold">0</span>
+                                        <span class="text-xs text-gray-600">斤</span>
+                                        <button onclick="changeQuantity(this, 1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">+</button>
+                                    </div>
+                                </div>
+                                <div class="product-item bg-white p-4 rounded-lg text-center">
+                                    <h4 class="text-xl font-bold text-blue-700 mb-2">T7</h4>
+                                    <p class="text-gray-600 mb-3">約260-300g</p>
+                                    <!-- 數量選擇 -->
+                                    <div class="flex items-center justify-center space-x-2 mt-3">
+                                        <button onclick="changeQuantity(this, -1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">-</button>
+                                        <span class="quantity-display w-8 text-center font-bold">0</span>
+                                        <span class="text-xs text-gray-600">斤</span>
+                                        <button onclick="changeQuantity(this, 1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">+</button>
+                                    </div>
+                                </div>
+                                <div class="product-item bg-white p-4 rounded-lg text-center">
+                                    <h4 class="text-xl font-bold text-blue-700 mb-2">T8</h4>
+                                    <p class="text-gray-600 mb-3">約300-350g</p>
+                                    <!-- 數量選擇 -->
+                                    <div class="flex items-center justify-center space-x-2 mt-3">
+                                        <button onclick="changeQuantity(this, -1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">-</button>
+                                        <span class="quantity-display w-8 text-center font-bold">0</span>
+                                        <span class="text-xs text-gray-600">斤</span>
+                                        <button onclick="changeQuantity(this, 1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 棒腿規格 -->
+            <div class="mb-12">
+                <div class="bg-blue-100 p-6 rounded-lg">
+                    <div class="flex flex-col lg:flex-row gap-6">
+                        <!-- 圖片區域 -->
+                        <div class="lg:w-1/3">
+                            <div class="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center mb-4">
+                                <span class="text-gray-500">棒腿產品圖片</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-blue-700 text-center">🍗 棒腿規格</h3>
+                            <p class="text-gray-600 text-center">(雞小腿部位)</p>
+                        </div>
+                        <!-- 規格細分 -->
+                        <div class="lg:w-2/3">
+                            <div class="grid md:grid-cols-3 gap-4">
+                                <div class="product-item bg-white p-4 rounded-lg text-center">
+                                    <h4 class="text-xl font-bold text-blue-700 mb-2">D3</h4>
+                                    <p class="text-gray-600 mb-3">約80-100g</p>
+                                    <!-- 數量選擇 -->
+                                    <div class="flex items-center justify-center space-x-2 mt-3">
+                                        <button onclick="changeQuantity(this, -1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">-</button>
+                                        <span class="quantity-display w-8 text-center font-bold">0</span>
+                                        <span class="text-xs text-gray-600">斤</span>
+                                        <button onclick="changeQuantity(this, 1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">+</button>
+                                    </div>
+                                </div>
+                                <div class="product-item bg-white p-4 rounded-lg text-center">
+                                    <h4 class="text-xl font-bold text-blue-700 mb-2">D4</h4>
+                                    <p class="text-gray-600 mb-3">約100-120g</p>
+                                    <!-- 數量選擇 -->
+                                    <div class="flex items-center justify-center space-x-2 mt-3">
+                                        <button onclick="changeQuantity(this, -1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">-</button>
+                                        <span class="quantity-display w-8 text-center font-bold">0</span>
+                                        <span class="text-xs text-gray-600">斤</span>
+                                        <button onclick="changeQuantity(this, 1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">+</button>
+                                    </div>
+                                </div>
+                                <div class="product-item bg-white p-4 rounded-lg text-center">
+                                    <h4 class="text-xl font-bold text-blue-700 mb-2">腿仁</h4>
+                                    <p class="text-gray-600 mb-1">約150-200g</p>
+                                    <p class="text-xs text-gray-500 mb-3">(去骨雞腿肉)</p>
+                                    <!-- 數量選擇 -->
+                                    <div class="flex items-center justify-center space-x-2 mt-3">
+                                        <button onclick="changeQuantity(this, -1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">-</button>
+                                        <span class="quantity-display w-8 text-center font-bold">0</span>
+                                        <span class="text-xs text-gray-600">斤</span>
+                                        <button onclick="changeQuantity(this, 1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 雞翅規格 -->
+            <div class="mb-12">
+                <div class="bg-blue-100 p-6 rounded-lg">
+                    <div class="flex flex-col lg:flex-row gap-6">
+                        <!-- 圖片區域 -->
+                        <div class="lg:w-1/3">
+                            <div class="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center mb-4">
+                                <span class="text-gray-500">雞翅產品圖片</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-blue-700 text-center">🪶 雞翅規格</h3>
+                            <p class="text-gray-600 text-center">(雞翅膀完整部位)</p>
+                        </div>
+                        <!-- 規格細分 -->
+                        <div class="lg:w-2/3">
+                            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <div class="product-item bg-white p-4 rounded-lg text-center">
+                                    <h4 class="text-xl font-bold text-blue-700 mb-2">W6</h4>
+                                    <p class="text-gray-600 mb-3">約45-55g</p>
+                                    <!-- 數量選擇 -->
+                                    <div class="flex items-center justify-center space-x-2 mt-3">
+                                        <button onclick="changeQuantity(this, -1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">-</button>
+                                        <span class="quantity-display w-8 text-center font-bold">0</span>
+                                        <span class="text-xs text-gray-600">斤</span>
+                                        <button onclick="changeQuantity(this, 1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">+</button>
+                                    </div>
+                                </div>
+                                <div class="product-item bg-white p-4 rounded-lg text-center">
+                                    <h4 class="text-xl font-bold text-blue-700 mb-2">W7</h4>
+                                    <p class="text-gray-600 mb-3">約55-65g</p>
+                                    <!-- 數量選擇 -->
+                                    <div class="flex items-center justify-center space-x-2 mt-3">
+                                        <button onclick="changeQuantity(this, -1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">-</button>
+                                        <span class="quantity-display w-8 text-center font-bold">0</span>
+                                        <span class="text-xs text-gray-600">斤</span>
+                                        <button onclick="changeQuantity(this, 1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">+</button>
+                                    </div>
+                                </div>
+                                <div class="product-item bg-white p-4 rounded-lg text-center">
+                                    <h4 class="text-xl font-bold text-blue-700 mb-2">W8</h4>
+                                    <p class="text-gray-600 mb-3">約65-75g</p>
+                                    <!-- 數量選擇 -->
+                                    <div class="flex items-center justify-center space-x-2 mt-3">
+                                        <button onclick="changeQuantity(this, -1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">-</button>
+                                        <span class="quantity-display w-8 text-center font-bold">0</span>
+                                        <span class="text-xs text-gray-600">斤</span>
+                                        <button onclick="changeQuantity(this, 1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">+</button>
+                                    </div>
+                                </div>
+                                <div class="product-item bg-white p-4 rounded-lg text-center">
+                                    <h4 class="text-xl font-bold text-blue-700 mb-2">二節翅</h4>
+                                    <p class="text-gray-600 mb-1">約25-35g</p>
+                                    <p class="text-xs text-gray-500 mb-3">(雞翅中段部位)</p>
+                                    <!-- 數量選擇 -->
+                                    <div class="flex items-center justify-center space-x-2 mt-3">
+                                        <button onclick="changeQuantity(this, -1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">-</button>
+                                        <span class="quantity-display w-8 text-center font-bold">0</span>
+                                        <span class="text-xs text-gray-600">斤</span>
+                                        <button onclick="changeQuantity(this, 1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 雞胸規格 -->
+            <div class="mb-12">
+                <div class="bg-blue-100 p-6 rounded-lg">
+                    <div class="flex flex-col lg:flex-row gap-6">
+                        <!-- 圖片區域 -->
+                        <div class="lg:w-1/3">
+                            <div class="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center mb-4">
+                                <span class="text-gray-500">雞胸產品圖片</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-blue-700 text-center">🥩 雞胸規格</h3>
+                            <p class="text-gray-600 text-center">(雞胸肉部位)</p>
+                        </div>
+                        <!-- 規格細分 -->
+                        <div class="lg:w-2/3">
+                            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <div class="product-item bg-white p-4 rounded-lg text-center">
+                                    <h4 class="text-lg font-bold text-blue-700 mb-2">原胸</h4>
+                                    <p class="text-gray-600 mb-1">約400-500g</p>
+                                    <p class="text-xs text-gray-500 mb-3">(完整雞胸肉帶骨)</p>
+                                    <!-- 數量選擇 -->
+                                    <div class="flex items-center justify-center space-x-2 mt-3">
+                                        <button onclick="changeQuantity(this, -1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">-</button>
+                                        <span class="quantity-display w-8 text-center font-bold">0</span>
+                                        <span class="text-xs text-gray-600">斤</span>
+                                        <button onclick="changeQuantity(this, 1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">+</button>
+                                    </div>
+                                </div>
+                                <div class="product-item bg-white p-4 rounded-lg text-center">
+                                    <h4 class="text-lg font-bold text-blue-700 mb-2">清胸</h4>
+                                    <p class="text-gray-600 mb-1">約250-350g</p>
+                                    <p class="text-xs text-gray-500 mb-3">(去骨雞胸肉)</p>
+                                    <!-- 數量選擇 -->
+                                    <div class="flex items-center justify-center space-x-2 mt-3">
+                                        <button onclick="changeQuantity(this, -1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">-</button>
+                                        <span class="quantity-display w-8 text-center font-bold">0</span>
+                                        <span class="text-xs text-gray-600">斤</span>
+                                        <button onclick="changeQuantity(this, 1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">+</button>
+                                    </div>
+                                </div>
+                                <div class="product-item bg-white p-4 rounded-lg text-center">
+                                    <h4 class="text-lg font-bold text-blue-700 mb-2">清肉</h4>
+                                    <p class="text-gray-600 mb-1">約200-300g</p>
+                                    <p class="text-xs text-gray-500 mb-3">(雞胸肉片)</p>
+                                    <!-- 數量選擇 -->
+                                    <div class="flex items-center justify-center space-x-2 mt-3">
+                                        <button onclick="changeQuantity(this, -1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">-</button>
+                                        <span class="quantity-display w-8 text-center font-bold">0</span>
+                                        <span class="text-xs text-gray-600">斤</span>
+                                        <button onclick="changeQuantity(this, 1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">+</button>
+                                    </div>
+                                </div>
+                                <div class="product-item bg-white p-4 rounded-lg text-center">
+                                    <h4 class="text-lg font-bold text-blue-700 mb-2">清肉丁</h4>
+                                    <p class="text-gray-600 mb-1">約200-250g</p>
+                                    <p class="text-xs text-gray-500 mb-3">(雞胸肉丁)</p>
+                                    <!-- 數量選擇 -->
+                                    <div class="flex items-center justify-center space-x-2 mt-3">
+                                        <button onclick="changeQuantity(this, -1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">-</button>
+                                        <span class="quantity-display w-8 text-center font-bold">0</span>
+                                        <span class="text-xs text-gray-600">斤</span>
+                                        <button onclick="changeQuantity(this, 1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">+</button>
+                                    </div>
+                                </div>
+                                <div class="product-item bg-white p-4 rounded-lg text-center">
+                                    <h4 class="text-lg font-bold text-blue-700 mb-2">里肌肉</h4>
+                                    <p class="text-gray-600 mb-1">約80-120g</p>
+                                    <p class="text-xs text-gray-500 mb-3">(雞胸內側嫩肉)</p>
+                                    <!-- 數量選擇 -->
+                                    <div class="flex items-center justify-center space-x-2 mt-3">
+                                        <button onclick="changeQuantity(this, -1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">-</button>
+                                        <span class="quantity-display w-8 text-center font-bold">0</span>
+                                        <span class="text-xs text-gray-600">斤</span>
+                                        <button onclick="changeQuantity(this, 1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 其他規格 -->
+            <div class="mb-12">
+                <div class="bg-blue-100 p-6 rounded-lg">
+                    <div class="flex flex-col lg:flex-row gap-6">
+                        <!-- 圖片區域 -->
+                        <div class="lg:w-1/3">
+                            <div class="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center mb-4">
+                                <span class="text-gray-500">其他部位產品圖片</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-blue-700 text-center">🫀 其他規格</h3>
+                            <p class="text-gray-600 text-center">(雞內臟及特殊部位)</p>
+                        </div>
+                        <!-- 規格細分 -->
+                        <div class="lg:w-2/3">
+                            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <div class="product-item bg-white p-4 rounded-lg text-center">
+                                    <h4 class="text-lg font-bold text-blue-700 mb-2">雞心</h4>
+                                    <p class="text-gray-700 mb-1"><strong>部位：</strong>雞心臟</p>
+                                    <p class="text-sm text-blue-600 font-semibold mb-3">重量：約8-12g</p>
+                                    <!-- 數量選擇 -->
+                                    <div class="flex items-center justify-center space-x-2 mt-3">
+                                        <button onclick="changeQuantity(this, -1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">-</button>
+                                        <span class="quantity-display w-8 text-center font-bold">0</span>
+                                        <span class="text-xs text-gray-600">斤</span>
+                                        <button onclick="changeQuantity(this, 1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">+</button>
+                                    </div>
+                                </div>
+                                <div class="product-item bg-white p-4 rounded-lg text-center">
+                                    <h4 class="text-lg font-bold text-blue-700 mb-2">雞胗</h4>
+                                    <p class="text-gray-700 mb-1"><strong>部位：</strong>雞胃部</p>
+                                    <p class="text-sm text-blue-600 font-semibold mb-3">重量：約15-25g</p>
+                                    <!-- 數量選擇 -->
+                                    <div class="flex items-center justify-center space-x-2 mt-3">
+                                        <button onclick="changeQuantity(this, -1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">-</button>
+                                        <span class="quantity-display w-8 text-center font-bold">0</span>
+                                        <span class="text-xs text-gray-600">斤</span>
+                                        <button onclick="changeQuantity(this, 1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">+</button>
+                                    </div>
+                                </div>
+                                <div class="product-item bg-white p-4 rounded-lg text-center">
+                                    <h4 class="text-lg font-bold text-blue-700 mb-2">雞尾椎</h4>
+                                    <p class="text-gray-700 mb-1"><strong>部位：</strong>雞尾巴部位</p>
+                                    <p class="text-sm text-blue-600 font-semibold mb-3">重量：約20-30g</p>
+                                    <!-- 數量選擇 -->
+                                    <div class="flex items-center justify-center space-x-2 mt-3">
+                                        <button onclick="changeQuantity(this, -1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">-</button>
+                                        <span class="quantity-display w-8 text-center font-bold">0</span>
+                                        <span class="text-xs text-gray-600">斤</span>
+                                        <button onclick="changeQuantity(this, 1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">+</button>
+                                    </div>
+                                </div>
+                                <div class="product-item bg-white p-4 rounded-lg text-center">
+                                    <h4 class="text-lg font-bold text-blue-700 mb-2">頸背排</h4>
+                                    <p class="text-gray-700 mb-1"><strong>部位：</strong>雞脖子背部</p>
+                                    <p class="text-sm text-blue-600 font-semibold mb-3">重量：約30-50g</p>
+                                    <!-- 數量選擇 -->
+                                    <div class="flex items-center justify-center space-x-2 mt-3">
+                                        <button onclick="changeQuantity(this, -1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">-</button>
+                                        <span class="quantity-display w-8 text-center font-bold">0</span>
+                                        <span class="text-xs text-gray-600">斤</span>
+                                        <button onclick="changeQuantity(this, 1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">+</button>
+                                    </div>
+                                </div>
+                                <div class="product-item bg-white p-4 rounded-lg text-center">
+                                    <h4 class="text-lg font-bold text-blue-700 mb-2">三角骨</h4>
+                                    <p class="text-gray-700 mb-1"><strong>部位：</strong>雞翅根部三角骨</p>
+                                    <p class="text-sm text-blue-600 font-semibold mb-3">重量：約15-25g</p>
+                                    <!-- 數量選擇 -->
+                                    <div class="flex items-center justify-center space-x-2 mt-3">
+                                        <button onclick="changeQuantity(this, -1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">-</button>
+                                        <span class="quantity-display w-8 text-center font-bold">0</span>
+                                        <span class="text-xs text-gray-600">斤</span>
+                                        <button onclick="changeQuantity(this, 1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">+</button>
+                                    </div>
+                                </div>
+                                <div class="product-item bg-white p-4 rounded-lg text-center">
+                                    <h4 class="text-lg font-bold text-blue-700 mb-2">雞皮</h4>
+                                    <p class="text-gray-700 mb-1"><strong>部位：</strong>雞皮部分</p>
+                                    <p class="text-sm text-blue-600 font-semibold mb-3">重量：約50-100g</p>
+                                    <!-- 數量選擇 -->
+                                    <div class="flex items-center justify-center space-x-2 mt-3">
+                                        <button onclick="changeQuantity(this, -1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">-</button>
+                                        <span class="quantity-display w-8 text-center font-bold">0</span>
+                                        <span class="text-xs text-gray-600">斤</span>
+                                        <button onclick="changeQuantity(this, 1)" class="w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center text-sm font-bold transition duration-200">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 確認按鈕 -->
+    <div class="fixed bottom-6 right-6 z-50">
+        <button onclick="showOrderSummary()" class="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white px-8 py-4 rounded-full shadow-2xl text-lg font-bold transition duration-300 transform hover:scale-105">
+            📋 確認訂單
+        </button>
+    </div>
+
+    <!-- 訂單確認彈窗 -->
+    <div id="orderModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl max-w-4xl w-full max-h-[80vh] overflow-y-auto shadow-2xl">
+            <div class="sticky top-0 bg-gradient-to-r from-orange-600 to-red-600 text-white p-6 rounded-t-xl">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-bold">📋 訂單確認清單</h2>
+                    <button onclick="closeOrderModal()" class="text-white hover:text-gray-200 text-3xl font-bold">&times;</button>
+                </div>
+            </div>
+            <div id="orderContent" class="p-6">
+                <!-- 訂單內容將在這裡動態生成 -->
+            </div>
+            <div class="sticky bottom-0 bg-gray-50 p-6 rounded-b-xl border-t">
+                <div class="flex justify-end space-x-4">
+                    <button onclick="closeOrderModal()" class="px-6 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-bold transition duration-200">
+                        取消
+                    </button>
+                    <button id="confirmOrderBtn" onclick="confirmOrder()" class="px-6 py-3 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white rounded-lg font-bold transition duration-200">
+                        確認清單
+                    </button>
+                    <button id="confirmContactBtn" onclick="confirmContact()" class="hidden px-6 py-3 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white rounded-lg font-bold transition duration-200">
+                        確認聯絡資訊
+                    </button>
+                </div>
+                
+                <!-- 聯絡資訊表單 -->
+                <div id="contactForm" class="hidden mt-4 bg-gradient-to-r from-blue-50 to-green-50 border-2 border-blue-200 rounded-lg p-6">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4 text-center">📝 請填寫聯絡資訊</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">聯絡人：</label>
+                            <input type="text" id="contactName" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="請輸入聯絡人姓名">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">聯絡電話：</label>
+                            <input type="tel" id="contactPhone" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="請輸入聯絡電話">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-gray-700 font-medium mb-2">地址：</label>
+                            <input type="text" id="contactAddress" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="請輸入完整地址">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-gray-700 font-medium mb-2">可聯繫時間：</label>
+                            <input type="text" id="contactTime" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="例：週一至週五 9:00-18:00">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 最終提示訊息 -->
+                <div id="orderInstructions" class="hidden mt-4 bg-gradient-to-r from-blue-50 to-green-50 border-2 border-blue-200 rounded-lg p-4">
+                    <p class="text-gray-800 text-center font-medium leading-relaxed">
+                        確認商品後請<span class="font-bold text-blue-600">(截圖/錄影)</span>此視窗，並傳送到店家的LINE，由專人為您確認及報價，如有其他問題請直接撥打電話由專人為您服務。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 頁尾聯絡資訊 -->
+    <footer class="bg-gradient-to-r from-gray-800 to-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-8">
+                <div class="flex flex-wrap justify-center items-center gap-8 text-lg">
+                    <div class="flex items-center">
+                        <span class="text-gray-300">👤 聯絡人：</span>
+                        <span class="font-bold text-white ml-2">蘇先生</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-gray-300">📞 連絡電話：</span>
+                        <span class="font-bold text-white ml-2">0926169899</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-gray-300">💬 LINE ID：</span>
+                        <span class="font-bold text-white ml-2">@330kxatg (雞肉供應商)</span>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2025 生鮮雞肉供應商. 版權所有 | 專業雞肉供應，品質保證</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function showCategory(category) {
+            // 移除所有 active 狀態
+            document.querySelectorAll('.category-card').forEach(card => {
+                card.classList.remove('ring-4', 'ring-orange-400');
+            });
+            
+            // 添加 active 狀態到點擊的卡片
+            event.currentTarget.classList.add('ring-4', 'ring-orange-400');
+            
+            // 滾動到對應區域
+            const targetSection = document.getElementById(category);
+            if (targetSection) {
+                targetSection.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
+
+        // 添加滾動效果
+        window.addEventListener('scroll', function() {
+            const cards = document.querySelectorAll('.product-item');
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                if (rect.top < window.innerHeight && rect.bottom > 0) {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }
+            });
+        });
+
+        // 數量控制功能
+        function changeQuantity(button, change) {
+            const quantityDisplay = button.parentElement.querySelector('.quantity-display');
+            let currentQuantity = parseInt(quantityDisplay.textContent);
+            let newQuantity = currentQuantity + change;
+            
+            // 確保數量不會小於0
+            if (newQuantity < 0) {
+                newQuantity = 0;
+            }
+            
+            quantityDisplay.textContent = newQuantity;
+        }
+
+        // 顯示訂單摘要
+        function showOrderSummary() {
+            const orderItems = [];
+            
+            // 收集生鮮雞肉訂單
+            const freshSection = document.getElementById('fresh');
+            const freshProducts = freshSection.querySelectorAll('.product-item');
+            freshProducts.forEach(product => {
+                const productName = product.querySelector('h3').textContent;
+                const quantity = parseInt(product.querySelector('.quantity-display').textContent);
+                const weightInput = product.querySelector('input[type="number"]');
+                const weight = weightInput ? parseFloat(weightInput.value) || 0 : 0;
+                
+                if (quantity > 0 || weight > 0) {
+                    orderItems.push({
+                        category: '🥩 生鮮雞肉',
+                        name: productName,
+                        quantity: quantity,
+                        weight: weight,
+                        unit: '公斤'
+                    });
+                }
+            });
+            
+            // 收集熟食雞肉訂單
+            const cookedSection = document.getElementById('cooked');
+            const cookedProducts = cookedSection.querySelectorAll('.product-item');
+            cookedProducts.forEach(product => {
+                const productName = product.querySelector('h3').textContent;
+                const quantity = parseInt(product.querySelector('.quantity-display').textContent);
+                const weightInput = product.querySelector('input[type="number"]');
+                const weight = weightInput ? parseFloat(weightInput.value) || 0 : 0;
+                
+                if (quantity > 0 || weight > 0) {
+                    orderItems.push({
+                        category: '🍗 熟食雞肉',
+                        name: productName,
+                        quantity: quantity,
+                        weight: weight,
+                        unit: '公斤'
+                    });
+                }
+            });
+            
+            // 收集冷凍分切訂單
+            const frozenSection = document.getElementById('frozen');
+            const frozenProducts = frozenSection.querySelectorAll('.product-item');
+            frozenProducts.forEach(product => {
+                const productName = product.querySelector('h4').textContent;
+                const quantity = parseInt(product.querySelector('.quantity-display').textContent);
+                
+                if (quantity > 0) {
+                    orderItems.push({
+                        category: '❄️ 冷凍分切',
+                        name: productName,
+                        quantity: quantity,
+                        weight: 0,
+                        unit: '斤'
+                    });
+                }
+            });
+            
+            // 生成訂單內容HTML
+            let orderHTML = '';
+            
+            if (orderItems.length === 0) {
+                orderHTML = `
+                    <div class="text-center py-12">
+                        <div class="text-6xl mb-4">🛒</div>
+                        <h3 class="text-xl font-bold text-gray-600 mb-2">尚未選擇任何商品</h3>
+                        <p class="text-gray-500">請先選擇您需要的雞肉產品數量</p>
+                    </div>
+                `;
+            } else {
+                // 按分類分組
+                const groupedItems = {};
+                orderItems.forEach(item => {
+                    if (!groupedItems[item.category]) {
+                        groupedItems[item.category] = [];
+                    }
+                    groupedItems[item.category].push(item);
+                });
+                
+                orderHTML = '<div class="space-y-6">';
+                
+                Object.keys(groupedItems).forEach(category => {
+                    orderHTML += `
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <h3 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">${category}</h3>
+                            <div class="space-y-3">
+                    `;
+                    
+                    groupedItems[category].forEach(item => {
+                        orderHTML += `
+                            <div class="flex justify-between items-center bg-gray-50 p-3 rounded">
+                                <div class="flex-1">
+                                    <span class="font-medium text-gray-800">${item.name}</span>
+                                </div>
+                                <div class="text-right">
+                        `;
+                        
+                        if (item.quantity > 0) {
+                            orderHTML += `<div class="text-blue-600 font-bold">數量：${item.quantity} ${item.unit === '公斤' ? '隻' : item.unit}</div>`;
+                        }
+                        
+                        if (item.weight > 0) {
+                            orderHTML += `<div class="text-green-600 font-bold">重量：${item.weight} ${item.unit}</div>`;
+                        }
+                        
+                        orderHTML += `
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    orderHTML += `
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                orderHTML += '</div>';
+                
+                // 添加總計資訊
+                const totalItems = orderItems.reduce((sum, item) => sum + item.quantity, 0);
+                const totalWeight = orderItems.reduce((sum, item) => sum + item.weight, 0);
+                
+                orderHTML += `
+                    <div class="mt-6 bg-gradient-to-r from-orange-100 to-yellow-100 p-4 rounded-lg border-2 border-orange-200">
+                        <h3 class="text-lg font-bold text-orange-800 mb-2">📊 訂單總計</h3>
+                        <div class="grid grid-cols-2 gap-4 text-sm">
+                            <div class="text-gray-700">
+                                <span class="font-medium">總品項數：</span>
+                                <span class="font-bold text-blue-600">${orderItems.length} 項</span>
+                            </div>
+                            <div class="text-gray-700">
+                                <span class="font-medium">總數量：</span>
+                                <span class="font-bold text-green-600">${totalItems} 件</span>
+                            </div>
+                        </div>
+                        ${totalWeight > 0 ? `
+                            <div class="mt-2 text-gray-700 text-sm">
+                                <span class="font-medium">指定重量總計：</span>
+                                <span class="font-bold text-purple-600">${totalWeight} 公斤</span>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }
+            
+            document.getElementById('orderContent').innerHTML = orderHTML;
+            document.getElementById('orderModal').classList.remove('hidden');
+        }
+        
+        // 關閉訂單彈窗
+        function closeOrderModal() {
+            document.getElementById('orderModal').classList.add('hidden');
+            // 重置所有狀態
+            document.getElementById('confirmOrderBtn').classList.remove('hidden');
+            document.getElementById('confirmContactBtn').classList.add('hidden');
+            document.getElementById('contactForm').classList.add('hidden');
+            document.getElementById('orderInstructions').classList.add('hidden');
+            
+            // 清空聯絡資訊表單
+            document.getElementById('contactName').value = '';
+            document.getElementById('contactPhone').value = '';
+            document.getElementById('contactAddress').value = '';
+            document.getElementById('contactTime').value = '';
+        }
+        
+        // 確認訂單清單
+        function confirmOrder() {
+            // 隱藏確認清單按鈕
+            document.getElementById('confirmOrderBtn').classList.add('hidden');
+            // 顯示聯絡資訊表單
+            document.getElementById('contactForm').classList.remove('hidden');
+            // 顯示確認聯絡資訊按鈕
+            document.getElementById('confirmContactBtn').classList.remove('hidden');
+        }
+        
+        // 確認聯絡資訊
+        function confirmContact() {
+            // 獲取表單資料
+            const contactName = document.getElementById('contactName').value.trim();
+            const contactPhone = document.getElementById('contactPhone').value.trim();
+            const contactAddress = document.getElementById('contactAddress').value.trim();
+            const contactTime = document.getElementById('contactTime').value.trim();
+            
+            // 檢查是否所有欄位都已填寫
+            if (!contactName || !contactPhone || !contactAddress || !contactTime) {
+                alert('請填寫完整的聯絡資訊！\n\n所有欄位都是必填項目：\n• 聯絡人\n• 聯絡電話\n• 地址\n• 可聯繫時間');
+                return;
+            }
+            
+            // 將聯絡資訊添加到訂單內容中
+            const contactInfo = `
+                <div class="mt-6 bg-gradient-to-r from-green-100 to-blue-100 p-4 rounded-lg border-2 border-green-200">
+                    <h3 class="text-lg font-bold text-green-800 mb-3">👤 聯絡資訊</h3>
+                    <div class="grid md:grid-cols-2 gap-3 text-sm">
+                        <div class="text-gray-700">
+                            <span class="font-medium">聯絡人：</span>
+                            <span class="font-bold text-blue-600">${contactName}</span>
+                        </div>
+                        <div class="text-gray-700">
+                            <span class="font-medium">聯絡電話：</span>
+                            <span class="font-bold text-blue-600">${contactPhone}</span>
+                        </div>
+                        <div class="md:col-span-2 text-gray-700">
+                            <span class="font-medium">地址：</span>
+                            <span class="font-bold text-blue-600">${contactAddress}</span>
+                        </div>
+                        <div class="md:col-span-2 text-gray-700">
+                            <span class="font-medium">可聯繫時間：</span>
+                            <span class="font-bold text-blue-600">${contactTime}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // 將聯絡資訊添加到訂單內容
+            document.getElementById('orderContent').innerHTML += contactInfo;
+            
+            // 隱藏聯絡資訊表單和按鈕
+            document.getElementById('contactForm').classList.add('hidden');
+            document.getElementById('confirmContactBtn').classList.add('hidden');
+            
+            // 顯示最終提示訊息
+            document.getElementById('orderInstructions').classList.remove('hidden');
+        }
+        
+        // 截圖訂單清單
+        async function captureOrderScreenshot() {
+            try {
+                // 引入html2canvas庫
+                if (!window.html2canvas) {
+                    const script = document.createElement('script');
+                    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+                    document.head.appendChild(script);
+                    
+                    // 等待庫加載完成
+                    await new Promise((resolve) => {
+                        script.onload = resolve;
+                    });
+                }
+                
+                // 獲取要截圖的內容區域
+                const orderContent = document.querySelector('#orderModal .bg-white');
+                
+                // 暫時隱藏按鈕區域
+                const buttonArea = document.querySelector('#orderModal .sticky.bottom-0');
+                buttonArea.style.display = 'none';
+                
+                // 生成截圖
+                const canvas = await html2canvas(orderContent, {
+                    backgroundColor: '#ffffff',
+                    scale: 2, // 提高清晰度
+                    useCORS: true,
+                    allowTaint: true,
+                    width: orderContent.offsetWidth,
+                    height: orderContent.scrollHeight
+                });
+                
+                // 恢復按鈕區域
+                buttonArea.style.display = 'flex';
+                
+                // 創建下載鏈接
+                const link = document.createElement('a');
+                link.download = `雞肉訂單清單_${new Date().toLocaleDateString('zh-TW').replace(/\//g, '-')}_${new Date().toLocaleTimeString('zh-TW', {hour12: false}).replace(/:/g, '-')}.png`;
+                link.href = canvas.toDataURL('image/png');
+                
+                // 觸發下載
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                // 顯示成功訊息
+                alert('📸 訂單清單截圖已保存！\n\n截圖已下載到您的裝置，可用於訂單確認或記錄保存。');
+                
+            } catch (error) {
+                console.error('截圖失敗:', error);
+                alert('截圖功能暫時無法使用，請手動截圖保存訂單清單。');
+            }
+        }
+        
+        // 點擊彈窗外部關閉
+        document.getElementById('orderModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeOrderModal();
+            }
+        });
+
+        // 初始化產品項目動畫
+        document.querySelectorAll('.product-item').forEach(item => {
+            item.style.opacity = '0';
+            item.style.transform = 'translateY(20px)';
+            item.style.transition = 'all 0.6s ease';
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'968f316eb73b4a4d',t:'MTc1NDE1NDY3Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
