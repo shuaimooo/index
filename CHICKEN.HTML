@@ -16,86 +16,127 @@
     <div class="max-w-6xl mx-auto">
         <h1 class="text-4xl font-bold text-center text-gray-800 mb-8">重量換算與價格計算器</h1>
         
-        <!-- 重量換算區域 -->
-        <div class="bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
-            <h2 class="text-2xl font-semibold text-white mb-6 border-b border-gray-600 pb-3">重量換算與價格計算</h2>
-            
-            <div class="grid md:grid-cols-2 gap-6">
-
-                <!-- 價格設定區 -->
-                <div class="bg-gray-700 rounded-lg p-3">
-                    <h2 class="text-white text-xs font-medium mb-2">📋 設定基準價格</h2>
-                    <div class="grid grid-cols-3 gap-2 mb-2">
+        <!-- 所有計算區域 -->
+        <div class="grid md:grid-cols-3 gap-6 mb-8">
+            <!-- 1. 重量換算 -->
+            <div class="bg-gray-800 rounded-xl shadow-lg p-6">
+                <h3 class="text-xl font-semibold text-white mb-4 text-center">重量換算</h3>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-white mb-2">重量</label>
                         <div class="relative">
-                            <input type="number" id="baseWeight" placeholder="重量" min="0" step="0.1"
-                                   class="px-2 py-1 pr-6 text-sm bg-gray-600 text-white rounded border border-gray-500 focus:border-green-500 focus:outline-none w-full">
-                            <button onclick="clearInput('baseWeight')" class="absolute right-1 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white text-xs">✕</button>
+                            <input type="number" id="convertWeight" placeholder="重量" min="0" step="0.1"
+                                   class="w-full px-4 py-2 pr-10 bg-gray-600 text-white rounded-lg border border-gray-500 focus:border-blue-500 focus:outline-none">
+                            <button onclick="clearInput('convertWeight')" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">✕</button>
                         </div>
-                        <select id="baseUnit" class="px-2 py-1 text-sm bg-gray-600 text-white rounded border border-gray-500 focus:border-green-500 focus:outline-none">
-                            <option value="兩">兩</option>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-white mb-2">單位</label>
+                        <select id="convertUnit" class="w-full px-4 py-2 bg-gray-600 text-white rounded-lg border border-gray-500 focus:border-blue-500 focus:outline-none">
+                            <option value="公斤">公斤</option>
                             <option value="斤">斤</option>
                             <option value="克">克</option>
-                            <option value="公斤">公斤</option>
+                            <option value="兩">兩</option>
                         </select>
-                        <div class="relative">
-                            <input type="number" id="basePrice" placeholder="價格" min="0" step="0.1"
-                                   class="px-2 py-1 pr-6 text-sm bg-gray-600 text-white rounded border border-gray-500 focus:border-green-500 focus:outline-none w-full">
-                            <button onclick="clearInput('basePrice')" class="absolute right-1 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white text-xs">✕</button>
-                        </div>
                     </div>
-                    <div id="basePriceDisplay" class="text-green-400 text-xs text-center py-1 bg-gray-600 rounded">
-                        
-                    </div>
-                    
-                    <!-- 計算價格區 -->
-                    <div class="mt-4 pt-3 border-t border-gray-600">
-                        <h2 class="text-white text-xs font-medium mb-2">🧮 計算價格</h2>
-                        <div class="grid grid-cols-2 gap-2 mb-2">
-                            <div class="relative">
-                                <input type="number" id="calcWeight" placeholder="重量" min="0" step="0.1"
-                                       class="px-2 py-1 pr-6 text-sm bg-gray-600 text-white rounded border border-gray-500 focus:border-blue-500 focus:outline-none w-full">
-                                <button onclick="clearInput('calcWeight')" class="absolute right-1 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white text-xs">✕</button>
-                            </div>
-                            <select id="calcUnit" class="px-2 py-1 text-sm bg-gray-600 text-white rounded border border-gray-500 focus:border-blue-500 focus:outline-none">
-                                <option value="兩">兩</option>
-                                <option value="斤">斤</option>
-                                <option value="克">克</option>
-                                <option value="公斤">公斤</option>
-                            </select>
+                    <div class="bg-gray-600 rounded-lg p-3">
+                        <div id="convertResult" class="text-white text-sm space-y-1">
+                            <div>公斤: <span id="resultKg">-</span></div>
+                            <div>斤: <span id="resultJin">-</span></div>
+                            <div>克: <span id="resultGram">-</span></div>
+                            <div>兩: <span id="resultLiang">-</span></div>
                         </div>
-                        <div id="calcResult" class="text-blue-400 text-lg font-semibold text-center py-2 bg-gray-600 rounded">
-                            
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 計算紀錄區 -->
-                <div class="bg-gray-700 rounded-lg p-3">
-                    <h3 class="text-white text-xs font-medium mb-2">📋 計算紀錄</h3>
-                    
-                    <!-- 基準價格紀錄 -->
-                    <div class="mb-3">
-                        <h4 class="text-white text-xs mb-2">基準價格設定紀錄</h4>
-                        <div id="basePriceHistory" class="bg-gray-600 rounded p-2 max-h-32 overflow-y-auto">
-                            <div class="text-gray-400 text-xs text-center">尚無紀錄</div>
-                        </div>
-                        <button id="clearBasePriceHistory" class="mt-1 bg-red-500 hover:bg-red-600 text-white text-xs px-2 py-1 rounded">清除紀錄</button>
-                    </div>
-                    
-                    <!-- 計算價格紀錄 -->
-                    <div>
-                        <h4 class="text-white text-xs mb-2">價格計算紀錄</h4>
-                        <div id="calcPriceHistory" class="bg-gray-600 rounded p-2 max-h-32 overflow-y-auto">
-                            <div class="text-gray-400 text-xs text-center">尚無紀錄</div>
-                        </div>
-                        <button id="clearCalcPriceHistory" class="mt-1 bg-red-500 hover:bg-red-600 text-white text-xs px-2 py-1 rounded">清除紀錄</button>
                     </div>
                 </div>
             </div>
+
+            <!-- 2. 設定基準價格 -->
+            <div class="bg-green-800 rounded-xl shadow-lg p-6">
+                <h3 class="text-xl font-semibold text-white mb-4 text-center">設定基準價格</h3>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-white mb-2">重量</label>
+                        <div class="relative">
+                            <input type="number" id="baseWeight" placeholder="重量" min="0" step="0.1"
+                                   class="w-full px-4 py-2 pr-10 bg-green-600 text-white rounded-lg border border-green-500 focus:border-green-300 focus:outline-none">
+                            <button onclick="clearInput('baseWeight')" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-300 hover:text-white">✕</button>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-white mb-2">單位</label>
+                        <select id="baseUnit" class="w-full px-4 py-2 bg-green-600 text-white rounded-lg border border-green-500 focus:border-green-300 focus:outline-none">
+                            <option value="公斤">公斤</option>
+                            <option value="斤">斤</option>
+                            <option value="克">克</option>
+                            <option value="兩">兩</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-white mb-2">金額</label>
+                        <div class="relative">
+                            <input type="number" id="basePrice" placeholder="金額" min="0" step="0.1"
+                                   class="w-full px-4 py-2 pr-10 bg-green-600 text-white rounded-lg border border-green-500 focus:border-green-300 focus:outline-none">
+                            <button onclick="clearInput('basePrice')" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-300 hover:text-white">✕</button>
+                        </div>
+                    </div>
+                    <div class="bg-green-600 rounded-lg p-3">
+                        <div class="flex justify-between items-center mb-2">
+                            <h4 class="text-white text-xs">設定紀錄</h4>
+                            <button id="clearBasePriceHistory" class="bg-red-500 hover:bg-red-600 text-white text-xs px-2 py-1 rounded">清除</button>
+                        </div>
+                        <div id="basePriceHistory" class="max-h-24 overflow-y-auto">
+                            <div class="text-gray-300 text-xs text-center">尚無紀錄</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. 計算價格 -->
+            <div class="bg-blue-800 rounded-xl shadow-lg p-6">
+                <h3 class="text-xl font-semibold text-white mb-4 text-center">計算價格</h3>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-white mb-2">重量</label>
+                        <div class="relative">
+                            <input type="number" id="calcWeight" placeholder="重量" min="0" step="0.1"
+                                   class="w-full px-4 py-2 pr-10 bg-blue-600 text-white rounded-lg border border-blue-500 focus:border-blue-300 focus:outline-none">
+                            <button onclick="clearInput('calcWeight')" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-300 hover:text-white">✕</button>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-white mb-2">單位</label>
+                        <select id="calcUnit" class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg border border-blue-500 focus:border-blue-300 focus:outline-none">
+                            <option value="公斤">公斤</option>
+                            <option value="斤">斤</option>
+                            <option value="克">克</option>
+                            <option value="兩">兩</option>
+                        </select>
+                    </div>
+                    <div class="bg-blue-600 rounded-lg p-3">
+                        <div id="calcResult" class="text-blue-200 text-lg font-semibold text-center mb-2">
+                            
+                        </div>
+                        <div class="border-t border-blue-500 pt-2">
+                            <div class="flex justify-between items-center mb-2">
+                                <h4 class="text-white text-xs">計算紀錄</h4>
+                                <button id="clearCalcPriceHistory" class="bg-red-500 hover:bg-red-600 text-white text-xs px-2 py-1 rounded">清除</button>
+                            </div>
+                            <div id="calcPriceHistory" class="max-h-24 overflow-y-auto">
+                                <div class="text-gray-300 text-xs text-center">尚無紀錄</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
 
-        <!-- 固定公式計算區域 -->
-        <div class="grid md:grid-cols-3 gap-6">
+        <!-- 第二排計算區域 -->
+        <div class="grid md:grid-cols-3 gap-6 mb-8">
             <!-- 毛雞計算 -->
             <div class="bg-white rounded-xl shadow-lg p-6">
                 <h3 class="text-xl font-semibold text-gray-700 mb-4 text-center">毛雞計算金額</h3>
@@ -177,7 +218,6 @@
             </div>
         </div>
 
-
     </div>
 
     <script>
@@ -192,6 +232,28 @@
         let basePricePerKg = 0; // 基準價格（每公斤）
         let basePriceHistory = []; // 基準價格設定紀錄
         let calcPriceHistory = []; // 價格計算紀錄
+
+        // 重量換算功能
+        function convertWeight() {
+            const weight = parseFloat(document.getElementById('convertWeight').value) || 0;
+            const unit = document.getElementById('convertUnit').value;
+
+            if (weight > 0) {
+                // 先轉換為公斤
+                const weightInKg = weight * CONVERSIONS[unit];
+                
+                // 再轉換為各種單位
+                document.getElementById('resultKg').textContent = (weightInKg / CONVERSIONS['公斤']).toFixed(3);
+                document.getElementById('resultJin').textContent = (weightInKg / CONVERSIONS['斤']).toFixed(3);
+                document.getElementById('resultGram').textContent = (weightInKg / CONVERSIONS['克']).toFixed(1);
+                document.getElementById('resultLiang').textContent = (weightInKg / CONVERSIONS['兩']).toFixed(2);
+            } else {
+                document.getElementById('resultKg').textContent = '-';
+                document.getElementById('resultJin').textContent = '-';
+                document.getElementById('resultGram').textContent = '-';
+                document.getElementById('resultLiang').textContent = '-';
+            }
+        }
 
         // 紀錄管理功能
         function addBasePriceRecord(weight, unit, price, pricePerKg) {
@@ -381,6 +443,16 @@
 
         // 事件監聽器
         document.addEventListener('DOMContentLoaded', function() {
+            // 重量換算事件
+            ['convertWeight', 'convertUnit'].forEach(id => {
+                const element = document.getElementById(id);
+                if (element.tagName === 'SELECT') {
+                    element.addEventListener('change', convertWeight);
+                } else {
+                    element.addEventListener('input', convertWeight);
+                }
+            });
+
             // 基準價格設定事件
             ['baseWeight', 'baseUnit', 'basePrice'].forEach(id => {
                 const element = document.getElementById(id);
@@ -438,11 +510,10 @@
             document.getElementById('clearCalcPriceHistory').addEventListener('click', clearCalcPriceHistory);
 
             // 初始化
+            convertWeight();
             updateBasePrice();
             calculatePrice();
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96ecd06210964a28',t:'MTc1NTEzNjM1OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9725fdbd23caa343',t:'MTc1NTczNTkwNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
-
-
