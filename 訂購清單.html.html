@@ -31,7 +31,7 @@
 <body>
   <header>
     <h1>生鮮雞業帳務範本</h1>
-    
+  </header>
 
   <div class="wrap">
     <nav>
@@ -39,8 +39,7 @@
       <button id="tab-account">2. 帳務結算（應收/付款）</button>
       <button id="tab-analysis">3. 統計分析 / Dashboard</button>
       <hr/>
-      <button id="export-csv">匯出 CSV</button>
-      <button id="export-xlsx">匯出 Excel (.xlsx)</button>
+      <button id="export-xlsx">匯出 Excel + 上傳 Google Sheet</button>
       <button id="clear-data" style="color:#c00">清除全部資料</button>
     </nav>
 
@@ -73,8 +72,8 @@
         <h3>帳務結算（應收帳款 / 付款進度）</h3>
         <div class="form-inline">
           <input placeholder="客戶名稱（新增或選擇）" id="a-cust" />
-          <input placeholder="結算日（每期） ex: 1" id="a-settle-day" type="number" />
-          <input placeholder="付款期限日 ex: 15" id="a-pay-day" type="number" />
+          <input placeholder="結算日 ex: 1" id="a-settle-day" type="number" />
+          <input placeholder="付款期限 ex: 15" id="a-pay-day" type="number" />
           <input placeholder="已收金額" id="a-paid" type="number" />
           <input placeholder="收款日期" id="a-paid-date" type="date" />
           <input placeholder="匯款帳號" id="a-account" />
@@ -102,178 +101,112 @@
             <div id="unpaid-total" style="font-size:20px;color:#c0392b">0</div>
           </div>
           <div style="flex:1" class="card">
-            <div class="small">Top 客戶（按金額）</div>
+            <div class="small">Top 客戶</div>
             <div id="top-cust">無資料</div>
           </div>
         </div>
-
         <div class="card">
-          <div class="small">每月營收趨勢（近 12 個月）</div>
+          <div class="small">每月營收趨勢</div>
           <canvas id="rev-chart" height="100"></canvas>
         </div>
-
-        <div class="card">
-          <div class="small">毛利率分析（需手動輸入進貨成本）</div>
-          <div class="form-inline">
-            <input placeholder="輸入月份 (YYYY-MM)" id="g-month" />
-            <input placeholder="當月總售價" id="g-sales" type="number" />
-            <input placeholder="當月總成本" id="g-cost" type="number" />
-            <button id="calc-margin">計算毛利率</button>
-          </div>
-          <div id="g-result" style="margin-top:8px" class="small"></div>
-        </div>
       </section>
-
   </div>
 
-  <!-- 需要的外部套件：Chart.js, SheetJS (匯出) -->
+  <!-- 外部套件 -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
   <script>
-    // 基本資料結構存在 localStorage
     const STORAGE_KEY = 'chicken_business_v1';
     let state = {shipments:[], accounts:[], margins:[]};
-    function load(){
-      try{ const s=localStorage.getItem(STORAGE_KEY); if(s){ state=JSON.parse(s); }}catch(e){console.error(e)}
-    }
+    function load(){ try{const s=localStorage.getItem(STORAGE_KEY); if(s){ state=JSON.parse(s); }}catch(e){} }
     function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
 
-    // 計算金額函數（依三種算法）
+    // 計算金額
+    function calcAmount(item){
+      const price = Number(item.price||0);
+      const kg = Number(item.kg||0);
+      const count = Number(item.count||0);
+      const pieces = Number(item.pieces||0);
+      if(item.type==='全雞'){ return +(kg * price * 0.6 * (pieces||1)).toFixed(2); }
+      if(item.type==='分切'){ return +((pieces * 18 * price)).toFixed(2); }
+      if(item.type==='冷凍'){ return +(kg * 8 * pieces * price).toFixed(2); }
+      return 0;
+    }
 
-// 計算金額函數（依三種算法）
-function calcAmount(item){
-  const price = Number(item.price||0);
-  const kg = Number(item.kg||0);
-  const count = Number(item.count||0);
-  const pieces = Number(item.pieces||0);
-
-  if(item.type==='全雞'){
-    // 全雞：重量 × 單價 × 0.6 × 件數
-    return +(kg * price * 0.6 * (pieces||1)).toFixed(2);
-  }
-  if(item.type==='分切'){
-    // 分切：件數 × 18 × 單價
-    return +((pieces * 18 * price)).toFixed(2);
-  }
-  if(item.type==='冷凍'){
-    // 冷凍：重量 × 8 × 件數 × 單價
-    return +(kg * 8 * pieces * price).toFixed(2);
-  }
-  return 0;
-}
-
-    // DOM & 互動
     const qs = (s)=>document.querySelector(s);
     function renderShipments(){
       const tbody = qs('#shipment-table tbody'); tbody.innerHTML='';
       state.shipments.forEach((r,idx)=>{
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${r.date||''}</td><td>${r.custType||''}</td><td>${r.cust||''}</td><td>${r.type||''}</td><td>${r.kg||''}</td><td>${r.count||''}</td><td>${r.pieces||''}</td><td>${r.price||''}</td><td>${r.amount||0}</td><td class="row-actions"><button onclick="editShipment(${idx})">編輯</button><button onclick="delShipment(${idx})">刪除</button></td>`;
+        const tr=document.createElement('tr');
+        tr.innerHTML=`<td>${r.date}</td><td>${r.custType}</td><td>${r.cust}</td><td>${r.type}</td><td>${r.kg}</td><td>${r.count}</td><td>${r.pieces}</td><td>${r.price}</td><td>${r.amount}</td><td class="row-actions"><button onclick="editShipment(${idx})">編輯</button><button onclick="delShipment(${idx})">刪除</button></td>`;
         tbody.appendChild(tr);
       });
     }
     function renderAccounts(){
-      // 本期出貨金額自動彙總（以客戶為 key）
-      const sums = {};
-      state.shipments.forEach(s=>{ const k=s.cust||'未知客戶'; sums[k]=(sums[k]||0)+Number(s.amount||0); });
-      // 將 sums 匯入帳務 list（若帳務已有則更新本期出貨金額）
-      state.accounts.forEach(a=>{ a.periodAmount = +(sums[a.cust]||0).toFixed(2); a.unpaid = +( (a.periodAmount||0) - (a.paid||0) ).toFixed(2); a.status = (a.unpaid<=0)?'已付款':(a.unpaid>0 && a.unpaid>0 && a.paid>0)?'部分已收':'未付款'; });
-      // 新增尚未在帳務表的客戶選項
-      Object.keys(sums).forEach(k=>{ if(!state.accounts.find(a=>a.cust===k)){ state.accounts.push({cust:k,periodAmount:+sums[k].toFixed(2),settleDay:1,payDay:15,paid:0,unpaid:+sums[k].toFixed(2),paidDate:'',bank:''}); } });
-
+      const sums={}; state.shipments.forEach(s=>{const k=s.cust||'未知'; sums[k]=(sums[k]||0)+Number(s.amount||0);});
+      state.accounts.forEach(a=>{a.periodAmount=+(sums[a.cust]||0).toFixed(2); a.unpaid=+(a.periodAmount-(a.paid||0)).toFixed(2); a.status=(a.unpaid<=0)?'已付款':(a.paid>0?'部分已收':'未付款');});
       save();
-      const tbody = qs('#account-table tbody'); tbody.innerHTML='';
+      const tbody=qs('#account-table tbody'); tbody.innerHTML='';
       state.accounts.forEach((r,idx)=>{
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${r.cust||''}</td><td>${r.periodAmount||0}</td><td>${r.settleDay||''}</td><td>${r.payDay||''}</td><td>${r.paid||0}</td><td>${r.unpaid||0}</td><td>${r.paidDate||''}</td><td>${r.bank||''}</td><td>${r.status||''}</td><td><button onclick="editAccount(${idx})">編輯</button><button onclick="delAccount(${idx})">刪除</button></td>`;
+        const tr=document.createElement('tr');
+        tr.innerHTML=`<td>${r.cust}</td><td>${r.periodAmount}</td><td>${r.settleDay}</td><td>${r.payDay}</td><td>${r.paid}</td><td>${r.unpaid}</td><td>${r.paidDate}</td><td>${r.bank}</td><td>${r.status}</td><td><button onclick="editAccount(${idx})">編輯</button><button onclick="delAccount(${idx})">刪除</button></td>`;
         tbody.appendChild(tr);
       });
-      // 更新 dashboard 數字
-      const monthRev = state.shipments.reduce((s,i)=> s + Number(i.amount||0),0);
-      qs('#month-rev').innerText = monthRev.toFixed(2);
-      const unpaidTotal = state.accounts.reduce((s,a)=> s + Number(a.unpaid||0),0);
-      qs('#unpaid-total').innerText = unpaidTotal.toFixed(2);
-      // top 客戶
-      const arr = Object.entries(state.shipments.reduce((acc,s)=>{ acc[s.cust]= (acc[s.cust]||0)+Number(s.amount||0); return acc; },{})).sort((a,b)=>b[1]-a[1]);
-      qs('#top-cust').innerText = arr.slice(0,5).map(x=>`${x[0]}：${x[1].toFixed(2)}`).join('\n')||'無資料';
+      qs('#month-rev').innerText=state.shipments.reduce((s,i)=>s+Number(i.amount||0),0).toFixed(2);
+      qs('#unpaid-total').innerText=state.accounts.reduce((s,a)=>s+Number(a.unpaid||0),0).toFixed(2);
     }
 
     // 新增出貨
-    qs('#add-shipment').addEventListener('click', ()=>{
-      const item = {
-        date: qs('#s-date').value || new Date().toISOString().slice(0,10),
-        custType: qs('#s-cust-type').value,
-        cust: qs('#s-cust').value || '未命名',
-        type: qs('#s-type').value,
-        kg: Number(qs('#s-kg').value)||0,
-        count: Number(qs('#s-count').value)||0,
-        pieces: Number(qs('#s-pieces').value)||0,
-        price: Number(qs('#s-price').value)||0
-      };
-      item.amount = calcAmount(item);
-      state.shipments.push(item); save(); renderShipments(); renderAccounts(); clearShipmentForm();
+    qs('#add-shipment').addEventListener('click',()=>{
+      const item={date:qs('#s-date').value||new Date().toISOString().slice(0,10), custType:qs('#s-cust-type').value, cust:qs('#s-cust').value||'未命名', type:qs('#s-type').value, kg:Number(qs('#s-kg').value)||0, count:Number(qs('#s-count').value)||0, pieces:Number(qs('#s-pieces').value)||0, price:Number(qs('#s-price').value)||0};
+      item.amount=calcAmount(item); state.shipments.push(item); save(); renderShipments(); renderAccounts();
     });
-    function clearShipmentForm(){ qs('#s-kg').value=''; qs('#s-count').value=''; qs('#s-pieces').value=''; qs('#s-price').value=''; qs('#s-cust').value=''; }
-    window.delShipment = function(i){ if(confirm('確定刪除出貨？')){ state.shipments.splice(i,1); save(); renderShipments(); renderAccounts(); } }
-    window.editShipment = function(i){ const r=state.shipments[i]; qs('#s-date').value=r.date; qs('#s-cust-type').value=r.custType; qs('#s-cust').value=r.cust; qs('#s-type').value=r.type; qs('#s-kg').value=r.kg; qs('#s-count').value=r.count; qs('#s-pieces').value=r.pieces; qs('#s-price').value=r.price; // remove old
-      state.shipments.splice(i,1); save(); renderShipments(); renderAccounts(); }
+    window.delShipment=(i)=>{state.shipments.splice(i,1); save(); renderShipments(); renderAccounts();};
+    window.editShipment=(i)=>{const r=state.shipments[i]; qs('#s-date').value=r.date; qs('#s-cust-type').value=r.custType; qs('#s-cust').value=r.cust; qs('#s-type').value=r.type; qs('#s-kg').value=r.kg; qs('#s-count').value=r.count; qs('#s-pieces').value=r.pieces; qs('#s-price').value=r.price; state.shipments.splice(i,1); save(); renderShipments(); renderAccounts();};
 
-    // 帳務新增/更新
-    qs('#add-account').addEventListener('click', ()=>{
-      const cust = qs('#a-cust').value || '未命名';
-      const obj = {cust, settleDay: Number(qs('#a-settle-day').value)||1, payDay: Number(qs('#a-pay-day').value)||15, paid: Number(qs('#a-paid').value)||0, paidDate: qs('#a-paid-date').value||'', bank: qs('#a-account').value||'' };
-      // 若已存在則更新
-      const idx = state.accounts.findIndex(a=>a.cust===cust);
-      if(idx>=0){ Object.assign(state.accounts[idx], obj); } else { state.accounts.push(obj); }
-      save(); renderAccounts(); qs('#a-cust').value=''; qs('#a-paid').value=''; qs('#a-account').value='';
+    qs('#add-account').addEventListener('click',()=>{
+      const cust=qs('#a-cust').value||'未命名';
+      const obj={cust,settleDay:Number(qs('#a-settle-day').value)||1,payDay:Number(qs('#a-pay-day').value)||15,paid:Number(qs('#a-paid').value)||0,paidDate:qs('#a-paid-date').value||'',bank:qs('#a-account').value||''};
+      const idx=state.accounts.findIndex(a=>a.cust===cust); if(idx>=0){Object.assign(state.accounts[idx],obj);}else{state.accounts.push(obj);}
+      save(); renderAccounts();
     });
-    window.delAccount = function(i){ if(confirm('刪除帳務紀錄？')){ state.accounts.splice(i,1); save(); renderAccounts(); } }
-    window.editAccount = function(i){ const r=state.accounts[i]; qs('#a-cust').value=r.cust; qs('#a-settle-day').value=r.settleDay; qs('#a-pay-day').value=r.payDay; qs('#a-paid').value=r.paid; qs('#a-paid-date').value=r.paidDate; qs('#a-account').value=r.bank; state.accounts.splice(i,1); save(); renderAccounts(); }
+    window.delAccount=(i)=>{state.accounts.splice(i,1); save(); renderAccounts();};
+    window.editAccount=(i)=>{const r=state.accounts[i]; qs('#a-cust').value=r.cust; qs('#a-settle-day').value=r.settleDay; qs('#a-pay-day').value=r.payDay; qs('#a-paid').value=r.paid; qs('#a-paid-date').value=r.paidDate; qs('#a-account').value=r.bank; state.accounts.splice(i,1); save(); renderAccounts();};
 
-    // 分頁控制
-    qs('#tab-shipment').addEventListener('click', ()=>{ show('shipment'); });
-    qs('#tab-account').addEventListener('click', ()=>{ show('account'); });
-    qs('#tab-analysis').addEventListener('click', ()=>{ show('analysis'); drawChart(); });
-    function show(name){ document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active')); document.querySelectorAll('main section').forEach(s=>s.style.display='none'); qs('#tab-'+name).classList.add('active'); qs('#panel-'+name).style.display='block'; }
+    // 匯出 Excel + Google Sheet
+    async function exportAll(){
+      // 匯出 Excel
+      const wb=XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(state.shipments),'出貨紀錄');
+      XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(state.accounts),'帳務結算');
+      XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(state.margins),'毛利');
+      XLSX.writeFile(wb,`雞肉生意紀錄_${new Date().toISOString().slice(0,10)}.xlsx`);
 
-    // 匯出（CSV / XLSX）
-    function exportCSV(){
-      // export three sheets
-      const sheets = { '出貨紀錄': arrayToSheet(state.shipments), '帳務結算': arrayToSheet(state.accounts), '毛利': arrayToSheet(state.margins) };
-      const wb = XLSX.utils.book_new();
-      Object.entries(sheets).forEach(([name,ws])=>{ XLSX.utils.book_append_sheet(wb, ws, name); });
-      XLSX.writeFile(wb, `雞肉生意紀錄_${new Date().toISOString().slice(0,10)}.xlsx`);
+      // 上傳到 Google Sheet
+      const url="https://script.google.com/macros/s/AKfycbwBZlBLqOvgzxKptNuEfsZzm4XFWt6oYxzro0OOtrc9DhPmGZzYAp--qT0ZspQ5-VkzJw/exec";
+      const KEY="請填你的WEBHOOK_KEY";  // ⚠️ 這裡換成 Apps Script 裡的密鑰
+      try{
+        const res=await fetch(url,{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({shipments:state.shipments,accounts:state.accounts,margins:state.margins,key:KEY})
+        });
+        const data=await res.json();
+        if(data.result==="ok"){alert("成功同步到 Google Sheet");}
+        else{alert("上傳失敗："+JSON.stringify(data));}
+      }catch(err){alert("上傳失敗："+err);}
     }
-    function arrayToSheet(arr){ const ws = XLSX.utils.json_to_sheet(arr); return ws; }
-    qs('#export-csv').addEventListener('click', ()=>{ exportCSV(); });
-    qs('#export-xlsx').addEventListener('click', ()=>{ exportCSV(); });
+    qs('#export-xlsx').addEventListener('click',exportAll);
 
-    // 清除資料
-    qs('#clear-data').addEventListener('click', ()=>{ if(confirm('確定要清除所有資料（無法復原）？')){ state={shipments:[],accounts:[],margins:[]}; save(); renderShipments(); renderAccounts(); drawChart(); } });
+    qs('#tab-shipment').addEventListener('click',()=>{show('shipment');});
+    qs('#tab-account').addEventListener('click',()=>{show('account');});
+    qs('#tab-analysis').addEventListener('click',()=>{show('analysis');});
+    function show(name){document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.querySelectorAll('main section').forEach(s=>s.style.display='none');qs('#tab-'+name).classList.add('active');qs('#panel-'+name).style.display='block';}
 
-    // 毛利計算
-    qs('#calc-margin').addEventListener('click', ()=>{
-      const m = qs('#g-month').value; const sales=Number(qs('#g-sales').value)||0; const cost=Number(qs('#g-cost').value)||0; const gm = sales-cost; const gmr = sales? ((gm/sales)*100).toFixed(2) : '0.00';
-      state.margins.push({month:m,sales, cost, gross:gm, margin:gmr}); save(); qs('#g-result').innerText = `毛利 ${gm}，毛利率 ${gmr}%`;
-      drawChart();
-    });
-
-    // Chart
-    let revChart=null;
-    function drawChart(){
-      const last12 = Array.from({length:12}).map((_,i)=>{
-        const d = new Date(); d.setMonth(d.getMonth()-11+i); const key = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); return key;
-      });
-      const sums = {};
-      state.shipments.forEach(s=>{ const m = s.date.slice(0,7); sums[m]=(sums[m]||0)+Number(s.amount||0); });
-      const data = last12.map(k=> +(sums[k]||0).toFixed(2));
-      const ctx = document.getElementById('rev-chart').getContext('2d');
-      if(revChart) revChart.destroy();
-      revChart = new Chart(ctx,{ type:'line', data:{ labels:last12, datasets:[{ label:'每月營收', data, fill:false, tension:0.3 }] }, options:{responsive:true, plugins:{legend:{display:false}} } });
-    }
+    qs('#clear-data').addEventListener('click',()=>{state={shipments:[],accounts:[],margins:[]}; save(); renderShipments(); renderAccounts();});
 
     // 初始化
-    load(); renderShipments(); renderAccounts(); drawChart();
+    load(); renderShipments(); renderAccounts();
   </script>
 </body>
 </html>
