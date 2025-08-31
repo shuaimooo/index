@@ -2,776 +2,652 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>生鮮雞出貨／對帳／分析 一頁通</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>生鮮雞 出貨／帳務／經營分析（範本）</title>
 <style>
-  :root{
-    --bg:#0f172a; --card:#111827; --muted:#94a3b8; --text:#e5e7eb; --accent:#22c55e; --warn:#f59e0b; --danger:#ef4444; --line:#1f2937;
+  :root {
+    --bg:#0f172a; --card:#111827; --muted:#1f2937; --text:#e5e7eb; --soft:#9ca3af; --accent:#22d3ee; --ok:#22c55e; --warn:#f59e0b; --bad:#ef4444;
+    --gap:14px; --radius:16px;
   }
   *{box-sizing:border-box}
-  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans TC",sans-serif;background:var(--bg);color:var(--text)}
-  header{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-  h1{font-size:20px;margin:0}
-  .tabs{display:flex;gap:8px;flex-wrap:wrap}
-  .tab-btn{border:1px solid var(--line);background:#0b1220;color:var(--text);padding:8px 12px;border-radius:999px;cursor:pointer}
-  .tab-btn.active{border-color:var(--accent);box-shadow:0 0 0 2px #22c55e33 inset}
-  main{padding:16px;display:grid;gap:16px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
-  .row{display:grid;gap:12px}
-  .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
-  label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px}
-  input,select,textarea{width:100%;background:#0b1220;border:1px solid var(--line);color:var(--text);padding:10px 12px;border-radius:10px;outline:none}
-  input[type="date"]{padding:8px 12px}
-  input:focus,select:focus,textarea:focus{border-color:#334155;box-shadow:0 0 0 2px #33415580}
-  .btn{background:#0b1220;border:1px solid var(--line);color:var(--text);padding:10px 14px;border-radius:12px;cursor:pointer}
-  .btn.primary{background:linear-gradient(180deg,#16a34a,#15803d);border-color:#14532d}
-  .btn.warn{background:#1f2937;border-color:#374151;color:#fde68a}
-  .btn.danger{background:#1f2937;border-color:#374151;color:#fecaca}
-  .btn:disabled{opacity:.5;cursor:not-allowed}
-  table{width:100%;border-collapse:collapse;border-spacing:0}
-  th,td{border-bottom:1px solid var(--line);padding:10px;text-align:left;vertical-align:top}
-  th{font-weight:600;color:#cbd5e1;background:#0b1220;position:sticky;top:0;z-index:1}
-  tr:hover td{background:#0b1220}
-  .pill{display:inline-block;padding:2px 8px;border-radius:999px;border:1px solid var(--line);font-size:12px;color:#cbd5e1}
-  .pill.green{border-color:#065f46;color:#bbf7d0;background:#064e3b}
-  .pill.red{border-color:#7f1d1d;color:#fecaca;background:#3f1212}
-  .right{display:flex;gap:8px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
-  .totals{display:flex;gap:16px;flex-wrap:wrap}
-  .kpi{background:#0b1220;border:1px solid var(--line);padding:12px 14px;border-radius:12px}
-  .kpi b{font-size:18px}
-  .hint{color:var(--muted);font-size:12px}
-  .danger-text{color:#fecaca}
-  .ok-text{color:#bbf7d0}
-  .flex{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-  .grow{flex:1}
-  .nowrap{white-space:nowrap}
-  .badge{font-size:11px;border:1px solid var(--line);padding:2px 6px;border-radius:999px;color:#cbd5e1}
-  .chart{width:100%;height:260px;background:#0b1220;border:1px solid var(--line);border-radius:12px;overflow:hidden}
-  .footer{color:var(--muted);font-size:12px;padding:8px 16px 20px}
-  .bar{height:100%;background:#22c55e}
-  .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-  .input-sm{padding:6px 10px;border-radius:8px}
-  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  body{margin:0; font-family:system-ui,-apple-system,"Segoe UI",Roboto,Inter,"Noto Sans TC",sans-serif; background:var(--bg); color:var(--text); line-height:1.5}
+  header{padding:20px clamp(16px,3vw,32px); border-bottom:1px solid #1f2937; position:sticky; top:0; background:linear-gradient(180deg, rgba(15,23,42,.98), rgba(15,23,42,.84)); backdrop-filter: blur(6px); z-index:9}
+  h1{margin:0;font-size:20px; letter-spacing:.5px}
+  .wrap{padding:20px clamp(16px,3vw,32px)}
+  .grid{display:grid; gap:var(--gap)}
+  .cols-2{grid-template-columns: repeat(2,minmax(0,1fr))}
+  .cols-3{grid-template-columns: repeat(3,minmax(0,1fr))}
+  @media (max-width: 1000px){ .cols-2,.cols-3{grid-template-columns:1fr} }
+  .card{background:var(--card); border:1px solid #1f2937; border-radius:var(--radius); padding:16px; box-shadow: 0 8px 24px rgba(0,0,0,.25)}
+  .title{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px}
+  .title h2{margin:0; font-size:18px}
+  .title small{color:var(--soft)}
+  label{display:block; font-size:12px; color:var(--soft); margin-bottom:6px}
+  input,select,button,textarea{width:100%; padding:10px 12px; border-radius:10px; border:1px solid #334155; background:#0b1220; color:var(--text)}
+  input[type="date"]{background:#0b1220}
+  .row{display:grid; grid-template-columns: repeat(6, 1fr); gap:var(--gap)}
+  .row > div{min-width:0}
+  .btn{cursor:pointer; border:1px solid #374151; background:#0b1324; transition:.2s; font-weight:600}
+  .btn:hover{transform: translateY(-1px); border-color:#4b5563}
+  .btn.primary{background:linear-gradient(180deg,#0ea5e9,#0891b2); border:0}
+  .btn.good{background:linear-gradient(180deg,#16a34a,#15803d); border:0}
+  .btn.warn{background:linear-gradient(180deg,#f59e0b,#b45309); border:0}
+  .btn.ghost{background:transparent; border:1px dashed #334155}
+  .tools{display:flex; gap:8px; flex-wrap:wrap}
+  table{width:100%; border-collapse:separate; border-spacing:0; background:#0b1220; border:1px solid #1f2937; border-radius:12px; overflow:hidden}
+  th,td{padding:10px 12px; border-bottom:1px solid #1f2937; font-size:14px; text-align:left; white-space:nowrap}
+  th{position:sticky; top:0; background:#111827; z-index:1}
+  tbody tr:hover{background:#0e1729}
+  .right{text-align:right}
+  .pill{display:inline-block; padding:2px 8px; border-radius:999px; font-size:12px; border:1px solid #334155; background:#0b1324}
+  .ok{color:#86efac}.bad{color:#fca5a5}.muted{color:var(--soft)}
+  .sep{height:1px; background:#1f2937; margin:12px 0}
+  canvas{width:100%; height:260px; background: #0b1220; border:1px solid #1f2937; border-radius:12px}
+  .note{font-size:12px; color:var(--soft)}
+  .print-hide{display:initial}
+  @media print{
+    header, .print-hide{display:none!important}
+    body{background:#fff; color:#000}
+    .card{border:1px solid #000}
+    table{border-color:#000}
+    th,td{border-color:#000}
+  }
 </style>
 </head>
 <body>
 <header>
-  <h1>🐔 生鮮雞｜出貨／對帳／分析</h1>
-  <div class="tabs">
-    <button class="tab-btn active" data-tab="ship">出貨紀錄</button>
-    <button class="tab-btn" data-tab="ar">應收帳款</button>
-    <button class="tab-btn" data-tab="ap">應付（上游）</button>
-    <button class="tab-btn" data-tab="analytics">統計分析</button>
-    <button class="tab-btn" data-tab="settings">設定 / 匯入匯出</button>
-  </div>
+  <h1>生鮮雞｜出貨／交易基本紀錄、帳務結算、經營分析</h1>
+  <div class="note">流程：新增出貨 ➜ 每日明細 ➜ 應收/收款 ➜ 半月結算 ➜ 趨勢與毛利率</div>
 </header>
 
-<main>
-  <!-- 出貨紀錄 -->
-  <section class="card" id="tab-ship">
-    <h2 style="margin:0 0 10px">① 出貨／交易基本紀錄</h2>
-    <div class="hint">每日輸入一筆單項明細：金額會自動＝（重量或隻/件數）× 單價。資料會存本機 LocalStorage。</div>
-    <div class="row grid-4" style="margin-top:12px">
+<div class="wrap grid cols-2">
+  <!-- 出貨單輸入 -->
+  <section class="card">
+    <div class="title">
+      <h2>出貨單（新增）</h2><small>每日三千隻：支援「全雞 / 分切 / 冷凍」等類別</small>
+    </div>
+    <div class="grid cols-3">
       <div>
         <label>日期</label>
-        <input type="date" id="s-date">
+        <input type="date" id="ship_date">
       </div>
       <div>
         <label>客戶名稱</label>
-        <input id="s-client" placeholder="例：攤商A / 煮雞廠B / 零售商C">
+        <input type="text" id="ship_customer" placeholder="煮雞廠A / 餐館B / 代工廠C">
       </div>
       <div>
         <label>類別</label>
-        <select id="s-type">
-          <option value="全雞">全雞</option>
-          <option value="分切">分切</option>
-          <option value="冷凍">冷凍</option>
+        <select id="ship_category">
+          <option>全雞</option>
+          <option>分切</option>
+          <option>冷凍</option>
         </select>
-      </div>
-      <div>
-        <label>部位</label>
-        <input id="s-part" placeholder="例：去毛雞／腿排／雞胸…">
       </div>
 
       <div>
+        <label>部位</label>
+        <input type="text" id="ship_part" placeholder="去骨腿 / 胸 / 翅中…">
+      </div>
+      <div>
         <label>規格</label>
-        <input id="s-spec" placeholder="例：大隻、小包…">
+        <input type="text" id="ship_spec" placeholder="例：1.8kg/隻、散裝10件/箱…">
       </div>
       <div>
         <label>單位</label>
-        <select id="s-unit">
-          <option value="公斤">公斤</option>
-          <option value="克">克</option>
-          <option value="斤">斤</option>
+        <select id="ship_unit">
+          <option>公斤</option>
+          <option>克</option>
+          <option>斤</option>
         </select>
-      </div>
-      <div>
-        <label>重量</label>
-        <input id="s-weight" type="number" step="0.001" placeholder="kg/g/斤">
-      </div>
-      <div>
-        <label>單價</label>
-        <input id="s-price" type="number" step="0.01" placeholder="每單位單價">
       </div>
 
       <div>
+        <label>重量</label>
+        <input type="number" step="0.001" id="ship_weight" placeholder="kg / g / 斤">
+      </div>
+      <div>
         <label>隻數</label>
-        <input id="s-birds" type="number" step="1" placeholder="若以重量計價可留空">
+        <input type="number" step="1" id="ship_count_birds" placeholder="例如 120">
       </div>
       <div>
         <label>件數</label>
-        <input id="s-packs" type="number" step="1" placeholder="若以重量計價可留空">
+        <input type="number" step="1" id="ship_count_cases" placeholder="例如 20">
+      </div>
+
+      <div>
+        <label>單價（售價）</label>
+        <input type="number" step="0.01" id="ship_price" placeholder="每單位售價">
       </div>
       <div>
-        <label>金額（自動）</label>
-        <input id="s-amount" class="mono" placeholder="自動計算" disabled>
+        <label>進貨成本單價</label>
+        <input type="number" step="0.01" id="ship_cost" placeholder="每單位成本">
       </div>
       <div>
-        <label>備註 / 操作</label>
-        <input id="s-note" placeholder="例：已出貨、等收款、退回1件…">
+        <label>備註</label>
+        <input type="text" id="ship_note" placeholder="客製規格、急件、司機…">
       </div>
     </div>
-
-    <div class="right" style="margin-top:10px">
-      <button class="btn" id="btn-clear-form" title="清空表單">清空</button>
-      <button class="btn primary" id="btn-add">新增明細</button>
+    <div class="sep"></div>
+    <div class="tools">
+      <button class="btn primary" onclick="addShipment()">新增出貨</button>
+      <button class="btn ghost" onclick="resetShipForm()">清空</button>
+      <button class="btn" onclick="window.print()">列印（簽單/留底）</button>
     </div>
+  </section>
 
-    <div class="totals" style="margin-top:16px">
-      <div class="kpi">今日金額合計：<b class="mono" id="kpi-today">0</b></div>
-      <div class="kpi">本月金額合計：<b class="mono" id="kpi-month">0</b></div>
-      <div class="kpi">筆數：<b class="mono" id="kpi-count">0</b></div>
+  <!-- 收款紀錄 -->
+  <section class="card">
+    <div class="title">
+      <h2>收款紀錄（新增）</h2><small>更新「已收 / 未收」與應收帳款</small>
     </div>
-
-    <div class="toolbar" style="margin-top:12px">
-      <input class="input-sm grow" id="filter" placeholder="快速篩選（客戶／類別／部位／備註）">
-      <div class="flex">
-        <label>月份</label>
-        <input class="input-sm" type="month" id="filter-month">
+    <div class="grid cols-3">
+      <div>
+        <label>收款日期</label>
+        <input type="date" id="pay_date">
       </div>
-      <div class="flex">
-        <label>客戶</label>
-        <input class="input-sm" id="filter-client" placeholder="全部">
+      <div>
+        <label>客戶名稱</label>
+        <input type="text" id="pay_customer" placeholder="與出貨客戶一致">
       </div>
-      <button class="btn" id="btn-reset-filter">清除篩選</button>
+      <div>
+        <label>收款金額</label>
+        <input type="number" step="0.01" id="pay_amount" placeholder="例：50000">
+      </div>
+      <div>
+        <label>匯款帳號</label>
+        <input type="text" id="pay_account" placeholder="銀行/帳號末五碼…">
+      </div>
+      <div>
+        <label>備註</label>
+        <input type="text" id="pay_note" placeholder="現金/匯款/票據…">
+      </div>
     </div>
+    <div class="sep"></div>
+    <div class="tools">
+      <button class="btn good" onclick="addPayment()">記錄收款</button>
+      <button class="btn ghost" onclick="resetPayForm()">清空</button>
+    </div>
+  </section>
 
-    <div class="card" style="margin-top:12px;padding:0;overflow:auto;max-height:60vh">
-      <table id="tbl-ship">
+  <!-- 每筆單項明細 -->
+  <section class="card">
+    <div class="title">
+      <h2>每日明細</h2>
+      <small>日期｜類別｜客戶｜部位｜重量/單位｜隻數｜件數｜單價｜金額｜成本｜毛利</small>
+    </div>
+    <div class="tools print-hide">
+      <input id="filter_date_from" type="date" />
+      <input id="filter_date_to" type="date" />
+      <input id="filter_customer" type="text" placeholder="篩選客戶">
+      <button class="btn" onclick="renderDetail()">套用篩選</button>
+      <button class="btn ghost" onclick="clearFilters()">清除篩選</button>
+    </div>
+    <div style="max-height:420px; overflow:auto; margin-top:10px">
+      <table id="detail_table">
         <thead>
           <tr>
-            <th>日期</th><th>客戶</th><th>類別</th><th>部位</th><th>規格</th>
-            <th>重量</th><th>單位</th><th>隻數</th><th>件數</th><th>單價</th><th>金額</th><th>備註</th><th>刪除</th>
+            <th>日期</th><th>類別</th><th>客戶</th><th>部位</th>
+            <th class="right">重量</th><th>單位</th><th class="right">隻</th><th class="right">件</th>
+            <th class="right">單價</th><th class="right">金額</th>
+            <th class="right">成本額</th><th class="right">毛利</th><th class="right">毛利率</th>
+            <th>備註</th><th>操作</th>
           </tr>
         </thead>
         <tbody></tbody>
         <tfoot>
           <tr>
-            <th colspan="10" style="text-align:right">小計</th>
-            <th class="mono" id="ship-subtotal">0</th>
-            <th colspan="2"></th>
+            <th colspan="9" class="right">合計</th>
+            <th class="right" id="detail_sum_amount">0</th>
+            <th class="right" id="detail_sum_cost">0</th>
+            <th class="right" id="detail_sum_profit">0</th>
+            <th class="right" id="detail_avg_margin">0%</th>
+            <th></th>
           </tr>
         </tfoot>
       </table>
     </div>
   </section>
 
-  <!-- 應收帳款 -->
-  <section class="card" id="tab-ar" style="display:none">
-    <h2 style="margin:0 0 10px">② 應收帳款（下游客戶對帳）</h2>
-    <div class="hint">
-      規則建議：下游客戶多為「1 號結算，15 號付款」。本表會依「出貨紀錄」自動彙總當月出貨金額；你可填「已收金額、收款日期、匯款帳號」。
+  <!-- 應收帳款 / 付款進度 -->
+  <section class="card">
+    <div class="title">
+      <h2>應收帳款 / 付款進度</h2>
+      <small>一目了然：已收金額、未收金額、最近收款日、匯款帳號</small>
     </div>
-
-    <div class="toolbar" style="margin-top:12px">
-      <div class="flex"><label>月份</label><input class="input-sm" type="month" id="ar-month"></div>
-      <button class="btn" id="btn-ar-refresh">重新整理</button>
-    </div>
-
-    <div class="card" style="margin-top:12px;padding:0;overflow:auto;max-height:60vh">
-      <table id="tbl-ar">
-        <thead>
-        <tr>
-          <th>客戶</th><th>本月出貨金額</th><th>結算日</th><th>付款期限</th>
-          <th>已收金額</th><th>未收金額</th><th>收款日期</th><th>匯款帳號</th><th>狀態</th>
-        </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- 應付（上游） -->
-  <section class="card" id="tab-ap" style="display:none">
-    <h2 style="margin:0 0 10px">③ 應付帳款（上游供應商）</h2>
-    <div class="hint">
-      最上游多為「每週結算」。此表獨立於出貨（通常是進貨成本），你可記錄每次進貨、付款進度與週期。
-    </div>
-
-    <div class="row grid-4" style="margin-top:12px">
-      <div><label>日期</label><input type="date" id="ap-date"></div>
-      <div><label>供應商</label><input id="ap-vendor" placeholder="例：配貨商X"></div>
-      <div><label>品項/備註</label><input id="ap-item" placeholder="例：全雞 100 隻"></div>
-      <div><label>金額</label><input type="number" step="0.01" id="ap-amount" placeholder="進貨總額"></div>
-      <div><label>結算週期</label>
-        <select id="ap-cycle">
-          <option value="每週五結算">每週五結算</option>
-          <option value="每週結算">每週結算</option>
-          <option value="月結">月結</option>
-          <option value="其他">其他</option>
-        </select>
-      </div>
-      <div><label>付款狀態</label>
-        <select id="ap-status">
-          <option value="未付款">未付款</option>
-          <option value="部分付款">部分付款</option>
-          <option value="已結清">已結清</option>
-        </select>
-      </div>
-      <div><label>已付金額</label><input type="number" step="0.01" id="ap-paid"></div>
-      <div><label>付款日期</label><input type="date" id="ap-paid-date"></div>
-    </div>
-    <div class="right" style="margin-top:10px">
-      <button class="btn" id="btn-ap-clear">清空</button>
-      <button class="btn primary" id="btn-ap-add">新增應付</button>
-    </div>
-
-    <div class="totals" style="margin-top:16px">
-      <div class="kpi">本月應付：<b class="mono" id="ap-month-sum">0</b></div>
-      <div class="kpi">本月未付：<b class="mono" id="ap-month-unpaid">0</b></div>
-    </div>
-
-    <div class="card" style="margin-top:12px;padding:0;overflow:auto;max-height:60vh">
-      <table id="tbl-ap">
+    <div style="max-height:420px; overflow:auto">
+      <table id="ar_table">
         <thead>
           <tr>
-            <th>日期</th><th>供應商</th><th>品項/備註</th><th>結算週期</th>
-            <th>金額</th><th>已付</th><th>未付</th><th>付款日期</th><th>狀態</th><th>刪除</th>
+            <th>客戶</th>
+            <th class="right">出貨金額</th>
+            <th class="right">已收</th>
+            <th class="right">未收</th>
+            <th>最近收款日</th>
+            <th>匯款帳號</th>
           </tr>
         </thead>
         <tbody></tbody>
         <tfoot>
           <tr>
-            <th colspan="4" style="text-align:right">小計</th>
-            <th class="mono" id="ap-sub-sum">0</th>
-            <th class="mono" id="ap-sub-paid">0</th>
-            <th class="mono" id="ap-sub-unpaid">0</th>
-            <th colspan="3"></th>
+            <th>總計</th>
+            <th class="right" id="ar_total_ship">0</th>
+            <th class="right" id="ar_total_paid">0</th>
+            <th class="right" id="ar_total_unpaid">0</th>
+            <th></th><th></th>
           </tr>
         </tfoot>
       </table>
     </div>
   </section>
 
-  <!-- 統計分析 -->
-  <section class="card" id="tab-analytics" style="display:none">
-    <h2 style="margin:0 0 10px">④ 經營統計與趨勢</h2>
-    <div class="toolbar">
-      <div class="flex"><label>年度</label><input class="input-sm" type="number" id="ana-year" min="2000" max="2100"></div>
-      <button class="btn" id="btn-ana-refresh">更新分析</button>
+  <!-- 半月結算 -->
+  <section class="card">
+    <div class="title">
+      <h2>半月結算（1–15、16–月底）</h2>
+      <small>範圍依據「出貨日期」自動統計</small>
     </div>
-
-    <div class="totals" style="margin-top:12px">
-      <div class="kpi">今年累計營收：<b class="mono" id="ana-ytd">0</b></div>
-      <div class="kpi">本年筆數：<b class="mono" id="ana-count">0</b></div>
-      <div class="kpi">Top 客戶：<b id="ana-top-client">—</b></div>
+    <div class="tools print-hide">
+      <input type="month" id="settle_month" />
+      <button class="btn" onclick="renderSettlement()">結算本月</button>
+      <button class="btn warn" onclick="renderSettlement(true)">結算並顯示客戶分組</button>
     </div>
-
-    <div class="card" style="margin-top:12px">
-      <div class="flex" style="justify-content:space-between;align-items:center">
-        <h3 style="margin:0">每月營收趨勢</h3>
-        <span class="hint">用單檔 SVG 畫圖（無外掛），滑鼠移到柱狀可看金額。</span>
+    <div class="grid cols-2">
+      <div>
+        <h3>上半月（1–15）</h3>
+        <table id="set_first">
+          <thead><tr><th>項目</th><th class="right">金額</th></tr></thead>
+          <tbody></tbody>
+          <tfoot><tr><th>合計</th><th class="right" id="set_first_sum">0</th></tr></tfoot>
+        </table>
       </div>
-      <div class="chart" id="bar-chart" aria-label="月營收柱狀圖"></div>
-    </div>
-
-    <div class="card" style="margin-top:12px;padding:0;overflow:auto">
-      <table id="tbl-top-client">
-        <thead><tr><th>客戶</th><th>月平均</th><th>年累計</th><th>穩定度（月份有下單數/12）</th></tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- 設定／匯入匯出 -->
-  <section class="card" id="tab-settings" style="display:none">
-    <h2 style="margin:0 0 10px">設定 / 匯入匯出</h2>
-    <div class="row grid-3">
-      <div class="card">
-        <h3 style="margin-top:0">結算規則（預設）</h3>
-        <div class="row">
-          <div>
-            <label>下游客戶：固定月結規則</label>
-            <input id="cfg-ar-rule" value="1 號結算，15 號付">
-          </div>
-          <div>
-            <label>上游供應：常見週結規則</label>
-            <input id="cfg-ap-rule" value="每週五結算，隔週二付款">
-          </div>
-          <button class="btn" id="btn-save-cfg">儲存規則</button>
-          <div class="hint">規則僅作為欄位預填與提醒，不影響計算。</div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3 style="margin-top:0">資料匯出</h3>
-        <div class="row">
-          <button class="btn" id="btn-export-csv">匯出出貨 CSV</button>
-          <button class="btn" id="btn-export-json">匯出全部 JSON（出貨/AR/AP/設定）</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3 style="margin-top:0">資料匯入（JSON）</h3>
-        <div class="row">
-          <input type="file" id="file-import" accept="application/json">
-          <button class="btn warn" id="btn-import">開始匯入</button>
-          <div class="hint danger-text">匯入會覆蓋本機資料，請先匯出備份。</div>
-        </div>
+      <div>
+        <h3>下半月（16–月底）</h3>
+        <table id="set_second">
+          <thead><tr><th>項目</th><th class="right">金額</th></tr></thead>
+          <tbody></tbody>
+          <tfoot><tr><th>合計</th><th class="right" id="set_second_sum">0</th></tr></tfoot>
+        </table>
       </div>
     </div>
   </section>
-</main>
 
-<div class="footer">ⓘ 資料僅存於你的瀏覽器（LocalStorage）。換電腦或清除瀏覽資料會消失，請定期匯出備份。</div>
+  <!-- 經營統計圖 -->
+  <section class="card">
+    <div class="title">
+      <h2>統計分析（營收趨勢／毛利率）</h2>
+      <small>每週或每月更新即可，掌握淡旺季與風險</small>
+    </div>
+    <div class="grid cols-2">
+      <div>
+        <label>時間粒度</label>
+        <select id="agg_gran" onchange="renderCharts()">
+          <option value="month">按月</option>
+          <option value="week">按週</option>
+        </select>
+        <canvas id="rev_chart"></canvas>
+      </div>
+      <div>
+        <label>毛利（銷售－成本）與毛利率</label>
+        <canvas id="gp_chart"></canvas>
+      </div>
+    </div>
+    <div class="note" style="margin-top:8px">
+      註：金額＝「單價 × 重量（若有）」，否則使用「單價 × 件數/隻數（擇一）」。可依實務需要調整。
+    </div>
+  </section>
+</div>
 
 <script>
-/* ========= 工具 ========= */
-const $ = s => document.querySelector(s);
-const $$ = s => Array.from(document.querySelectorAll(s));
-const fmtMoney = n => (isNaN(n)||n===null)?'0':Number(n).toLocaleString('zh-Hant-TW',{minimumFractionDigits:0,maximumFractionDigits:2});
-const todayStr = ()=> new Date().toISOString().slice(0,10);
-const ym = d => (d||'').slice(0,7);
-const clamp0 = n => Math.max(0, Number(n)||0);
+/** ====== 簡易資料存放（頁面內存） ====== **/
+let shipments = []; // 每筆出貨
+let payments  = []; // 每筆收款
 
-/* ========= LocalStorage ========= */
-const KEY = 'poultryBook.v1';
-const store = {
-  data: { shipments:[], ar: {}, ap:[], cfg:{arRule:'1 號結算，15 號付', apRule:'每週五結算，隔週二付款'} },
-  load(){
-    try{
-      const raw = localStorage.getItem(KEY);
-      if(raw){ this.data = JSON.parse(raw); }
-    }catch(e){ console.warn(e); }
-  },
-  save(){ localStorage.setItem(KEY, JSON.stringify(this.data)); }
-};
-store.load();
+/** ====== 工具 ====== **/
+const $ = (id)=>document.getElementById(id);
+const pad2 = (n)=> String(n).padStart(2,'0');
+const fmt = (n)=> (isNaN(n)?0:n).toLocaleString(undefined,{minimumFractionDigits:0, maximumFractionDigits:0});
+const fmts = (n)=> (isNaN(n)?0:n).toLocaleString(undefined,{minimumFractionDigits:2, maximumFractionDigits:2});
+const parseN = (v)=> { const n = parseFloat(v); return isNaN(n)?0:n; };
+const within = (d, from, to) => (!from || d>=from) && (!to || d<=to);
 
-/* ========= Tabs ========= */
-$$('.tab-btn').forEach(b=>{
-  b.addEventListener('click', ()=>{
-    $$('.tab-btn').forEach(x=>x.classList.remove('active'));
-    b.classList.add('active');
-    const tab = b.dataset.tab;
-    ['ship','ar','ap','analytics','settings'].forEach(id=>{
-      $('#tab-'+id).style.display = (id===tab)?'block':'none';
-    });
-    if(tab==='ar'){ renderAR(); }
-    if(tab==='ap'){ renderAP(); }
-    if(tab==='analytics'){ renderAnalytics(); }
-  });
-});
-
-/* ========= 出貨表單 ========= */
-const sDate = $('#s-date'), sClient=$('#s-client'), sType=$('#s-type'), sPart=$('#s-part'),
-      sSpec=$('#s-spec'), sUnit=$('#s-unit'), sWeight=$('#s-weight'), sPrice=$('#s-price'),
-      sBirds=$('#s-birds'), sPacks=$('#s-packs'), sAmount=$('#s-amount'), sNote=$('#s-note');
-
-function calcAmount(){
-  const weight = Number(sWeight.value)||0;
-  const birds = Number(sBirds.value)||0;
-  const packs = Number(sPacks.value)||0;
-  const price = Number(sPrice.value)||0;
-  const qty = weight>0 ? weight : (birds>0? birds : packs);
-  const amt = qty * price;
-  sAmount.value = fmtMoney(amt);
+/** 單位換算（全部換算到「公斤」作為計價基準，可依需要調整） */
+function normalizeWeight(weight, unit){
+  const w = parseN(weight);
+  if(!w) return 0;
+  if(unit === '公斤') return w;
+  if(unit === '克')    return w/1000;
+  if(unit === '斤')    return w*0.6; // 台斤 600g
+  return w;
 }
-[sWeight,sBirds,sPacks,sPrice].forEach(el=>el.addEventListener('input', calcAmount));
 
-$('#btn-clear-form').addEventListener('click', ()=>{
-  [sClient,sPart,sSpec,sWeight,sPrice,sBirds,sPacks,sAmount,sNote].forEach(el=>el.value='');
-  sType.value='全雞'; sUnit.value='公斤'; sDate.value = todayStr();
-});
+/** 計算金額與成本 */
+function calcAmounts(row){
+  const wkg = normalizeWeight(row.weight, row.unit);
+  const price = parseN(row.price);
+  const cost  = parseN(row.cost);
+  let amount = 0, costAmount = 0;
 
-$('#btn-add').addEventListener('click', ()=>{
-  const rec = {
-    id: crypto.randomUUID(),
-    date: sDate.value || todayStr(),
-    client: (sClient.value||'').trim(),
-    type: sType.value,
-    part: (sPart.value||'').trim(),
-    spec: (sSpec.value||'').trim(),
-    unit: sUnit.value,
-    weight: Number(sWeight.value)||0,
-    birds: Number(sBirds.value)||0,
-    packs: Number(sPacks.value)||0,
-    price: Number(sPrice.value)||0,
-    note: (sNote.value||'').trim()
-  };
-  if(!rec.client){ alert('請填「客戶名稱」'); return; }
-  if(!rec.date){ alert('請選擇日期'); return; }
-  // 計算金額：重量優先，其次隻數，再來件數
-  const qty = rec.weight>0?rec.weight:(rec.birds>0?rec.birds:rec.packs);
-  rec.amount = +(qty * rec.price).toFixed(2);
-  store.data.shipments.push(rec);
-  store.save();
-  renderShipments();
-  // 保留表單，但清除重量/隻件/金額，方便連續輸入
-  [sWeight,sBirds,sPacks,sAmount].forEach(el=>el.value='');
-  sPrice.value='';
-  sPart.value=''; sSpec.value=''; sNote.value='';
-  sClient.focus();
-});
-
-/* 預設日期今天 */
-if(!sDate.value) sDate.value = todayStr();
-
-/* ========= 出貨表格 & 篩選 ========= */
-const filter = $('#filter'), fMonth = $('#filter-month'), fClient=$('#filter-client');
-$('#btn-reset-filter').addEventListener('click', ()=>{ filter.value=''; fMonth.value=''; fClient.value=''; renderShipments(); });
-
-function renderShipments(){
-  const tbody = $('#tbl-ship tbody');
-  tbody.innerHTML = '';
-  const q = (filter.value||'').toLowerCase();
-  const ymVal = fMonth.value;
-  const clientQ = (fClient.value||'').trim();
-  const list = store.data.shipments.filter(r=>{
-    if(ymVal && ym(r.date)!==ymVal) return false;
-    if(clientQ && r.client!==clientQ) return false;
-    const hay = [r.client,r.type,r.part,r.note].join(' ').toLowerCase();
-    return !q || hay.includes(q);
-  }).sort((a,b)=> a.date.localeCompare(b.date));
-  let subtotal = 0;
-  list.forEach(r=>{
-    subtotal += r.amount||0;
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${r.date}</td>
-      <td>${esc(r.client)}</td>
-      <td><span class="pill">${esc(r.type)}</span></td>
-      <td>${esc(r.part)}</td>
-      <td>${esc(r.spec)}</td>
-      <td class="mono">${r.weight||''}</td>
-      <td>${esc(r.unit||'')}</td>
-      <td class="mono">${r.birds||''}</td>
-      <td class="mono">${r.packs||''}</td>
-      <td class="mono">${fmtMoney(r.price||0)}</td>
-      <td class="mono">${fmtMoney(r.amount||0)}</td>
-      <td>${esc(r.note||'')}</td>
-      <td><button class="btn danger btn-del" data-id="${r.id}">刪</button></td>
-    `;
-    tbody.appendChild(tr);
-  });
-  $('#ship-subtotal').textContent = fmtMoney(subtotal);
-  // KPI
-  const today = todayStr();
-  const month = new Date().toISOString().slice(0,7);
-  const todaySum = store.data.shipments.filter(r=>r.date===today).reduce((s,r)=>s+(r.amount||0),0);
-  const monthSum = store.data.shipments.filter(r=>ym(r.date)===month).reduce((s,r)=>s+(r.amount||0),0);
-  $('#kpi-today').textContent = fmtMoney(todaySum);
-  $('#kpi-month').textContent = fmtMoney(monthSum);
-  $('#kpi-count').textContent = list.length.toString();
-
-  // 綁定刪除
-  $$('#tbl-ship .btn-del').forEach(b=>{
-    b.addEventListener('click', ()=>{
-      const id = b.dataset.id;
-      if(confirm('確定刪除此筆出貨明細？')){
-        store.data.shipments = store.data.shipments.filter(x=>x.id!==id);
-        store.save();
-        renderShipments();
-      }
-    });
-  });
-
-  // 客戶清單自動提示（簡易）
-  const uniqClients = [...new Set(store.data.shipments.map(r=>r.client))].filter(Boolean).sort();
-  fClient.setAttribute('list','datalist-clients');
-  if(!$('#datalist-clients')){
-    const dl = document.createElement('datalist');
-    dl.id = 'datalist-clients';
-    document.body.appendChild(dl);
+  if(wkg>0){
+    amount = wkg * price;
+    costAmount = wkg * cost;
+  }else if(parseN(row.count_cases)>0){
+    amount = parseN(row.count_cases) * price;
+    costAmount = parseN(row.count_cases) * cost;
+  }else if(parseN(row.count_birds)>0){
+    amount = parseN(row.count_birds) * price;
+    costAmount = parseN(row.count_birds) * cost;
   }
-  $('#datalist-clients').innerHTML = uniqClients.map(c=>`<option value="${esc(c)}">`).join('');
+  const profit = amount - costAmount;
+  const margin = amount>0 ? (profit/amount)*100 : 0;
+  return {amount, costAmount, profit, margin};
 }
-function esc(s){ return (s||'').replace(/[&<>"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m])); }
-renderShipments();
 
-/* ========= 應收帳款（彙總） ========= */
-const arMonth = $('#ar-month');
-if(!arMonth.value){ arMonth.value = new Date().toISOString().slice(0,7); }
+/** ====== 表單處理 ====== **/
+function resetShipForm(){
+  ['ship_date','ship_customer','ship_part','ship_spec','ship_weight','ship_count_birds','ship_count_cases','ship_price','ship_cost','ship_note'].forEach(id=>$(id).value='');
+  $('ship_category').selectedIndex = 0;
+  $('ship_unit').selectedIndex = 0;
+}
+function resetPayForm(){
+  ['pay_date','pay_customer','pay_amount','pay_account','pay_note'].forEach(id=>$(id).value='');
+}
+
+function addShipment(){
+  const row = {
+    id: crypto.randomUUID(),
+    date: $('ship_date').value,
+    customer: $('ship_customer').value.trim(),
+    category: $('ship_category').value,
+    part: $('ship_part').value.trim(),
+    spec: $('ship_spec').value.trim(),
+    unit: $('ship_unit').value,
+    weight: $('ship_weight').value,
+    count_birds: $('ship_count_birds').value,
+    count_cases: $('ship_count_cases').value,
+    price: $('ship_price').value,
+    cost: $('ship_cost').value,
+    note: $('ship_note').value.trim()
+  };
+  if(!row.date || !row.customer){ alert('請填「日期」與「客戶名稱」'); return; }
+  shipments.push(row);
+  resetShipForm();
+  renderAll();
+}
+
+function addPayment(){
+  const row = {
+    id: crypto.randomUUID(),
+    date: $('pay_date').value,
+    customer: $('pay_customer').value.trim(),
+    amount: parseN($('pay_amount').value),
+    account: $('pay_account').value.trim(),
+    note: $('pay_note').value.trim()
+  };
+  if(!row.date || !row.customer || row.amount<=0){ alert('請填「收款日期 / 客戶 / 金額」'); return; }
+  payments.push(row);
+  resetPayForm();
+  renderAll();
+}
+
+/** ====== 明細表格 ====== **/
+function clearFilters(){
+  ['filter_date_from','filter_date_to','filter_customer'].forEach(id=>$(id).value='');
+  renderDetail();
+}
+
+function renderDetail(){
+  const tb = $('detail_table').querySelector('tbody');
+  tb.innerHTML = '';
+  const from = $('filter_date_from').value;
+  const to   = $('filter_date_to').value;
+  const kw   = $('filter_customer').value.trim();
+
+  let sumA=0, sumC=0, sumP=0, margins=[];
+  shipments
+    .filter(r => within(r.date, from, to) && (!kw || r.customer.includes(kw)))
+    .sort((a,b)=> (a.date>b.date?1:a.date<b.date?-1:0))
+    .forEach(r=>{
+      const {amount, costAmount, profit, margin} = calcAmounts(r);
+      sumA+=amount; sumC+=costAmount; sumP+=profit; margins.push({amount, margin});
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${r.date}</td>
+        <td>${r.category}</td>
+        <td>${r.customer}</td>
+        <td>${r.part||''}</td>
+        <td class="right">${fmts(normalizeWeight(r.weight, r.unit))}</td>
+        <td>${r.unit}</td>
+        <td class="right">${parseN(r.count_birds)||''}</td>
+        <td class="right">${parseN(r.count_cases)||''}</td>
+        <td class="right">${fmts(parseN(r.price))}</td>
+        <td class="right">${fmt(amount)}</td>
+        <td class="right">${fmt(costAmount)}</td>
+        <td class="right ${profit>=0?'ok':'bad'}">${fmt(profit)}</td>
+        <td class="right">${margin?margin.toFixed(1):'0.0'}%</td>
+        <td>${r.note||''}</td>
+        <td><button class="btn warn" onclick="delShipment('${r.id}')">刪除</button></td>
+      `;
+      tb.appendChild(tr);
+    });
+
+  $('detail_sum_amount').textContent = fmt(sumA);
+  $('detail_sum_cost').textContent   = fmt(sumC);
+  $('detail_sum_profit').textContent = fmt(sumP);
+  const avgMargin = (()=> {
+    let w=0, acc=0;
+    margins.forEach(m=>{ w+=m.amount; acc+=m.amount*(isNaN(m.margin)?0:m.margin); });
+    return w>0 ? (acc/w) : 0;
+  })();
+  $('detail_avg_margin').textContent = `${avgMargin.toFixed(1)}%`;
+}
+
+function delShipment(id){
+  shipments = shipments.filter(r=>r.id!==id);
+  renderAll();
+}
+
+/** ====== 應收帳款 ====== **/
+function sumBy(arr, key){
+  return arr.reduce((a,b)=> (a+(+b[key]||0)), 0);
+}
+
 function renderAR(){
-  const tbody = $('#tbl-ar tbody'); tbody.innerHTML='';
-  const month = arMonth.value || new Date().toISOString().slice(0,7);
-  const cfgRule = store.data.cfg.arRule || '1 號結算，15 號付';
+  const tb = $('ar_table').querySelector('tbody');
+  tb.innerHTML = '';
 
-  // 當月各客戶金額
-  const map = new Map();
-  store.data.shipments.filter(r=>ym(r.date)===month).forEach(r=>{
-    const k = r.client||'(未填客戶)';
-    map.set(k, (map.get(k)||0) + (r.amount||0));
+  // 銷售額 by 客戶
+  const salesByCust = {};
+  shipments.forEach(r=>{
+    const {amount} = calcAmounts(r);
+    salesByCust[r.customer] = (salesByCust[r.customer]||0) + amount;
   });
 
-  // 已收金額資料容器（每月-客戶一筆）
-  if(!store.data.ar[month]) store.data.ar[month] = {};
-  const arMonthObj = store.data.ar[month];
-
-  [...map.entries()].sort((a,b)=> b[1]-a[1]).forEach(([client,total])=>{
-    const row = arMonthObj[client] || { received:0, recvDate:'', bank:'', settle:'1 號', due:'15 號' };
-    if(!row.settle && !row.due){ row.settle='1 號'; row.due='15 號'; }
-    const tr = document.createElement('tr');
-    const unpaid = Math.max(0, +(total - (Number(row.received)||0)).toFixed(2));
-    const status = unpaid<=0? `<span class="pill green">已結清</span>` :
-                   `<span class="pill red">未結清</span>`;
-    tr.innerHTML = `
-      <td>${esc(client)}</td>
-      <td class="mono">${fmtMoney(total)}</td>
-      <td contenteditable class="nowrap td-settle">${esc(row.settle||'1 號')}</td>
-      <td contenteditable class="nowrap td-due">${esc(row.due||'15 號')}</td>
-      <td contenteditable class="mono td-received">${row.received||0}</td>
-      <td class="mono td-unpaid">${fmtMoney(unpaid)}</td>
-      <td contenteditable class="td-recvDate">${esc(row.recvDate||'')}</td>
-      <td contenteditable class="td-bank">${esc(row.bank||'')}</td>
-      <td>${status}</td>
-    `;
-    tbody.appendChild(tr);
-
-    // 編輯儲存
-    tr.querySelector('.td-received').addEventListener('input', ()=> saveAR(client, month, tr, total));
-    tr.querySelector('.td-recvDate').addEventListener('input', ()=> saveAR(client, month, tr, total));
-    tr.querySelector('.td-bank').addEventListener('input', ()=> saveAR(client, month, tr, total));
-    tr.querySelector('.td-settle').addEventListener('input', ()=> saveAR(client, month, tr, total));
-    tr.querySelector('.td-due').addEventListener('input', ()=> saveAR(client, month, tr, total));
+  // 已收款 by 客戶
+  const paidByCust = {};
+  const lastPayDate = {};
+  const lastAccount = {};
+  payments.forEach(p=>{
+    paidByCust[p.customer] = (paidByCust[p.customer]||0) + (p.amount||0);
+    if(!lastPayDate[p.customer] || p.date > lastPayDate[p.customer]) lastPayDate[p.customer] = p.date;
+    if(p.account) lastAccount[p.customer] = p.account;
   });
 
-  function saveAR(client, month, tr, total){
-    const received = clamp0(tr.querySelector('.td-received').textContent);
-    const recvDate = tr.querySelector('.td-recvDate').textContent.trim();
-    const bank = tr.querySelector('.td-bank').textContent.trim();
-    const settle = tr.querySelector('.td-settle').textContent.trim() || '1 號';
-    const due = tr.querySelector('.td-due').textContent.trim() || '15 號';
-    if(!store.data.ar[month]) store.data.ar[month] = {};
-    store.data.ar[month][client] = { received, recvDate, bank, settle, due };
-    tr.querySelector('.td-unpaid').textContent = fmtMoney(Math.max(0, total - received));
-    store.save();
-  }
-}
-$('#btn-ar-refresh').addEventListener('click', renderAR);
-arMonth.addEventListener('change', renderAR);
+  let totalShip=0,totalPaid=0,totalUnpaid=0;
+  Object.keys(salesByCust).sort().forEach(c=>{
+    const ship = salesByCust[c]||0;
+    const paid = paidByCust[c]||0;
+    const unpd = ship - paid;
+    totalShip += ship; totalPaid += paid; totalUnpaid += unpd;
 
-/* ========= 應付（上游） ========= */
-const apDate=$('#ap-date'), apVendor=$('#ap-vendor'), apItem=$('#ap-item'),
-      apAmount=$('#ap-amount'), apCycle=$('#ap-cycle'), apStatus=$('#ap-status'),
-      apPaid=$('#ap-paid'), apPaidDate=$('#ap-paid-date');
-
-if(!apDate.value) apDate.value = todayStr();
-
-$('#btn-ap-clear').addEventListener('click', ()=>{
-  [apVendor,apItem,apAmount,apPaid,apPaidDate].forEach(x=>x.value='');
-  apCycle.value='每週五結算'; apStatus.value='未付款'; apDate.value = todayStr();
-});
-
-$('#btn-ap-add').addEventListener('click', ()=>{
-  const rec = {
-    id: crypto.randomUUID(),
-    date: apDate.value || todayStr(),
-    vendor: (apVendor.value||'').trim(),
-    item: (apItem.value||'').trim(),
-    cycle: apCycle.value,
-    amount: clamp0(apAmount.value),
-    paid: clamp0(apPaid.value),
-    paidDate: apPaidDate.value || '',
-    status: apStatus.value
-  };
-  if(!rec.vendor){ alert('請填「供應商」'); return; }
-  store.data.ap.push(rec);
-  store.save();
-  renderAP();
-});
-
-function renderAP(){
-  const tbody = $('#tbl-ap tbody'); tbody.innerHTML='';
-  let sum=0, paid=0, unpaid=0;
-  store.data.ap.sort((a,b)=> a.date.localeCompare(b.date)).forEach(r=>{
-    const u = Math.max(0, (r.amount||0)-(r.paid||0));
-    sum += r.amount||0; paid += r.paid||0; unpaid += u;
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td>${r.date}</td>
-      <td>${esc(r.vendor)}</td>
-      <td>${esc(r.item)}</td>
-      <td>${esc(r.cycle)}</td>
-      <td class="mono">${fmtMoney(r.amount||0)}</td>
-      <td class="mono">${fmtMoney(r.paid||0)}</td>
-      <td class="mono">${fmtMoney(u)}</td>
-      <td>${esc(r.paidDate||'')}</td>
-      <td>${r.status==='已結清'?'<span class="pill green">已結清</span>':(r.status==='部分付款'?'<span class="pill">部分</span>':'<span class="pill red">未付</span>')}</td>
-      <td><button class="btn danger btn-ap-del" data-id="${r.id}">刪</button></td>
+      <td>${c}</td>
+      <td class="right">${fmt(ship)}</td>
+      <td class="right">${fmt(paid)}</td>
+      <td class="right ${unpd>0?'bad':''}">${fmt(unpd)}</td>
+      <td>${lastPayDate[c]||'-'}</td>
+      <td>${lastAccount[c]||'-'}</td>
     `;
-    tbody.appendChild(tr);
-  });
-  $('#ap-sub-sum').textContent = fmtMoney(sum);
-  $('#ap-sub-paid').textContent = fmtMoney(paid);
-  $('#ap-sub-unpaid').textContent = fmtMoney(unpaid);
-
-  // 當月 KPI
-  const m = new Date().toISOString().slice(0,7);
-  const monthRows = store.data.ap.filter(r=>ym(r.date)===m);
-  const mSum = monthRows.reduce((s,r)=>s+(r.amount||0),0);
-  const mUnpaid = monthRows.reduce((s,r)=>s+Math.max(0,(r.amount||0)-(r.paid||0)),0);
-  $('#ap-month-sum').textContent = fmtMoney(mSum);
-  $('#ap-month-unpaid').textContent = fmtMoney(mUnpaid);
-
-  $$('#tbl-ap .btn-ap-del').forEach(b=>{
-    b.addEventListener('click', ()=>{
-      const id = b.dataset.id;
-      if(confirm('確定刪除此筆應付？')){
-        store.data.ap = store.data.ap.filter(x=>x.id!==id);
-        store.save();
-        renderAP();
-      }
-    });
-  });
-}
-renderAP();
-
-/* ========= 統計分析 ========= */
-const anaYear = $('#ana-year');
-if(!anaYear.value) anaYear.value = new Date().getFullYear();
-$('#btn-ana-refresh').addEventListener('click', renderAnalytics);
-
-function renderAnalytics(){
-  const Y = Number(anaYear.value)||new Date().getFullYear();
-  const list = store.data.shipments.filter(r=> (r.date||'').startsWith(String(Y)));
-  const ytd = list.reduce((s,r)=>s+(r.amount||0),0);
-  $('#ana-ytd').textContent = fmtMoney(ytd);
-  $('#ana-count').textContent = list.length.toString();
-
-  // 客戶統計
-  const byClient = new Map();
-  const byMonth = new Array(12).fill(0);
-  list.forEach(r=>{
-    byClient.set(r.client, (byClient.get(r.client)||0)+(r.amount||0));
-    const m = new Date(r.date).getMonth(); if(!isNaN(m)) byMonth[m] += r.amount||0;
-  });
-  const top = [...byClient.entries()].sort((a,b)=>b[1]-a[1])[0];
-  $('#ana-top-client').textContent = top? `${top[0]}（${fmtMoney(top[1])}）` : '—';
-
-  // Top 客戶表：年累計、月平均、穩定度（有下單月份/12）
-  const tbody = $('#tbl-top-client tbody'); tbody.innerHTML='';
-  [...byClient.entries()].sort((a,b)=>b[1]-a[1]).slice(0,20).forEach(([client,total])=>{
-    const monthsSet = new Set(
-      store.data.shipments
-        .filter(r=>r.client===client && (r.date||'').startsWith(String(Y)))
-        .map(r=> new Date(r.date).getMonth())
-    );
-    const activeMonths = monthsSet.size;
-    const avg = total / 12;
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${esc(client)}</td>
-      <td class="mono">${fmtMoney(avg)}</td>
-      <td class="mono">${fmtMoney(total)}</td>
-      <td>${activeMonths}/12</td>
-    `;
-    tbody.appendChild(tr);
+    tb.appendChild(tr);
   });
 
-  // 繪製柱狀圖（純 SVG）
-  drawBarChart('#bar-chart', byMonth);
+  $('ar_total_ship').textContent = fmt(totalShip);
+  $('ar_total_paid').textContent = fmt(totalPaid);
+  $('ar_total_unpaid').textContent = fmt(totalUnpaid);
 }
 
-function drawBarChart(selector, arr){
-  const el = document.querySelector(selector);
-  const W = el.clientWidth||600, H = 240, padL=40, padR=10, padT=10, padB=24;
-  const max = Math.max(1, ...arr);
-  const bw = (W - padL - padR) / arr.length;
-  const toY = v => H - padB - (v/max)*(H - padT - padB);
-  const months = ['1','2','3','4','5','6','7','8','9','10','11','12'];
+/** ====== 半月結算 ====== **/
+function renderSettlement(showByCustomer=false){
+  const ym = $('settle_month').value;
+  if(!ym){ alert('請先選擇結算月份'); return; }
+  const [y,m] = ym.split('-').map(Number);
+  const lastDay = new Date(y, m, 0).getDate();
 
-  let svg = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="每月營收柱狀圖">`;
-  // y軸線
-  svg += `<line x1="${padL}" y1="${padT}" x2="${padL}" y2="${H-padB}" stroke="#1f2937"/>`;
-  // x軸線
-  svg += `<line x1="${padL}" y1="${H-padB}" x2="${W-padR}" y2="${H-padB}" stroke="#1f2937"/>`;
+  const first = {label:'1–15', sum:0, by:{}};
+  const second= {label:`16–${lastDay}`, sum:0, by:{}};
 
-  // 柱
-  arr.forEach((v,i)=>{
-    const x = padL + i*bw + 6;
-    const y = toY(v);
-    const h = (H-padB) - y;
-    svg += `<rect x="${x}" y="${y}" width="${Math.max(6,bw-12)}" height="${Math.max(0,h)}" fill="#22c55e">
-              <title>${months[i]} 月：${fmtMoney(v)}</title>
-            </rect>`;
-    // x 標籤
-    svg += `<text x="${padL + i*bw + bw/2}" y="${H-6}" text-anchor="middle" font-size="11" fill="#94a3b8">${months[i]}</text>`;
+  shipments.forEach(r=>{
+    if(!r.date.startsWith(ym)) return;
+    const {amount} = calcAmounts(r);
+    const d = Number(r.date.split('-')[2]);
+    const bucket = d<=15 ? first : second;
+    bucket.sum += amount;
+    bucket.by[r.customer] = (bucket.by[r.customer]||0)+amount;
   });
 
-  // y 標籤（最大值）
-  svg += `<text x="8" y="${toY(max)}" font-size="11" fill="#94a3b8">${fmtMoney(max)}</text>`;
-  svg += `</svg>`;
-  el.innerHTML = svg;
-}
-
-/* ========= 設定／匯出匯入 ========= */
-$('#cfg-ar-rule').value = store.data.cfg.arRule || '1 號結算，15 號付';
-$('#cfg-ap-rule').value = store.data.cfg.apRule || '每週五結算，隔週二付款';
-$('#btn-save-cfg').addEventListener('click', ()=>{
-  store.data.cfg.arRule = ($('#cfg-ar-rule').value||'').trim();
-  store.data.cfg.apRule = ($('#cfg-ap-rule').value||'').trim();
-  store.save();
-  alert('已儲存');
-});
-
-$('#btn-export-csv').addEventListener('click', ()=>{
-  const headers = ['日期','客戶','類別','部位','規格','重量','單位','隻數','件數','單價','金額','備註'];
-  const rows = store.data.shipments.map(r=>[
-    r.date,r.client,r.type,r.part,r.spec,r.weight,r.unit,r.birds,r.packs,r.price,r.amount,r.note
-  ]);
-  const csv = [headers.join(','), ...rows.map(r=>r.map(v=> `"${String(v??'').replace(/"/g,'""')}"`).join(','))].join('\n');
-  download('shipments.csv', csv, 'text/csv;charset=utf-8;');
-});
-
-$('#btn-export-json').addEventListener('click', ()=>{
-  download('poultry-data.json', JSON.stringify(store.data,null,2), 'application/json');
-});
-
-function download(filename, content, mime){
-  const blob = new Blob([content], {type:mime});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(a.href);
-}
-
-$('#btn-import').addEventListener('click', ()=>{
-  const f = $('#file-import').files[0];
-  if(!f){ alert('請選擇 JSON 檔'); return; }
-  const reader = new FileReader();
-  reader.onload = e=>{
-    try{
-      const data = JSON.parse(e.target.result);
-      if(!data || !data.shipments){ throw new Error('格式不正確'); }
-      store.data = data; store.save();
-      renderShipments(); renderAP(); renderAR(); renderAnalytics();
-      alert('匯入完成');
-    }catch(err){
-      alert('匯入失敗：'+err.message);
+  const renderBucket = (elId, bucket)=>{
+    const tb = $(elId).querySelector('tbody'); tb.innerHTML='';
+    if(showByCustomer){
+      Object.entries(bucket.by).sort((a,b)=>b[1]-a[1]).forEach(([c,amt])=>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${c}</td><td class="right">${fmt(amt)}</td>`;
+        tb.appendChild(tr);
+      });
+    }else{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>出貨金額（${bucket.label}）</td><td class="right">${fmt(bucket.sum)}</td>`;
+      tb.appendChild(tr);
     }
   };
-  reader.readAsText(f, 'utf-8');
-});
 
-/* ========= 初始化 ========= */
-function init(){
-  renderShipments(); renderAR(); renderAP(); renderAnalytics();
+  renderBucket('set_first', first);
+  renderBucket('set_second', second);
+  $('set_first_sum').textContent  = fmt(first.sum);
+  $('set_second_sum').textContent = fmt(second.sum);
 }
-init();
+
+/** ====== 統計圖（原生 Canvas） ====== **/
+function groupByPeriod(gran){
+  const map = {}; // key -> {rev, cost, profit}
+  shipments.forEach(r=>{
+    const {amount, costAmount, profit} = calcAmounts(r);
+    const d = new Date(r.date);
+    if(isNaN(d)) return;
+    let key;
+    if(gran==='week'){
+      // ISO week key: YYYY-Www
+      const temp = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+      const dayNum = (temp.getUTCDay() || 7);
+      temp.setUTCDate(temp.getUTCDate() + 4 - dayNum);
+      const yearStart = new Date(Date.UTC(temp.getUTCFullYear(),0,1));
+      const weekNo = Math.ceil((((temp - yearStart)/86400000)+1)/7);
+      key = `${temp.getUTCFullYear()}-W${pad2(weekNo)}`;
+    }else{
+      key = `${d.getFullYear()}-${pad2(d.getMonth()+1)}`;
+    }
+    if(!map[key]) map[key] = {rev:0,cost:0,profit:0};
+    map[key].rev += amount;
+    map[key].cost += costAmount;
+    map[key].profit += profit;
+  });
+  const keys = Object.keys(map).sort();
+  return {
+    labels: keys,
+    rev: keys.map(k=>map[k].rev),
+    profit: keys.map(k=>map[k].profit),
+    marginPct: keys.map(k=> map[k].rev>0 ? (map[k].profit/map[k].rev*100) : 0 )
+  };
+}
+
+function drawLineChart(canvasId, labels, series, opts={}){
+  const c = $(canvasId);
+  const ctx = c.getContext('2d');
+  const W = c.width = c.clientWidth * (window.devicePixelRatio||1);
+  const H = c.height= c.clientHeight* (window.devicePixelRatio||1);
+  ctx.clearRect(0,0,W,H);
+
+  // margins
+  const ml=70, mr=20, mt=20, mb=40;
+  const plotW = W-ml-mr, plotH = H-mt-mb;
+
+  // scales
+  const maxY = Math.max(1, ...series.flat());
+  const minY = Math.min(0, ...series.flat());
+  const toX = (i, n)=> ml + (plotW) * (n<=1?0:(i/(n-1)));
+  const toY = (v)=> mt + (plotH) * (1 - (v - minY)/(maxY - minY));
+
+  // grid + axes
+  ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  for(let g=0; g<=5; g++){
+    const y = mt + plotH * (g/5);
+    ctx.moveTo(ml,y); ctx.lineTo(W-mr,y);
+  }
+  ctx.stroke();
+
+  // labels Y
+  ctx.fillStyle = '#9ca3af'; ctx.font = `${12*(window.devicePixelRatio||1)}px system-ui`;
+  for(let g=0; g<=5; g++){
+    const yVal = minY + (maxY-minY)*((5-g)/5);
+    const y = mt + plotH * (g/5);
+    ctx.fillText(yVal.toFixed(0), 8, y+4);
+  }
+
+  // X labels
+  labels.forEach((lab,i)=>{
+    const x = toX(i, labels.length);
+    ctx.fillText(lab, x-20, H-8);
+  });
+
+  // lines
+  const colors = opts.colors || ['#22d3ee','#22c55e','#f59e0b','#ef4444'];
+  series.forEach((arr, si)=>{
+    ctx.strokeStyle = colors[si%colors.length];
+    ctx.lineWidth = 2*(window.devicePixelRatio||1);
+    ctx.beginPath();
+    arr.forEach((v,i)=>{
+      const x=toX(i, arr.length), y=toY(v);
+      if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    });
+    ctx.stroke();
+  });
+}
+
+function renderCharts(){
+  const gran = $('agg_gran').value;
+  const g = groupByPeriod(gran);
+  drawLineChart('rev_chart', g.labels, [g.rev], {colors:['#22d3ee']});
+  drawLineChart('gp_chart',  g.labels, [g.marginPct], {colors:['#22c55e']});
+}
+
+/** ====== 一鍵重繪 ====== **/
+function renderAll(){
+  renderDetail();
+  renderAR();
+  renderSettlement(); // 若未選月份會報警示，不阻斷其它渲染
+  renderCharts();
+}
+
+/** 初始：帶入今天日期方便輸入 */
+(function init(){
+  const today = new Date();
+  const iso = `${today.getFullYear()}-${pad2(today.getMonth()+1)}-${pad2(today.getDate())}`;
+  $('ship_date').value = iso;
+  $('pay_date').value  = iso;
+  $('settle_month').value = `${today.getFullYear()}-${pad2(today.getMonth()+1)}`;
+  renderAll();
+})();
 </script>
 </body>
 </html>
