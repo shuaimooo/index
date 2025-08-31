@@ -1,907 +1,281 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
+<!doctype html>
+<html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>優鮮雞肉批發管理系統 - Excel表格版</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Inter', 'Noto Sans TC', sans-serif; }
-        .glass-effect { backdrop-filter: blur(10px); background: rgba(255, 255, 255, 0.9); }
-        .slide-in { animation: slideIn 0.4s ease-out; }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
-        .bounce-in { animation: bounceIn 0.5s ease-out; }
-        @keyframes bounceIn { 
-            0% { opacity: 0; transform: scale(0.3); }
-            50% { opacity: 1; transform: scale(1.05); }
-            70% { transform: scale(0.9); }
-            100% { opacity: 1; transform: scale(1); }
-        }
-        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .card-hover { transition: all 0.3s ease; }
-        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
-        
-        /* Excel風格表格樣式 */
-        .excel-table { border-collapse: collapse; }
-        .excel-table th, .excel-table td { 
-            border: 1px solid #d1d5db; 
-            padding: 8px 12px; 
-            text-align: left;
-            position: relative;
-        }
-        .excel-table th { 
-            background: #f3f4f6; 
-            font-weight: 600;
-            user-select: none;
-        }
-        .excel-table td { 
-            background: white;
-            min-width: 120px;
-        }
-        .excel-table td:hover { background: #f8fafc; }
-        .excel-table td.selected { background: #dbeafe !important; }
-        .excel-table tr.selected { background: #dbeafe; }
-        
-        .excel-input {
-            border: none;
-            background: transparent;
-            width: 100%;
-            padding: 4px;
-            font-size: 14px;
-        }
-        .excel-input:focus {
-            outline: 2px solid #3b82f6;
-            background: white;
-        }
-        
-        .column-header {
-            cursor: pointer;
-            user-select: none;
-        }
-        .column-header:hover {
-            background: #e5e7eb;
-        }
-        
-        .row-number {
-            background: #f9fafb;
-            color: #6b7280;
-            font-weight: 500;
-            text-align: center;
-            width: 50px;
-            cursor: pointer;
-        }
-        .row-number:hover {
-            background: #e5e7eb;
-        }
-        
-        .print-only { display: none; }
-        @media print {
-            body * { visibility: hidden; }
-            .print-content, .print-content * { visibility: visible; }
-            .print-content { position: absolute; left: 0; top: 0; width: 100%; }
-            .print-only { display: block !important; }
-            .no-print { display: none !important; }
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>生鮮雞業帳務範本</title>
+  <style>
+    :root{--bg:#f7f8fa;--card:#fff;--accent:#0ea5a4}
+    body{font-family: system-ui,-apple-system, 'Noto Sans TC', "Microsoft JhengHei", Arial; background:var(--bg); margin:0; padding:20px}
+    header{display:flex;gap:12px;align-items:center;margin-bottom:16px}
+    h1{font-size:18px;margin:0}
+    .wrap{display:grid;grid-template-columns:260px 1fr;gap:16px}
+    nav{background:var(--card);padding:12px;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+    nav button{display:block;width:100%;text-align:left;padding:8px;border:0;background:none;border-radius:6px;margin-bottom:6px;cursor:pointer}
+    nav button.active{background:#ecfeff}
+    main{min-height:80vh}
+    .card{background:var(--card);padding:12px;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:12px}
+    table{width:100%;border-collapse:collapse;font-size:13px}
+    th,td{padding:6px;border:1px solid #eee;text-align:left}
+    .row-actions button{margin-right:6px}
+    .form-inline{display:flex;gap:8px;flex-wrap:wrap}
+    input,select{padding:6px;border-radius:6px;border:1px solid #ddd}
+    .right{display:flex;gap:8px;align-items:center;justify-content:flex-end}
+    .small{font-size:12px;color:#666}
+    .badge{background:var(--accent);color:#fff;padding:4px 8px;border-radius:999px;font-size:12px}
+    footer{margin-top:12px;font-size:12px;color:#666}
+    .danger{color:#c0392b}
+    .success{color:#16a34a}
+  </style>
 </head>
-<body class="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 min-h-screen">
-    <!-- 頂部導航 -->
-    <header class="glass-effect border-b border-white/20 sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto px-6 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-4">
-                    <div class="w-12 h-12 gradient-bg rounded-xl flex items-center justify-center text-white text-2xl font-bold">
-                        🐔
-                    </div>
-                    <div>
-                        <h1 class="text-2xl font-bold text-gray-800">優鮮雞肉批發 - Excel表格版</h1>
-                        <p class="text-sm text-gray-600">Professional Poultry Wholesale Management System</p>
-                    </div>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <div class="text-right mr-4">
-                        <div class="text-sm font-semibold text-gray-800">管理員</div>
-                        <div class="text-xs text-gray-500">${new Date().toLocaleDateString('zh-TW')}</div>
-                    </div>
-                    <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold">
-                        A
-                    </div>
-                </div>
-            </div>
+<body>
+  <header>
+    <h1>生鮮雞業帳務範本（單檔 HTML）</h1>
+    <div class="small">說明：左側選單切換三大模組：出貨紀錄 / 帳務結算 / 統計分析。資料會存在 localStorage，可匯出 CSV/Excel。</div>
+  </header>
+
+  <div class="wrap">
+    <nav>
+      <button id="tab-shipment" class="active">1. 出貨紀錄</button>
+      <button id="tab-account">2. 帳務結算（應收/付款）</button>
+      <button id="tab-analysis">3. 統計分析 / Dashboard</button>
+      <hr/>
+      <button id="export-csv">匯出 CSV</button>
+      <button id="export-xlsx">匯出 Excel (.xlsx)</button>
+      <button id="clear-data" style="color:#c00">清除全部資料</button>
+    </nav>
+
+    <main>
+      <!-- 出貨紀錄 -->
+      <section id="panel-shipment" class="card" style="display:block">
+        <h3>出貨紀錄（每日填）</h3>
+        <div class="form-inline">
+          <input type="date" id="s-date" />
+          <select id="s-cust-type"><option>攤販</option><option>市場零售商</option><option>煮雞廠</option><option>下游加工廠</option><option>其他</option></select>
+          <input placeholder="客戶名稱" id="s-cust" />
+          <select id="s-type"><option value="全雞">全雞</option><option value="分切">分切</option><option value="冷凍">冷凍</option></select>
+          <input placeholder="重量(kg)" id="s-kg" type="number" step="0.01" />
+          <input placeholder="隻數（冷凍用）" id="s-count" type="number" />
+          <input placeholder="件數（分切/冷凍可用）" id="s-pieces" type="number" />
+          <input placeholder="單價" id="s-price" type="number" step="0.01" />
+          <button id="add-shipment">新增出貨</button>
         </div>
-    </header>
 
-    <!-- 側邊導航 -->
-    <div class="flex">
-        <nav class="w-64 glass-effect border-r border-white/20 min-h-screen p-6 no-print">
-            <div class="space-y-2">
-                <button onclick="showModule('excel')" id="excelBtn" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium transition-all">
-                    <span class="text-xl">📊</span>
-                    <span>Excel表格管理</span>
-                </button>
-                <button onclick="showModule('dashboard')" id="dashboardBtn" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-white/50 font-medium transition-all">
-                    <span class="text-xl">📈</span>
-                    <span>營運儀表板</span>
-                </button>
-                <button onclick="showModule('procurement')" id="procurementBtn" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-white/50 font-medium transition-all">
-                    <span class="text-xl">📦</span>
-                    <span>採購進貨管理</span>
-                </button>
-                <button onclick="showModule('finance')" id="financeBtn" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-white/50 font-medium transition-all">
-                    <span class="text-xl">💰</span>
-                    <span>財務會計管理</span>
-                </button>
-                <button onclick="showModule('customer')" id="customerBtn" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-white/50 font-medium transition-all">
-                    <span class="text-xl">👥</span>
-                    <span>客戶業務管理</span>
-                </button>
-                <button onclick="showModule('reports')" id="reportsBtn" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-white/50 font-medium transition-all">
-                    <span class="text-xl">📋</span>
-                    <span>報表分析中心</span>
-                </button>
-            </div>
-        </nav>
-
-        <!-- 主要內容區域 -->
-        <main class="flex-1 p-6">
-            <!-- Excel表格管理 -->
-            <div id="excelModule" class="slide-in">
-                <div class="mb-8">
-                    <h2 class="text-3xl font-bold text-gray-800 mb-2">Excel表格管理</h2>
-                    <p class="text-gray-600">像Excel一樣編輯和管理您的業務數據</p>
-                </div>
-
-                <!-- 表格選擇器 -->
-                <div class="mb-6">
-                    <div class="flex flex-wrap gap-2">
-                        <button onclick="showExcelTable('customers')" id="customersTabBtn" class="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all font-semibold">👥 客戶資料表</button>
-                        <button onclick="showExcelTable('orders')" id="ordersTabBtn" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all font-semibold">📋 訂單記錄表</button>
-                        <button onclick="showExcelTable('inventory')" id="inventoryTabBtn" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all font-semibold">📦 庫存管理表</button>
-                        <button onclick="showExcelTable('finance')" id="financeTabBtn" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all font-semibold">💰 財務記錄表</button>
-                        <button onclick="showExcelTable('suppliers')" id="suppliersTabBtn" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all font-semibold">🏭 供應商表</button>
-                    </div>
-                </div>
-
-                <!-- Excel表格容器 -->
-                <div class="glass-effect rounded-2xl p-6 border border-white/20">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 id="excelTableTitle" class="text-xl font-semibold text-gray-800">👥 客戶資料表</h3>
-                        <div class="flex flex-wrap gap-2">
-                            <button onclick="addExcelRow()" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-sm">➕ 新增行</button>
-                            <button onclick="deleteSelectedRows()" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-sm">🗑️ 刪除選中</button>
-                            <button onclick="duplicateRow()" class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors text-sm">📋 複製行</button>
-                            <button onclick="sortTable()" class="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors text-sm">🔄 排序</button>
-                            <button onclick="exportToCSV()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm">📤 匯出CSV</button>
-                            <button onclick="printExcelTable()" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors text-sm">🖨️ 列印</button>
-                        </div>
-                    </div>
-                    
-                    <!-- 搜尋和篩選 -->
-                    <div class="mb-4 flex gap-4">
-                        <input type="text" id="searchInput" placeholder="🔍 搜尋..." class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" onkeyup="searchTable()">
-                        <select id="filterColumn" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" onchange="filterTable()">
-                            <option value="">篩選欄位...</option>
-                        </select>
-                        <button onclick="clearFilters()" class="px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500 transition-colors text-sm">清除篩選</button>
-                    </div>
-                    
-                    <!-- Excel風格表格 -->
-                    <div class="overflow-auto max-h-96 border border-gray-300 rounded-lg">
-                        <table id="excelTable" class="excel-table w-full text-sm">
-                            <thead id="excelTableHead" class="sticky top-0">
-                                <!-- 動態生成表頭 -->
-                            </thead>
-                            <tbody id="excelTableBody">
-                                <!-- 動態生成表格內容 -->
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <!-- 表格統計 -->
-                    <div class="mt-4 flex justify-between items-center text-sm text-gray-600">
-                        <div id="tableStats">總計: 0 筆記錄</div>
-                        <div class="flex space-x-4">
-                            <span>選中: <span id="selectedCount">0</span> 行</span>
-                            <span>數值總和: $<span id="sumValue">0</span></span>
-                            <span>平均值: $<span id="avgValue">0</span></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 營運儀表板 -->
-            <div id="dashboardModule" class="hidden slide-in">
-                <div class="mb-8">
-                    <h2 class="text-3xl font-bold text-gray-800 mb-2">營運儀表板</h2>
-                    <p class="text-gray-600">即時監控業務狀況與關鍵指標</p>
-                </div>
-                <div class="text-center py-12">
-                    <div class="text-6xl mb-4">📊</div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">儀表板功能</h3>
-                    <p class="text-gray-600">基於Excel表格數據的即時統計分析</p>
-                </div>
-            </div>
-
-            <!-- 其他模組佔位 -->
-            <div id="procurementModule" class="hidden slide-in">
-                <div class="text-center py-12">
-                    <div class="text-6xl mb-4">📦</div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">採購進貨管理</h3>
-                    <p class="text-gray-600">使用Excel表格管理採購和庫存</p>
-                </div>
-            </div>
-
-            <div id="financeModule" class="hidden slide-in">
-                <div class="text-center py-12">
-                    <div class="text-6xl mb-4">💰</div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">財務會計管理</h3>
-                    <p class="text-gray-600">使用Excel表格管理財務記錄</p>
-                </div>
-            </div>
-
-            <div id="customerModule" class="hidden slide-in">
-                <div class="text-center py-12">
-                    <div class="text-6xl mb-4">👥</div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">客戶業務管理</h3>
-                    <p class="text-gray-600">使用Excel表格管理客戶資料</p>
-                </div>
-            </div>
-
-            <div id="reportsModule" class="hidden slide-in">
-                <div class="text-center py-12">
-                    <div class="text-6xl mb-4">📋</div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">報表分析中心</h3>
-                    <p class="text-gray-600">基於Excel數據生成分析報表</p>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- 列印區域 -->
-    <div id="printArea" class="print-content hidden">
-        <div class="print-only p-8">
-            <div class="text-center mb-8">
-                <h1 class="text-3xl font-bold">優鮮雞肉批發</h1>
-                <p class="text-lg text-gray-600">Professional Poultry Wholesale</p>
-                <p class="text-sm text-gray-500">地址：台北市中山區民生東路456號 | 電話：02-2345-6789</p>
-                <hr class="my-4">
-            </div>
-            <div id="printContent"></div>
-            <div class="mt-8 text-center text-sm text-gray-500">
-                <p>列印時間：${new Date().toLocaleString('zh-TW')}</p>
-            </div>
+        <div style="margin-top:10px;overflow:auto;max-height:420px">
+          <table id="shipment-table">
+            <thead><tr><th>日期</th><th>類別</th><th>客戶</th><th>品類</th><th>重量(kg)</th><th>隻數</th><th>件數</th><th>單價</th><th>金額</th><th>操作</th></tr></thead>
+            <tbody></tbody>
+          </table>
         </div>
-    </div>
+      </section>
 
-    <!-- 隱藏的檔案輸入 -->
-    <input type="file" id="csvFileInput" accept=".csv" style="display: none;" onchange="handleCSVImport(event)">
+      <!-- 帳務結算 -->
+      <section id="panel-account" class="card" style="display:none">
+        <h3>帳務結算（應收帳款 / 付款進度）</h3>
+        <div class="form-inline">
+          <input placeholder="客戶名稱（新增或選擇）" id="a-cust" />
+          <input placeholder="結算日（每期） ex: 1" id="a-settle-day" type="number" />
+          <input placeholder="付款期限日 ex: 15" id="a-pay-day" type="number" />
+          <input placeholder="已收金額" id="a-paid" type="number" />
+          <input placeholder="收款日期" id="a-paid-date" type="date" />
+          <input placeholder="匯款帳號" id="a-account" />
+          <button id="add-account">新增/更新帳務</button>
+        </div>
 
-    <script>
-        // 全域資料儲存
-        let excelData = {
-            customers: [],
-            orders: [],
-            inventory: [],
-            finance: [],
-            suppliers: []
-        };
+        <div style="margin-top:10px;overflow:auto;max-height:420px">
+          <table id="account-table">
+            <thead><tr><th>客戶名稱</th><th>本期出貨金額</th><th>結算日</th><th>付款期限</th><th>已收金額</th><th>未收金額</th><th>收款日</th><th>匯款帳號</th><th>狀態</th><th>操作</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
 
-        // 當前選中的表格和行
-        let currentTable = 'customers';
-        let selectedRows = new Set();
-        let selectedCells = new Set();
+      <!-- 統計分析 -->
+      <section id="panel-analysis" class="card" style="display:none">
+        <h3>統計分析 / Dashboard</h3>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px">
+          <div style="flex:1" class="card">
+            <div class="small">當月營收</div>
+            <div id="month-rev" style="font-size:20px">0</div>
+          </div>
+          <div style="flex:1" class="card">
+            <div class="small">未收金額</div>
+            <div id="unpaid-total" style="font-size:20px;color:#c0392b">0</div>
+          </div>
+          <div style="flex:1" class="card">
+            <div class="small">Top 客戶（按金額）</div>
+            <div id="top-cust">無資料</div>
+          </div>
+        </div>
 
-        // 表格結構定義
-        const tableStructures = {
-            customers: {
-                title: '👥 客戶資料表',
-                columns: [
-                    { key: 'name', title: '客戶名稱', type: 'text' },
-                    { key: 'contact', title: '聯絡人', type: 'text' },
-                    { key: 'phone', title: '電話', type: 'tel' },
-                    { key: 'email', title: '電子郵件', type: 'email' },
-                    { key: 'address', title: '地址', type: 'text' },
-                    { key: 'type', title: '客戶類型', type: 'select', options: ['餐廳', '雞肉攤', '超市', '便當店', '其他'] },
-                    { key: 'grade', title: '客戶等級', type: 'select', options: ['鑽石級', '白金級', '黃金級', '銀級', '銅級'] },
-                    { key: 'paymentTerms', title: '付款條件', type: 'select', options: ['現金', '月結15天', '月結30天', '月結45天'] },
-                    { key: 'monthlyAmount', title: '月購金額', type: 'number' },
-                    { key: 'status', title: '狀態', type: 'select', options: ['活躍', '暫停', '待聯繫'] },
-                    { key: 'notes', title: '備註', type: 'text' }
-                ]
-            },
-            orders: {
-                title: '📋 訂單記錄表',
-                columns: [
-                    { key: 'orderNumber', title: '訂單編號', type: 'text' },
-                    { key: 'date', title: '訂單日期', type: 'date' },
-                    { key: 'customer', title: '客戶名稱', type: 'text' },
-                    { key: 'product', title: '商品名稱', type: 'text' },
-                    { key: 'quantity', title: '數量(kg)', type: 'number' },
-                    { key: 'unitPrice', title: '單價', type: 'number' },
-                    { key: 'totalAmount', title: '總金額', type: 'number' },
-                    { key: 'deliveryDate', title: '交貨日期', type: 'date' },
-                    { key: 'status', title: '訂單狀態', type: 'select', options: ['待處理', '處理中', '已出貨', '已完成', '已取消'] },
-                    { key: 'paymentStatus', title: '付款狀態', type: 'select', options: ['未付款', '部分付款', '已付款'] },
-                    { key: 'notes', title: '備註', type: 'text' }
-                ]
-            },
-            inventory: {
-                title: '📦 庫存管理表',
-                columns: [
-                    { key: 'productCode', title: '商品編號', type: 'text' },
-                    { key: 'productName', title: '商品名稱', type: 'text' },
-                    { key: 'category', title: '商品類別', type: 'select', options: ['雞胸肉', '雞腿肉', '全雞', '雞翅', '雞腳', '內臟'] },
-                    { key: 'supplier', title: '供應商', type: 'text' },
-                    { key: 'currentStock', title: '現有庫存(kg)', type: 'number' },
-                    { key: 'safetyStock', title: '安全庫存(kg)', type: 'number' },
-                    { key: 'unitCost', title: '進貨成本', type: 'number' },
-                    { key: 'sellingPrice', title: '銷售價格', type: 'number' },
-                    { key: 'expiryDate', title: '保存期限', type: 'date' },
-                    { key: 'location', title: '存放位置', type: 'text' },
-                    { key: 'status', title: '庫存狀態', type: 'select', options: ['充足', '偏低', '不足', '過期'] }
-                ]
-            },
-            finance: {
-                title: '💰 財務記錄表',
-                columns: [
-                    { key: 'date', title: '日期', type: 'date' },
-                    { key: 'type', title: '類型', type: 'select', options: ['收入', '支出'] },
-                    { key: 'category', title: '科目', type: 'text' },
-                    { key: 'description', title: '說明', type: 'text' },
-                    { key: 'amount', title: '金額', type: 'number' },
-                    { key: 'paymentMethod', title: '付款方式', type: 'select', options: ['現金', '銀行轉帳', '支票', '信用卡'] },
-                    { key: 'invoiceNumber', title: '發票號碼', type: 'text' },
-                    { key: 'customer', title: '客戶/供應商', type: 'text' },
-                    { key: 'status', title: '狀態', type: 'select', options: ['已確認', '待確認', '已取消'] },
-                    { key: 'notes', title: '備註', type: 'text' }
-                ]
-            },
-            suppliers: {
-                title: '🏭 供應商表',
-                columns: [
-                    { key: 'name', title: '供應商名稱', type: 'text' },
-                    { key: 'contact', title: '聯絡人', type: 'text' },
-                    { key: 'phone', title: '電話', type: 'tel' },
-                    { key: 'email', title: '電子郵件', type: 'email' },
-                    { key: 'address', title: '地址', type: 'text' },
-                    { key: 'products', title: '主要商品', type: 'text' },
-                    { key: 'paymentTerms', title: '付款條件', type: 'select', options: ['現金', '月結15天', '月結30天', '月結45天'] },
-                    { key: 'rating', title: '評等', type: 'select', options: ['優良', '良好', '普通', '待改善'] },
-                    { key: 'monthlyAmount', title: '月採購額', type: 'number' },
-                    { key: 'status', title: '狀態', type: 'select', options: ['合作中', '暫停', '評估中'] },
-                    { key: 'notes', title: '備註', type: 'text' }
-                ]
-            }
-        };
+        <div class="card">
+          <div class="small">每月營收趨勢（近 12 個月）</div>
+          <canvas id="rev-chart" height="100"></canvas>
+        </div>
 
-        // 模組切換功能
-        function showModule(moduleName) {
-            const modules = ['excel', 'dashboard', 'procurement', 'finance', 'customer', 'reports'];
-            modules.forEach(module => {
-                const moduleElement = document.getElementById(module + 'Module');
-                const btnElement = document.getElementById(module + 'Btn');
-                if (moduleElement) moduleElement.classList.add('hidden');
-                if (btnElement) btnElement.className = 'w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-white/50 font-medium transition-all';
-            });
-            
-            const targetModule = document.getElementById(moduleName + 'Module');
-            const targetBtn = document.getElementById(moduleName + 'Btn');
-            if (targetModule) targetModule.classList.remove('hidden');
-            if (targetBtn) targetBtn.className = 'w-full flex items-center space-x-3 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium transition-all';
-        }
+        <div class="card">
+          <div class="small">毛利率分析（需手動輸入進貨成本）</div>
+          <div class="form-inline">
+            <input placeholder="輸入月份 (YYYY-MM)" id="g-month" />
+            <input placeholder="當月總售價" id="g-sales" type="number" />
+            <input placeholder="當月總成本" id="g-cost" type="number" />
+            <button id="calc-margin">計算毛利率</button>
+          </div>
+          <div id="g-result" style="margin-top:8px" class="small"></div>
+        </div>
+      </section>
 
-        // Excel表格功能
-        function showExcelTable(tableName) {
-            currentTable = tableName;
-            selectedRows.clear();
-            selectedCells.clear();
-            
-            // 更新標籤按鈕樣式
-            const tabButtons = ['customersTabBtn', 'ordersTabBtn', 'inventoryTabBtn', 'financeTabBtn', 'suppliersTabBtn'];
-            tabButtons.forEach(btnId => {
-                const btn = document.getElementById(btnId);
-                if (btn) {
-                    btn.className = 'px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all font-semibold';
-                }
-            });
-            
-            const activeBtn = document.getElementById(tableName + 'TabBtn');
-            if (activeBtn) {
-                activeBtn.className = 'px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all font-semibold';
-            }
-            
-            // 更新表格標題
-            document.getElementById('excelTableTitle').textContent = tableStructures[tableName].title;
-            
-            // 更新篩選選項
-            updateFilterOptions();
-            
-            // 渲染表格
-            renderExcelTable();
-            updateTableStats();
-        }
+      <footer class="small">提示：系統會根據你輸入的出貨紀錄自動彙總到帳務結算（本期出貨金額）。如需每週上游結算，請在出貨紀錄中用客戶類別標註為「上游-廠商」，再於帳務模組管理付款。</footer>
+    </main>
+  </div>
 
-        function renderExcelTable() {
-            const structure = tableStructures[currentTable];
-            const data = excelData[currentTable];
-            
-            // 渲染表頭
-            const thead = document.getElementById('excelTableHead');
-            thead.innerHTML = `
-                <tr>
-                    <th class="row-number">#</th>
-                    ${structure.columns.map((col, index) => `
-                        <th class="column-header" onclick="sortByColumn(${index})" title="點擊排序">
-                            ${col.title}
-                            <span class="text-xs text-gray-400 ml-1">↕️</span>
-                        </th>
-                    `).join('')}
-                </tr>
-            `;
-            
-            // 渲染表格內容
-            const tbody = document.getElementById('excelTableBody');
-            if (data.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="${structure.columns.length + 1}" class="text-center py-8 text-gray-500">
-                            <div class="text-2xl mb-2">📝</div>
-                            <div>尚無資料，點擊「新增行」開始建立</div>
-                        </td>
-                    </tr>
-                `;
-            } else {
-                tbody.innerHTML = data.map((row, rowIndex) => `
-                    <tr class="${selectedRows.has(rowIndex) ? 'selected' : ''}" onclick="selectRow(${rowIndex}, event)">
-                        <td class="row-number">${rowIndex + 1}</td>
-                        ${structure.columns.map((col, colIndex) => `
-                            <td class="${selectedCells.has(`${rowIndex}-${colIndex}`) ? 'selected' : ''}" 
-                                onclick="selectCell(${rowIndex}, ${colIndex}, event)">
-                                ${renderCell(row[col.key] || '', col, rowIndex, colIndex)}
-                            </td>
-                        `).join('')}
-                    </tr>
-                `).join('');
-            }
-        }
+  <!-- 需要的外部套件：Chart.js, SheetJS (匯出) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+  <script>
+    // 基本資料結構存在 localStorage
+    const STORAGE_KEY = 'chicken_business_v1';
+    let state = {shipments:[], accounts:[], margins:[]};
+    function load(){
+      try{ const s=localStorage.getItem(STORAGE_KEY); if(s){ state=JSON.parse(s); }}catch(e){console.error(e)}
+    }
+    function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
 
-        function renderCell(value, column, rowIndex, colIndex) {
-            if (column.type === 'select') {
-                return `
-                    <select class="excel-input" onchange="updateCellValue(${rowIndex}, '${column.key}', this.value)">
-                        <option value="">${value || '請選擇...'}</option>
-                        ${column.options.map(option => `
-                            <option value="${option}" ${value === option ? 'selected' : ''}>${option}</option>
-                        `).join('')}
-                    </select>
-                `;
-            } else {
-                return `
-                    <input type="${column.type}" 
-                           class="excel-input" 
-                           value="${value || ''}" 
-                           onchange="updateCellValue(${rowIndex}, '${column.key}', this.value)"
-                           ${column.type === 'number' ? 'step="0.01"' : ''}
-                           placeholder="輸入${column.title}...">
-                `;
-            }
-        }
+    // 計算金額函數（依三種算法）
+    function calcAmount(item){
+      const price = Number(item.price||0);
+      const kg = Number(item.kg||0);
+      const count = Number(item.count||0);
+      const pieces = Number(item.pieces||0);
+      if(item.type==='全雞'){
+        // 全雞：公斤 x 0.6 x 單價
+        return +(kg * 0.6 * price).toFixed(2);
+      }
+      if(item.type==='分切'){
+        // 分切：(公斤 x 單價 x 18) = 1 件
+        // 若輸入件數，則金額 = 件數 * (公斤*單價*18) ???
+        // 我們採用：金額 = (kg * price * 18)
+        return +((kg * price * 18)).toFixed(2);
+      }
+      if(item.type==='冷凍'){
+        // 冷凍：公斤 x 隻 x 單價 x 件數
+        return +(kg * count * price * (pieces||1)).toFixed(2);
+      }
+      return 0;
+    }
 
-        function updateCellValue(rowIndex, key, value) {
-            if (!excelData[currentTable][rowIndex]) {
-                excelData[currentTable][rowIndex] = {};
-            }
-            excelData[currentTable][rowIndex][key] = value;
-            
-            // 如果是訂單表格，自動計算總金額
-            if (currentTable === 'orders' && (key === 'quantity' || key === 'unitPrice')) {
-                const row = excelData[currentTable][rowIndex];
-                if (row.quantity && row.unitPrice) {
-                    row.totalAmount = (parseFloat(row.quantity) * parseFloat(row.unitPrice)).toFixed(2);
-                    renderExcelTable(); // 重新渲染以顯示計算結果
-                }
-            }
-            
-            updateTableStats();
-            showNotification('資料已更新', 'success');
-        }
+    // DOM & 互動
+    const qs = (s)=>document.querySelector(s);
+    function renderShipments(){
+      const tbody = qs('#shipment-table tbody'); tbody.innerHTML='';
+      state.shipments.forEach((r,idx)=>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${r.date||''}</td><td>${r.custType||''}</td><td>${r.cust||''}</td><td>${r.type||''}</td><td>${r.kg||''}</td><td>${r.count||''}</td><td>${r.pieces||''}</td><td>${r.price||''}</td><td>${r.amount||0}</td><td class="row-actions"><button onclick="editShipment(${idx})">編輯</button><button onclick="delShipment(${idx})">刪除</button></td>`;
+        tbody.appendChild(tr);
+      });
+    }
+    function renderAccounts(){
+      // 本期出貨金額自動彙總（以客戶為 key）
+      const sums = {};
+      state.shipments.forEach(s=>{ const k=s.cust||'未知客戶'; sums[k]=(sums[k]||0)+Number(s.amount||0); });
+      // 將 sums 匯入帳務 list（若帳務已有則更新本期出貨金額）
+      state.accounts.forEach(a=>{ a.periodAmount = +(sums[a.cust]||0).toFixed(2); a.unpaid = +( (a.periodAmount||0) - (a.paid||0) ).toFixed(2); a.status = (a.unpaid<=0)?'已付款':(a.unpaid>0 && a.unpaid>0 && a.paid>0)?'部分已收':'未付款'; });
+      // 新增尚未在帳務表的客戶選項
+      Object.keys(sums).forEach(k=>{ if(!state.accounts.find(a=>a.cust===k)){ state.accounts.push({cust:k,periodAmount:+sums[k].toFixed(2),settleDay:1,payDay:15,paid:0,unpaid:+sums[k].toFixed(2),paidDate:'',bank:''}); } });
 
-        function selectRow(rowIndex, event) {
-            event.stopPropagation();
-            
-            if (event.ctrlKey || event.metaKey) {
-                // 多選模式
-                if (selectedRows.has(rowIndex)) {
-                    selectedRows.delete(rowIndex);
-                } else {
-                    selectedRows.add(rowIndex);
-                }
-            } else {
-                // 單選模式
-                selectedRows.clear();
-                selectedRows.add(rowIndex);
-            }
-            
-            renderExcelTable();
-            updateTableStats();
-        }
+      save();
+      const tbody = qs('#account-table tbody'); tbody.innerHTML='';
+      state.accounts.forEach((r,idx)=>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${r.cust||''}</td><td>${r.periodAmount||0}</td><td>${r.settleDay||''}</td><td>${r.payDay||''}</td><td>${r.paid||0}</td><td>${r.unpaid||0}</td><td>${r.paidDate||''}</td><td>${r.bank||''}</td><td>${r.status||''}</td><td><button onclick="editAccount(${idx})">編輯</button><button onclick="delAccount(${idx})">刪除</button></td>`;
+        tbody.appendChild(tr);
+      });
+      // 更新 dashboard 數字
+      const monthRev = state.shipments.reduce((s,i)=> s + Number(i.amount||0),0);
+      qs('#month-rev').innerText = monthRev.toFixed(2);
+      const unpaidTotal = state.accounts.reduce((s,a)=> s + Number(a.unpaid||0),0);
+      qs('#unpaid-total').innerText = unpaidTotal.toFixed(2);
+      // top 客戶
+      const arr = Object.entries(state.shipments.reduce((acc,s)=>{ acc[s.cust]= (acc[s.cust]||0)+Number(s.amount||0); return acc; },{})).sort((a,b)=>b[1]-a[1]);
+      qs('#top-cust').innerText = arr.slice(0,5).map(x=>`${x[0]}：${x[1].toFixed(2)}`).join('\n')||'無資料';
+    }
 
-        function selectCell(rowIndex, colIndex, event) {
-            event.stopPropagation();
-            
-            const cellKey = `${rowIndex}-${colIndex}`;
-            if (event.ctrlKey || event.metaKey) {
-                if (selectedCells.has(cellKey)) {
-                    selectedCells.delete(cellKey);
-                } else {
-                    selectedCells.add(cellKey);
-                }
-            } else {
-                selectedCells.clear();
-                selectedCells.add(cellKey);
-            }
-            
-            renderExcelTable();
-        }
+    // 新增出貨
+    qs('#add-shipment').addEventListener('click', ()=>{
+      const item = {
+        date: qs('#s-date').value || new Date().toISOString().slice(0,10),
+        custType: qs('#s-cust-type').value,
+        cust: qs('#s-cust').value || '未命名',
+        type: qs('#s-type').value,
+        kg: Number(qs('#s-kg').value)||0,
+        count: Number(qs('#s-count').value)||0,
+        pieces: Number(qs('#s-pieces').value)||0,
+        price: Number(qs('#s-price').value)||0
+      };
+      item.amount = calcAmount(item);
+      state.shipments.push(item); save(); renderShipments(); renderAccounts(); clearShipmentForm();
+    });
+    function clearShipmentForm(){ qs('#s-kg').value=''; qs('#s-count').value=''; qs('#s-pieces').value=''; qs('#s-price').value=''; qs('#s-cust').value=''; }
+    window.delShipment = function(i){ if(confirm('確定刪除出貨？')){ state.shipments.splice(i,1); save(); renderShipments(); renderAccounts(); } }
+    window.editShipment = function(i){ const r=state.shipments[i]; qs('#s-date').value=r.date; qs('#s-cust-type').value=r.custType; qs('#s-cust').value=r.cust; qs('#s-type').value=r.type; qs('#s-kg').value=r.kg; qs('#s-count').value=r.count; qs('#s-pieces').value=r.pieces; qs('#s-price').value=r.price; // remove old
+      state.shipments.splice(i,1); save(); renderShipments(); renderAccounts(); }
 
-        function addExcelRow() {
-            const structure = tableStructures[currentTable];
-            const newRow = {};
-            
-            // 初始化新行的預設值
-            structure.columns.forEach(col => {
-                if (col.key === 'date' || col.key === 'orderDate') {
-                    newRow[col.key] = new Date().toISOString().split('T')[0];
-                } else if (col.key === 'orderNumber') {
-                    newRow[col.key] = 'ORD-' + new Date().getFullYear() + '-' + String(Date.now()).slice(-6);
-                } else if (col.key === 'productCode') {
-                    newRow[col.key] = 'PRD-' + String(Date.now()).slice(-6);
-                } else {
-                    newRow[col.key] = '';
-                }
-            });
-            
-            excelData[currentTable].push(newRow);
-            renderExcelTable();
-            updateTableStats();
-            showNotification('已新增一行', 'success');
-        }
+    // 帳務新增/更新
+    qs('#add-account').addEventListener('click', ()=>{
+      const cust = qs('#a-cust').value || '未命名';
+      const obj = {cust, settleDay: Number(qs('#a-settle-day').value)||1, payDay: Number(qs('#a-pay-day').value)||15, paid: Number(qs('#a-paid').value)||0, paidDate: qs('#a-paid-date').value||'', bank: qs('#a-account').value||'' };
+      // 若已存在則更新
+      const idx = state.accounts.findIndex(a=>a.cust===cust);
+      if(idx>=0){ Object.assign(state.accounts[idx], obj); } else { state.accounts.push(obj); }
+      save(); renderAccounts(); qs('#a-cust').value=''; qs('#a-paid').value=''; qs('#a-account').value='';
+    });
+    window.delAccount = function(i){ if(confirm('刪除帳務紀錄？')){ state.accounts.splice(i,1); save(); renderAccounts(); } }
+    window.editAccount = function(i){ const r=state.accounts[i]; qs('#a-cust').value=r.cust; qs('#a-settle-day').value=r.settleDay; qs('#a-pay-day').value=r.payDay; qs('#a-paid').value=r.paid; qs('#a-paid-date').value=r.paidDate; qs('#a-account').value=r.bank; state.accounts.splice(i,1); save(); renderAccounts(); }
 
-        function deleteSelectedRows() {
-            if (selectedRows.size === 0) {
-                showNotification('請先選擇要刪除的行', 'error');
-                return;
-            }
-            
-            if (confirm(`確定要刪除選中的 ${selectedRows.size} 行嗎？`)) {
-                const sortedRows = Array.from(selectedRows).sort((a, b) => b - a);
-                sortedRows.forEach(rowIndex => {
-                    excelData[currentTable].splice(rowIndex, 1);
-                });
-                
-                selectedRows.clear();
-                selectedCells.clear();
-                renderExcelTable();
-                updateTableStats();
-                showNotification(`已刪除 ${sortedRows.length} 行`, 'success');
-            }
-        }
+    // 分頁控制
+    qs('#tab-shipment').addEventListener('click', ()=>{ show('shipment'); });
+    qs('#tab-account').addEventListener('click', ()=>{ show('account'); });
+    qs('#tab-analysis').addEventListener('click', ()=>{ show('analysis'); drawChart(); });
+    function show(name){ document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active')); document.querySelectorAll('main section').forEach(s=>s.style.display='none'); qs('#tab-'+name).classList.add('active'); qs('#panel-'+name).style.display='block'; }
 
-        function duplicateRow() {
-            if (selectedRows.size !== 1) {
-                showNotification('請選擇一行進行複製', 'error');
-                return;
-            }
-            
-            const rowIndex = Array.from(selectedRows)[0];
-            const originalRow = excelData[currentTable][rowIndex];
-            const duplicatedRow = { ...originalRow };
-            
-            // 更新特殊欄位
-            if (duplicatedRow.orderNumber) {
-                duplicatedRow.orderNumber = 'ORD-' + new Date().getFullYear() + '-' + String(Date.now()).slice(-6);
-            }
-            if (duplicatedRow.productCode) {
-                duplicatedRow.productCode = 'PRD-' + String(Date.now()).slice(-6);
-            }
-            
-            excelData[currentTable].splice(rowIndex + 1, 0, duplicatedRow);
-            renderExcelTable();
-            updateTableStats();
-            showNotification('已複製行', 'success');
-        }
+    // 匯出（CSV / XLSX）
+    function exportCSV(){
+      // export three sheets
+      const sheets = { '出貨紀錄': arrayToSheet(state.shipments), '帳務結算': arrayToSheet(state.accounts), '毛利': arrayToSheet(state.margins) };
+      const wb = XLSX.utils.book_new();
+      Object.entries(sheets).forEach(([name,ws])=>{ XLSX.utils.book_append_sheet(wb, ws, name); });
+      XLSX.writeFile(wb, `雞肉生意紀錄_${new Date().toISOString().slice(0,10)}.xlsx`);
+    }
+    function arrayToSheet(arr){ const ws = XLSX.utils.json_to_sheet(arr); return ws; }
+    qs('#export-csv').addEventListener('click', ()=>{ exportCSV(); });
+    qs('#export-xlsx').addEventListener('click', ()=>{ exportCSV(); });
 
-        function sortByColumn(columnIndex) {
-            const structure = tableStructures[currentTable];
-            const column = structure.columns[columnIndex];
-            const data = excelData[currentTable];
-            
-            data.sort((a, b) => {
-                const aVal = a[column.key] || '';
-                const bVal = b[column.key] || '';
-                
-                if (column.type === 'number') {
-                    return parseFloat(aVal) - parseFloat(bVal);
-                } else if (column.type === 'date') {
-                    return new Date(aVal) - new Date(bVal);
-                } else {
-                    return aVal.toString().localeCompare(bVal.toString());
-                }
-            });
-            
-            renderExcelTable();
-            showNotification(`已按 ${column.title} 排序`, 'success');
-        }
+    // 清除資料
+    qs('#clear-data').addEventListener('click', ()=>{ if(confirm('確定要清除所有資料（無法復原）？')){ state={shipments:[],accounts:[],margins:[]}; save(); renderShipments(); renderAccounts(); drawChart(); } });
 
-        function searchTable() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const rows = document.querySelectorAll('#excelTableBody tr');
-            
-            rows.forEach(row => {
-                const text = row.textContent.toLowerCase();
-                if (text.includes(searchTerm)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        }
+    // 毛利計算
+    qs('#calc-margin').addEventListener('click', ()=>{
+      const m = qs('#g-month').value; const sales=Number(qs('#g-sales').value)||0; const cost=Number(qs('#g-cost').value)||0; const gm = sales-cost; const gmr = sales? ((gm/sales)*100).toFixed(2) : '0.00';
+      state.margins.push({month:m,sales, cost, gross:gm, margin:gmr}); save(); qs('#g-result').innerText = `毛利 ${gm}，毛利率 ${gmr}%`;
+      drawChart();
+    });
 
-        function updateFilterOptions() {
-            const structure = tableStructures[currentTable];
-            const filterSelect = document.getElementById('filterColumn');
-            
-            filterSelect.innerHTML = `
-                <option value="">篩選欄位...</option>
-                ${structure.columns.map(col => `
-                    <option value="${col.key}">${col.title}</option>
-                `).join('')}
-            `;
-        }
+    // Chart
+    let revChart=null;
+    function drawChart(){
+      const last12 = Array.from({length:12}).map((_,i)=>{
+        const d = new Date(); d.setMonth(d.getMonth()-11+i); const key = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); return key;
+      });
+      const sums = {};
+      state.shipments.forEach(s=>{ const m = s.date.slice(0,7); sums[m]=(sums[m]||0)+Number(s.amount||0); });
+      const data = last12.map(k=> +(sums[k]||0).toFixed(2));
+      const ctx = document.getElementById('rev-chart').getContext('2d');
+      if(revChart) revChart.destroy();
+      revChart = new Chart(ctx,{ type:'line', data:{ labels:last12, datasets:[{ label:'每月營收', data, fill:false, tension:0.3 }] }, options:{responsive:true, plugins:{legend:{display:false}} } });
+    }
 
-        function filterTable() {
-            const filterColumn = document.getElementById('filterColumn').value;
-            if (!filterColumn) return;
-            
-            const uniqueValues = [...new Set(excelData[currentTable].map(row => row[filterColumn]).filter(val => val))];
-            
-            if (uniqueValues.length === 0) {
-                showNotification('該欄位沒有資料可篩選', 'error');
-                return;
-            }
-            
-            const selectedValue = prompt(`選擇篩選值：\n${uniqueValues.join('\n')}`);
-            if (selectedValue) {
-                const rows = document.querySelectorAll('#excelTableBody tr');
-                rows.forEach((row, index) => {
-                    if (index === 0 && row.cells.length === 1) return; // 跳過空狀態行
-                    
-                    const rowData = excelData[currentTable][index];
-                    if (rowData && rowData[filterColumn] === selectedValue) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
-            }
-        }
-
-        function clearFilters() {
-            document.getElementById('searchInput').value = '';
-            document.getElementById('filterColumn').value = '';
-            const rows = document.querySelectorAll('#excelTableBody tr');
-            rows.forEach(row => {
-                row.style.display = '';
-            });
-            showNotification('已清除所有篩選', 'success');
-        }
-
-        function updateTableStats() {
-            const data = excelData[currentTable];
-            const structure = tableStructures[currentTable];
-            
-            // 更新基本統計
-            document.getElementById('tableStats').textContent = `總計: ${data.length} 筆記錄`;
-            document.getElementById('selectedCount').textContent = selectedRows.size;
-            
-            // 計算數值欄位的總和和平均值
-            const numberColumns = structure.columns.filter(col => col.type === 'number');
-            let totalSum = 0;
-            let count = 0;
-            
-            data.forEach(row => {
-                numberColumns.forEach(col => {
-                    const value = parseFloat(row[col.key]);
-                    if (!isNaN(value)) {
-                        totalSum += value;
-                        count++;
-                    }
-                });
-            });
-            
-            document.getElementById('sumValue').textContent = totalSum.toLocaleString();
-            document.getElementById('avgValue').textContent = count > 0 ? (totalSum / count).toFixed(2) : '0';
-        }
-
-        function exportToCSV() {
-            const structure = tableStructures[currentTable];
-            const data = excelData[currentTable];
-            
-            if (data.length === 0) {
-                showNotification('沒有資料可匯出', 'error');
-                return;
-            }
-            
-            // 建立CSV內容
-            const headers = structure.columns.map(col => col.title).join(',');
-            const rows = data.map(row => 
-                structure.columns.map(col => {
-                    const value = row[col.key] || '';
-                    return `"${value.toString().replace(/"/g, '""')}"`;
-                }).join(',')
-            );
-            
-            const csvContent = [headers, ...rows].join('\n');
-            
-            // 下載檔案
-            const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `${currentTable}_${new Date().toISOString().split('T')[0]}.csv`;
-            link.click();
-            
-            showNotification('CSV檔案已匯出', 'success');
-        }
-
-        function importFromCSV() {
-            document.getElementById('csvFileInput').click();
-        }
-
-        function handleCSVImport(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const csv = e.target.result;
-                    const lines = csv.split('\n').filter(line => line.trim());
-                    
-                    if (lines.length < 2) {
-                        showNotification('CSV檔案格式不正確', 'error');
-                        return;
-                    }
-                    
-                    const structure = tableStructures[currentTable];
-                    const headers = lines[0].split(',').map(h => h.replace(/"/g, '').trim());
-                    
-                    const importedData = [];
-                    for (let i = 1; i < lines.length; i++) {
-                        const values = lines[i].split(',').map(v => v.replace(/"/g, '').trim());
-                        const row = {};
-                        
-                        structure.columns.forEach((col, index) => {
-                            if (index < values.length) {
-                                row[col.key] = values[index];
-                            }
-                        });
-                        
-                        importedData.push(row);
-                    }
-                    
-                    if (confirm(`將匯入 ${importedData.length} 筆資料，是否繼續？`)) {
-                        excelData[currentTable] = [...excelData[currentTable], ...importedData];
-                        renderExcelTable();
-                        updateTableStats();
-                        showNotification(`已匯入 ${importedData.length} 筆資料`, 'success');
-                    }
-                } catch (error) {
-                    showNotification('CSV檔案解析失敗', 'error');
-                }
-            };
-            
-            reader.readAsText(file, 'UTF-8');
-            event.target.value = ''; // 清除檔案選擇
-        }
-
-        function printExcelTable() {
-            const structure = tableStructures[currentTable];
-            const data = excelData[currentTable];
-            
-            let tableHTML = `
-                <table class="w-full border-collapse border border-gray-300">
-                    <thead>
-                        <tr class="bg-gray-100">
-                            ${structure.columns.map(col => `<th class="border border-gray-300 p-2 text-left">${col.title}</th>`).join('')}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${data.map(row => `
-                            <tr>
-                                ${structure.columns.map(col => `<td class="border border-gray-300 p-2">${row[col.key] || ''}</td>`).join('')}
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-            `;
-            
-            document.getElementById('printContent').innerHTML = `
-                <h2 class="text-2xl font-bold mb-4">${structure.title}</h2>
-                <p class="mb-4">列印日期：${new Date().toLocaleDateString('zh-TW')} | 總計：${data.length} 筆記錄</p>
-                ${tableHTML}
-            `;
-            
-            document.getElementById('printArea').classList.remove('hidden');
-            window.print();
-            document.getElementById('printArea').classList.add('hidden');
-        }
-
-        function showNotification(message, type) {
-            const notification = document.createElement('div');
-            notification.className = `fixed top-4 right-4 p-4 rounded-xl shadow-lg z-50 ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white max-w-sm bounce-in`;
-            notification.innerHTML = `
-                <div class="flex items-center">
-                    <span class="mr-2">${type === 'success' ? '✅' : '❌'}</span>
-                    <span>${message}</span>
-                </div>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
-        }
-
-        // 鍵盤快捷鍵
-        document.addEventListener('keydown', function(e) {
-            if (e.ctrlKey || e.metaKey) {
-                switch(e.key) {
-                    case 'n':
-                        e.preventDefault();
-                        addExcelRow();
-                        break;
-                    case 'd':
-                        e.preventDefault();
-                        duplicateRow();
-                        break;
-                    case 'Delete':
-                        e.preventDefault();
-                        deleteSelectedRows();
-                        break;
-                    case 's':
-                        e.preventDefault();
-                        exportToCSV();
-                        break;
-                }
-            }
-        });
-
-        // 頁面載入初始化
-        document.addEventListener('DOMContentLoaded', function() {
-            showExcelTable('customers');
-            
-            // 添加一些範例資料
-            excelData.customers = [
-                {
-                    name: '範例客戶',
-                    contact: '張先生',
-                    phone: '02-1234-5678',
-                    email: 'example@email.com',
-                    address: '台北市中山區',
-                    type: '餐廳',
-                    grade: '黃金級',
-                    paymentTerms: '月結30天',
-                    monthlyAmount: '50000',
-                    status: '活躍',
-                    notes: '優質客戶'
-                }
-            ];
-            
-            renderExcelTable();
-            updateTableStats();
-        });
-    </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'975c3a1701834a1b',t:'MTc1NjMwNDYwOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+    // 初始化
+    load(); renderShipments(); renderAccounts(); drawChart();
+  </script>
+</body>
 </html>
