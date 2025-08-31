@@ -47,7 +47,7 @@
     <main>
       <!-- 出貨紀錄 -->
       <section id="panel-shipment" class="card" style="display:block">
-        <h3>出貨紀錄（每日填）</h3>
+       <h3>出貨紀錄（每日填）</h3>
 <div class="form-inline">
   <input type="date" id="s-date" />
   <input placeholder="客戶名稱" id="s-cust" />
@@ -76,7 +76,7 @@
 </div>
 
 <div style="margin-top:10px;overflow:auto;max-height:420px">
-  <table id="shipment-table" border="1">
+  <table id="shipment-table" border="1" style="width:100%;border-collapse:collapse;">
     <thead>
       <tr>
         <th>日期</th>
@@ -84,7 +84,7 @@
         <th>類別</th>
         <th>部位</th>
         <th>規格</th>
-        <th>重量</th>
+     
         <th>單位</th>
         <th>隻數</th>
         <th>件數</th>
@@ -94,8 +94,72 @@
       </tr>
     </thead>
     <tbody></tbody>
+    <tfoot>
+      <tr>
+        <td colspan="10" style="text-align:right;font-weight:bold;">合計金額：</td>
+        <td id="total-amount">0</td>
+        <td></td>
+      </tr>
+    </tfoot>
   </table>
 </div>
+
+<script>
+function updateTotal() {
+  let total = 0;
+  document.querySelectorAll("#shipment-table tbody tr").forEach(row => {
+    let amt = parseFloat(row.cells[10].textContent) || 0;
+    total += amt;
+  });
+  document.getElementById("total-amount").textContent = total.toFixed(2);
+}
+
+document.getElementById("add-shipment").addEventListener("click", function () {
+  let date = document.getElementById("s-date").value;
+  let cust = document.getElementById("s-cust").value;
+  let type = document.getElementById("s-type").value;
+  let part = document.getElementById("s-part").value;
+  let spec = document.getElementById("s-spec").value;
+  let unit = document.getElementById("s-unit").value;
+  let weight = parseFloat(document.getElementById("s-weight").value) || 0;
+  let count = parseFloat(document.getElementById("s-count").value) || 0;
+  let pieces = parseFloat(document.getElementById("s-pieces").value) || 0;
+  let price = parseFloat(document.getElementById("s-price").value) || 0;
+
+  let amount = 0;
+
+  // 計算公式
+  if (type === "全雞") {
+    amount = weight * 0.6 * price;
+  } else if (type === "分切") {
+    amount = weight * price * 18;
+    pieces = 1; // 分切固定1件
+  } else if (type === "冷凍") {
+    amount = weight * count * price * pieces;
+  }
+
+  // 插入表格
+  let table = document.querySelector("#shipment-table tbody");
+  let row = table.insertRow();
+  row.innerHTML = `
+    <td>${date}</td>
+    <td>${cust}</td>
+    <td>${type}</td>
+    <td>${part}</td>
+    <td>${spec}</td>
+    <td>${weight}</td>
+    <td>${unit}</td>
+    <td>${count}</td>
+    <td>${pieces}</td>
+    <td>${price}</td>
+    <td>${amount.toFixed(2)}</td>
+    <td><button onclick="this.parentElement.parentElement.remove();updateTotal();">刪除</button></td>
+  `;
+
+  updateTotal(); // 新增後更新合計
+});
+</script>
+
 
       <!-- 帳務結算 -->
       <section id="panel-account" class="card" style="display:none">
