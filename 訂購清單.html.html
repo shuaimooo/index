@@ -30,8 +30,7 @@
 </head>
 <body>
   <header>
-    <h1>生鮮雞業帳務範本</h1>
-    <div class="small">說明：左側選單切換三大模組：出貨紀錄 / 帳務結算 / 統計分析。資料會存在 localStorage，可匯出 CSV/Excel。</div>
+    <h1>生鮮雞業帳務</h1>
   </header>
 
   <div class="wrap">
@@ -49,25 +48,54 @@
       <!-- 出貨紀錄 -->
       <section id="panel-shipment" class="card" style="display:block">
         <h3>出貨紀錄（每日填）</h3>
-        <div class="form-inline">
-          <input type="date" id="s-date" />
-          <select id="s-cust-type"><option>攤販</option><option>市場零售商</option><option>煮雞廠</option><option>下游加工廠</option><option>其他</option></select>
-          <input placeholder="客戶名稱" id="s-cust" />
-          <select id="s-type"><option value="全雞">全雞</option><option value="分切">分切</option><option value="冷凍">冷凍</option></select>
-          <input placeholder="重量(kg)" id="s-kg" type="number" step="0.01" />
-          <input placeholder="隻數（冷凍用）" id="s-count" type="number" />
-          <input placeholder="件數（分切/冷凍可用）" id="s-pieces" type="number" />
-          <input placeholder="單價" id="s-price" type="number" step="0.01" />
-          <button id="add-shipment">新增出貨</button>
-        </div>
+<div class="form-inline">
+  <input type="date" id="s-date" />
+  <input placeholder="客戶名稱" id="s-cust" />
 
-        <div style="margin-top:10px;overflow:auto;max-height:420px">
-          <table id="shipment-table">
-            <thead><tr><th>日期</th><th>類別</th><th>客戶</th><th>品類</th><th>重量(kg)</th><th>隻數</th><th>件數</th><th>單價</th><th>金額</th><th>操作</th></tr></thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </section>
+  <select id="s-type">
+    <option value="全雞">全雞</option>
+    <option value="分切">分切</option>
+    <option value="冷凍">冷凍</option>
+  </select>
+
+  <input placeholder="部位" id="s-part" />
+  <input placeholder="規格" id="s-spec" />
+
+  <select id="s-unit">
+    <option value="公斤">公斤</option>
+    <option value="克">克</option>
+    <option value="斤">斤</option>
+  </select>
+
+  <input placeholder="重量" id="s-weight" type="number" step="0.01" />
+  <input placeholder="隻數" id="s-count" type="number" />
+  <input placeholder="件數" id="s-pieces" type="number" />
+  <input placeholder="單價" id="s-price" type="number" step="0.01" />
+
+  <button id="add-shipment">新增出貨</button>
+</div>
+
+<div style="margin-top:10px;overflow:auto;max-height:420px">
+  <table id="shipment-table" border="1">
+    <thead>
+      <tr>
+        <th>日期</th>
+        <th>客戶</th>
+        <th>類別</th>
+        <th>部位</th>
+        <th>規格</th>
+        <th>重量</th>
+        <th>單位</th>
+        <th>隻數</th>
+        <th>件數</th>
+        <th>單價</th>
+        <th>金額</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
 
       <!-- 帳務結算 -->
       <section id="panel-account" class="card" style="display:none">
@@ -276,6 +304,48 @@
 
     // 初始化
     load(); renderShipments(); renderAccounts(); drawChart();
+    document.getElementById("add-shipment").addEventListener("click", function () {
+  let date = document.getElementById("s-date").value;
+  let cust = document.getElementById("s-cust").value;
+  let type = document.getElementById("s-type").value;
+  let part = document.getElementById("s-part").value;
+  let spec = document.getElementById("s-spec").value;
+  let unit = document.getElementById("s-unit").value;
+  let weight = parseFloat(document.getElementById("s-weight").value) || 0;
+  let count = parseFloat(document.getElementById("s-count").value) || 0;
+  let pieces = parseFloat(document.getElementById("s-pieces").value) || 0;
+  let price = parseFloat(document.getElementById("s-price").value) || 0;
+
+  let amount = 0;
+
+  // 計算公式
+  if (type === "全雞") {
+    amount = weight * 0.6 * price;
+  } else if (type === "分切") {
+    amount = weight * price * 18;
+    pieces = 1; // 分切固定1件
+  } else if (type === "冷凍") {
+    amount = weight * count * price * pieces;
+  }
+
+  // 插入表格
+  let table = document.querySelector("#shipment-table tbody");
+  let row = table.insertRow();
+  row.innerHTML = `
+    <td>${date}</td>
+    <td>${cust}</td>
+    <td>${type}</td>
+    <td>${part}</td>
+    <td>${spec}</td>
+    <td>${weight}</td>
+    <td>${unit}</td>
+    <td>${count}</td>
+    <td>${pieces}</td>
+    <td>${price}</td>
+    <td>${amount.toFixed(2)}</td>
+    <td><button onclick="this.parentElement.parentElement.remove()">刪除</button></td>
+  `;
+});
   </script>
 </body>
 </html>
