@@ -30,9 +30,8 @@
 </head>
 <body>
   <header>
-    <h1>生鮮雞業帳務範本（單檔 HTML）</h1>
-    <div class="small">說明：左側選單切換三大模組：出貨紀錄 / 帳務結算 / 統計分析。資料會存在 localStorage，可匯出 CSV/Excel。</div>
-  </header>
+    <h1>生鮮雞業帳務範本</h1>
+    
 
   <div class="wrap">
     <nav>
@@ -125,8 +124,6 @@
         </div>
       </section>
 
-      <footer class="small">提示：系統會根據你輸入的出貨紀錄自動彙總到帳務結算（本期出貨金額）。如需每週上游結算，請在出貨紀錄中用客戶類別標註為「上游-廠商」，再於帳務模組管理付款。</footer>
-    </main>
   </div>
 
   <!-- 需要的外部套件：Chart.js, SheetJS (匯出) -->
@@ -142,27 +139,28 @@
     function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
 
     // 計算金額函數（依三種算法）
-    function calcAmount(item){
-      const price = Number(item.price||0);
-      const kg = Number(item.kg||0);
-      const count = Number(item.count||0);
-      const pieces = Number(item.pieces||0);
-      if(item.type==='全雞'){
-        // 全雞：公斤 x 0.6 x 單價
-        return +(kg * 0.6 * price).toFixed(2);
-      }
-      if(item.type==='分切'){
-        // 分切：(公斤 x 單價 x 18) = 1 件
-        // 若輸入件數，則金額 = 件數 * (公斤*單價*18) ???
-        // 我們採用：金額 = (kg * price * 18)
-        return +((kg * price * 18)).toFixed(2);
-      }
-      if(item.type==='冷凍'){
-        // 冷凍：公斤 x 隻 x 單價 x 件數
-        return +(kg * count * price * (pieces||1)).toFixed(2);
-      }
-      return 0;
-    }
+
+// 計算金額函數（依三種算法）
+function calcAmount(item){
+  const price = Number(item.price||0);
+  const kg = Number(item.kg||0);
+  const count = Number(item.count||0);
+  const pieces = Number(item.pieces||0);
+
+  if(item.type==='全雞'){
+    // 全雞：重量 × 單價 × 0.6 × 件數
+    return +(kg * price * 0.6 * (pieces||1)).toFixed(2);
+  }
+  if(item.type==='分切'){
+    // 分切：件數 × 18 × 單價
+    return +((pieces * 18 * price)).toFixed(2);
+  }
+  if(item.type==='冷凍'){
+    // 冷凍：重量 × 8 × 件數 × 單價
+    return +(kg * 8 * pieces * price).toFixed(2);
+  }
+  return 0;
+}
 
     // DOM & 互動
     const qs = (s)=>document.querySelector(s);
