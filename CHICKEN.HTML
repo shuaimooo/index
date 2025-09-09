@@ -135,6 +135,53 @@
 
         </div>
 
+        <!-- 第三排 - 新增輸入區域 -->
+        <div class="bg-yellow-100 rounded-xl shadow-lg p-6 mb-8">
+            <h3 class="text-xl font-semibold text-gray-700 mb-4 text-center">倍數計算輸入</h3>
+            <div class="flex justify-center items-center space-x-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-600 mb-2">數字輸入（元）</label>
+                    <input type="number" id="multiplierPrice" step="0.1" min="0" 
+                           class="w-32 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-center" 
+                           placeholder="輸入金額">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-600 mb-2">選擇（公斤/斤）</label>
+                    <select id="multiplierUnit" class="w-32 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-center">
+                        <option value="公斤">公斤</option>
+                        <option value="斤">斤</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第四排 - 倍數計算結果 -->
+        <div class="grid md:grid-cols-3 gap-6 mb-8">
+            <!-- 1.5-2.0倍 -->
+            <div class="bg-pink-100 rounded-xl shadow-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4 text-center">1.5 - 2.0 倍數</h3>
+                <div id="multiplier15to20" class="space-y-2 text-sm">
+                    <div class="text-gray-500 text-center">請輸入金額</div>
+                </div>
+            </div>
+
+            <!-- 2.1-2.5倍 -->
+            <div class="bg-cyan-100 rounded-xl shadow-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4 text-center">2.1 - 2.5 倍數</h3>
+                <div id="multiplier21to25" class="space-y-2 text-sm">
+                    <div class="text-gray-500 text-center">請輸入金額</div>
+                </div>
+            </div>
+
+            <!-- 2.6-3.0倍 -->
+            <div class="bg-lime-100 rounded-xl shadow-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4 text-center">2.6 - 3.0 倍數</h3>
+                <div id="multiplier26to30" class="space-y-2 text-sm">
+                    <div class="text-gray-500 text-center">請輸入金額</div>
+                </div>
+            </div>
+        </div>
+
         <!-- 第二排計算區域 -->
         <div class="grid md:grid-cols-3 gap-6 mb-8">
             <!-- 毛雞計算 -->
@@ -434,6 +481,59 @@
             }
         }
 
+        // 倍數計算功能
+        function updateMultiplierCalculation() {
+            const priceValue = parseFloat(document.getElementById('multiplierPrice').value);
+            const unit = document.getElementById('multiplierUnit').value;
+            
+            if (isNaN(priceValue) || priceValue <= 0) {
+                // 清空所有結果
+                document.getElementById('multiplier15to20').innerHTML = '<div class="text-gray-500 text-center">請輸入數字</div>';
+                document.getElementById('multiplier21to25').innerHTML = '<div class="text-gray-500 text-center">請輸入數字</div>';
+                document.getElementById('multiplier26to30').innerHTML = '<div class="text-gray-500 text-center">請輸入數字</div>';
+                return;
+            }
+
+            // 根據單位換算成公斤價格
+            let pricePerKg = priceValue;
+            if (unit === '斤') {
+                pricePerKg = priceValue / 0.6; // 斤轉公斤：斤/0.6 = 公斤
+            }
+
+            // 1.5-2.0KG倍數計算
+            let html15to20 = '';
+            for (let i = 15; i <= 20; i++) {
+                const multiplier = i / 10;
+                const result = pricePerKg * multiplier;
+                html15to20 += `<div class="bg-white p-2 rounded border">
+                    $${priceValue}${unit === '斤' ? '斤' : ''} × ${multiplier.toFixed(1)}KG = <span class="font-semibold text-pink-600">$${result.toFixed(1)}</span>
+                </div>`;
+            }
+            document.getElementById('multiplier15to20').innerHTML = html15to20;
+
+            // 2.1-2.5KG倍數計算
+            let html21to25 = '';
+            for (let i = 21; i <= 25; i++) {
+                const multiplier = i / 10;
+                const result = pricePerKg * multiplier;
+                html21to25 += `<div class="bg-white p-2 rounded border">
+                    $${priceValue}${unit === '斤' ? '斤' : ''} × ${multiplier.toFixed(1)}KG = <span class="font-semibold text-cyan-600">$${result.toFixed(1)}</span>
+                </div>`;
+            }
+            document.getElementById('multiplier21to25').innerHTML = html21to25;
+
+            // 2.6-3.0KG倍數計算
+            let html26to30 = '';
+            for (let i = 26; i <= 30; i++) {
+                const multiplier = i / 10;
+                const result = pricePerKg * multiplier;
+                html26to30 += `<div class="bg-white p-2 rounded border">
+                    $${priceValue}${unit === '斤' ? '斤' : ''} × ${multiplier.toFixed(1)}KG = <span class="font-semibold text-lime-600">$${result.toFixed(1)}</span>
+                </div>`;
+            }
+            document.getElementById('multiplier26to30').innerHTML = html26to30;
+        }
+
         // 清除輸入框功能
         function clearInput(inputId) {
             const input = document.getElementById(inputId);
@@ -504,6 +604,9 @@
                 updateCookedCalculation();
             });
 
+            // 倍數計算事件
+            document.getElementById('multiplierPrice').addEventListener('input', updateMultiplierCalculation);
+            document.getElementById('multiplierUnit').addEventListener('change', updateMultiplierCalculation);
 
             // 紀錄清除按鈕事件
             document.getElementById('clearBasePriceHistory').addEventListener('click', clearBasePriceHistory);
@@ -515,5 +618,5 @@
             calculatePrice();
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9725fdbd23caa343',t:'MTc1NTczNTkwNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c56d0437dcf06f',t:'MTc1NzQwNzY5OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
