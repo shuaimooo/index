@@ -1,574 +1,1160 @@
+1141022_045081_OLDIIMN001
 
 
-<html lang="zh-TW"><head>
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LUMASONIX 技術人員報價單</title>
+    <title>LUMASONIX 人員勞報請款單</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        * {
-            box-sizing: border-box;
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f0f4f8;
             margin: 0;
             padding: 0;
-            font-family: Arial, "Microsoft JhengHei", sans-serif;
         }
-        
-        body {
-            background-color: #f0f0f0;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-        }
-        
-        .a4-container {
+        .a4-page {
             width: 210mm;
             height: 297mm;
-            background-color: white;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            position: relative;
             margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
             overflow: hidden;
+            position: relative;
+            padding-bottom: 20mm; /* Space for footer */
         }
-        
         .header {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 80px;
-            background: #000000;
+            background-color: #000;
+            color: white;
             padding: 15px 20px;
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
         }
-        
-        .header-title {
-            color: white;
-        }
-        
-        .header-title h1 {
-            font-size: 26px;
-            font-weight: bold;
-            margin-bottom: 4px;
-        }
-        
-        .header-title p {
-            font-size: 18px;
-        }
-        
-        .header-box {
-            background-color: rgba(255, 255, 255, 0.2);
-            padding: 10px 18px;
-            border-radius: 5px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-        
-        .header-box h2 {
-            font-size: 22px;
-            color: white;
-            font-weight: bold;
-        }
-        
-        .section-header {
-            background: #000000;
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-            padding: 8px 12px;
-            border-radius: 4px;
-            margin-bottom: 10px;
-        }
-        
-        .info-sections-container {
-            display: flex;
-    gap: 20px;
-    margin-top: 100px; /* 不要用 position:absolute;top */
-    height: auto;
-    padding: 0 20px;
-        }
-        
-        .client-info, .quote-info {
-            flex: 1;
-        }
-        
-        .form-row {
-            display: flex;
-            margin-bottom: 8px;
-            align-items: center;
-        }
-        
-        .form-label {
-            width: 90px;
-            font-size: 16px;
-        }
-        
-        .form-input {
-            flex: 1;
-            height: 30px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            padding: 0 10px;
-            font-size: 16px;
-        }
-        
-        .readonly-input {
-            background-color: #f3f4f6;
-        }
-        
-        .items-section {
-    margin-top: 30px;  /* 用 margin 控制間距 */
-    padding: 0 20px;
-        }
-        
-        .items-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 16px;
-        }
-        
-        .items-table th {
-            background: #000000;
-            color: white;
+        .header-left {
             text-align: left;
-            padding: 8px 10px;
-            font-weight: normal;
         }
-        
-        .items-table td {
-            padding: 7px 10px;
-            border-bottom: 1px solid #e5e7eb;
-            vertical-align: top;
-        }
-        
-        .items-table input[type="number"] {
-            width: 60px;
-            height: 30px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            padding: 0 5px;
-            text-align: center;
-            font-size: 16px;
-        }
-        
-        .price, .subtotal {
+        .header-right {
             text-align: right;
-            font-size: 16px;
         }
-        
-        .total-row {
-            background-color: #f3f4f6;
-            font-weight: bold;
+        .section-divider {
+            height: 1px;
+            background-color: #ccc;
+            margin: 15px 0;
         }
-        
-        .total-row td {
-            padding: 10px;
-            font-size: 18px;
-        }
-        
-        .work-content {
-            font-size: 14px;
-            color: #4b5563;
-        }
-        
-       .notes-section {
-    margin-top: 30px;
-    padding: 0 20px;
-        }
-        
-        .notes-content {
-            font-size: 15px;
-            color: #4b5563;
-            line-height: 1.5;
-            padding: 12px;
-        }
-        
-        .notes-content ul {
-            padding-left: 25px;
-        }
-        
-        .notes-content li {
-            margin-bottom: 8px;
-        }
-        
-      .action-buttons {
-    margin-top: 40px;
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    padding: 0 20px;
-}
-        
-        .btn {
-            padding: 10px 24px;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: white;
-        }
-        
-        .btn-print {
-            background-color: #6b7280;
-        }
-        
-        .btn-save {
-            background-color: #2563eb;
-        }
-        
-        .btn-download {
-            background-color: #10b981;
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        
         .footer {
-    margin-top: 50px;
-    text-align: center;
-    font-size: 14px;
-    color: white;
-    padding: 15px;
-    background: #000000;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 10px 20px;
+            background-color: #f8f8f8;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
         }
-        
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+        .time-input {
+            width: 40px;
+            text-align: center;
+        }
+        .time-label {
+            margin: 0 2px;
+        }
+        .date-input {
+            width: 40px;
+            text-align: center;
+            border: none;
+            border-bottom: 1px solid #999;
+            outline: none;
+            background: transparent;
+        }
+        .text-input {
+            border: none;
+            border-bottom: 1px solid #999;
+            outline: none;
+            background: transparent;
+        }
         @media print {
             body {
-                background: none;
-                padding: 0;
+                background-color: white;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
-            
-            .a4-container {
-                box-shadow: none;
-                width: 100%;
-                height: auto;
-            }
-            
-            .action-buttons {
+            .no-print {
                 display: none;
             }
-        }@media print {
-    .notes-section, .notes-content, .notes-section * {
-        color: #000 !important;
-        background: #fff !important;
-    }
+            .print-break {
+                page-break-before: always;
+            }
+            .a4-page {
+                box-shadow: none;
+                margin: 0;
+                width: 100%;
+                height: 100%;
+            }
+        }
     </style>
 </head>
-<body>
-    <div class="a4-container" id="quotation">
-        <!-- Header -->
-        <div class="header">
-            <div class="header-title">
-                <h1>LUMASONIX x PROFESSIONAL</h1>
-                <p>專業技術支援 x 人力媒合行銷</p>
-            </div>
-            <div class="header-box">
-                <h2>技術人員報價單</h2>
-            </div>
-        </div>
-
-        <!-- Info Sections Container -->
-        <div class="info-sections-container">
-            <!-- Client Information -->
-            <div class="client-info">
-                <div class="section-header">客戶資訊</div>
-                <div style="padding: 12px;">
-                    <div class="form-row">
-                        <div class="form-label">廠商名稱:</div>
-                        <input type="text" class="form-input" id="companyName">
-                    </div>
-                    <div class="form-row">
-                        <div class="form-label">派遣日期:</div>
-                        <input type="text" class="form-input" id="dispatchDate" placeholder="年/月/日">
-                    </div>
-                    <div class="form-row">
-                        <div class="form-label">活動地點:</div>
-                        <input type="text" class="form-input" id="eventLocation">
-                    </div>
-                    <div class="form-row">
-                        <div class="form-label">聯絡窗口:</div>
-                        <input type="text" class="form-input" id="contactPerson">
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quote Information -->
-            <div class="quote-info">
-                <div class="section-header">報價資訊</div>
-                <div style="padding: 12px;">
-                    <div class="form-row">
-                        <div class="form-label">報價編號:</div>
-                        <input type="text" value="LX-2025-98945" class="form-input readonly-input" readonly="">
-                    </div>
-                    <div class="form-row">
-                        <div class="form-label">報價日期:</div>
-                        <input type="text" value="2025/05/29" class="form-input readonly-input" readonly="">
-                    </div>
-                    <div class="form-row">
-                        <div class="form-label">負責人:</div>
-                        <input type="text" value="蘇裕庭" class="form-input readonly-input" readonly="">
-                    </div>
-                    <div class="form-row">
-                        <div class="form-label">聯絡電話:</div>
-                        <input type="text" value="0926169899" class="form-input readonly-input" readonly="">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Items Table -->
-        <div class="items-section">
-            <table class="items-table">
-                <thead>
-                    <tr>
-                        <th style="width: 110px;">品項</th>
-                        <th style="width: 70px; text-align: center;">數量</th>
-                        <th style="width: 90px;">單價</th>
-                        <th>工作內容</th>
-                        <th style="width: 120px; text-align: right;">小計(NT$)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>人事支援</td>
-                        <td style="text-align: center;">
-                             <input type="number" min="0" value="0" class="quantity" id="staffSupportQty" data-price="2500">
-                        </td>
-                        <td class="price">2,500</td>
-                        <td>進場、演出、撤場</td>
-                        <td class="subtotal">10,000</td>
-                    </tr>
-                    <tr>
-                        <td>燈/音/視控</td>
-                        <td style="text-align: center;">
-                            <input type="number" min="0" value="0" class="quantity" data-price="1000">
-                        </td>
-                        <td class="price">1,000</td>
-                        <td>
-                            <div class="work-content">演出前一日彩排，將視為一場演出，另行計費。</div>
-                            <div class="work-content">彩排與演出同日進行，僅收取一次演出費用。</div>
-                        </td>
-                        <td class="subtotal">1,000</td>
-                    </tr>
-                    <tr>
-                        <td>追光燈操作</td>
-                        <td style="text-align: center;">
-                            <input type="number" min="0" value="0" class="quantity" data-price="1000">
-                        </td>
-                        <td class="price">1,000</td>
-                        <td>
-                            <div class="work-content">演出前一日彩排，將視為一場演出，另行計費。</div>
-                            <div class="work-content">彩排與演出同日進行，僅收取一次演出費用。</div>
-                        </td>
-                        <td class="subtotal">1,000</td>
-                    </tr>
-                    <tr>
-                        <td>高空</td>
-                        <td style="text-align: center;">
-                            <input type="number" min="0" value="0" class="quantity" data-price="1000">
-                        </td>
-                        <td class="price">1,000</td>
-                        <td>依layer6格以上約9米高度，另酌收費</td>
-                        <td class="subtotal">0</td>
-                    </tr>
-                    <tr>
-                        <td>加班費</td>
-                        <td style="text-align: center;">
-                            <input type="number" min="0" value="0" class="quantity" data-price="350">
-                        </td>
-                        <td class="price">350</td>
-                        <td>每小時計算，超過8小時工作時間</td>
-                        <td class="subtotal">0</td>
-                    </tr>
-                    <tr>
-                        <td>行政執行費</td>
-                        <td style="text-align: center;">一式</td>
-                        <td class="price">10%</td>
-                        <td>單價*人數*10%</td>
-                        <td id="adminFee" class="subtotal">1,000</td>
-                    </tr>
-                    <tr>
-                        <td>其他</td>
-                        <td style="text-align: center;">一式</td>
-                        <td>
-                            <input type="number" min="0" value="0" id="otherPrice" style="width: 70px; height: 30px; border: 1px solid #ccc; border-radius: 4px; text-align: right; font-size: 16px;">
-                        </td>
-                        <td>
-                            <input type="text" placeholder="請輸入說明..." style="width: 100%; height: 30px; border: 1px solid #ccc; border-radius: 4px; padding: 0 8px; font-size: 16px;">
-                        </td>
-                        <td id="otherFee" class="subtotal">0</td>
-                    </tr>
-                    <tr>
-                        <td>技術指導</td>
-                        <td style="text-align: center;">
-                            <input type="number" min="0" value="0" class="quantity" data-price="5000">
-                        </td>
-                        <td class="price">5,000</td>
-                        <td>現場技術統籌與協調</td>
-                        <td class="subtotal">0</td>
-                    </tr>
-                    <tr class="total-row">
-                        <td colspan="4" style="text-align: right;">總計 (NT$):</td>
-                        <td id="totalAmount">13,000</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Notes Section -->
-        <div class="notes-section">
-            <div class="section-header">備註事項</div>
-            <div class="notes-content">
-                <ul>
-                    <li>本人僅協助媒合與執行活動之統籌角色，執行風險與責任應由現場技術人員自負。</li>
-                    <li>移動至不同活動場地即視為新場次，費用重新計算。</li>
-                    <li>演出當天取消需支付報價金額之 50% ，改期需於五日前通知，否則視同取消。</li>
-                    <li>活動結束雙方應現場確認交付狀況後視驗收完畢，恕不再就當日服務異議減項。</li>
-                    <li>維持作業品質與人員安排效率等相關行政作業，將酌收行政執行費用，已併入請款明細列示。</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="action-buttons" style="display: flex;">
-            <button class="btn btn-print" onclick="printQuote()">列印報價單</button>
-            <button class="btn btn-save" onclick="saveQuote()">儲存報價單</button>
-            <button class="btn btn-download" onclick="downloadPDF()">下載PDF</button>
-        </div>
-
-        <!-- Footer -->
-        <div class="footer">
-            LUMASONIX x PROFESSIONAL | 專業技術支援 x 人力媒合行銷<br>
-            電話: 0926-169-899 | 電子郵件: lumasonix@gmail.com
+<body class="bg-gray-100">
+    <div class="py-8 no-print">
+        <div class="container mx-auto px-4 flex justify-end gap-3 mb-4">
+            <button id="printBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm transition duration-200">列印表單</button>
+            <button id="downloadPdfBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm transition duration-200">下載 PDF</button>
+            <button id="resetBtn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm transition duration-200">重置表單</button>
         </div>
     </div>
 
+    <div id="invoice-content">
+        <!-- 第一頁 A4 -->
+        <div id="page1" class="a4-page mb-8">
+            <!-- 黑底白字標題 -->
+            <div class="header">
+                <div class="header-left">
+                    <h1 class="text-2xl font-bold">LUMASONIX x PROFESSIONAL</h1>
+                    <p class="text-sm">專業技術支援 x 人力媒合行銷</p>
+                </div>
+                <div class="header-right">
+                    <h2 class="text-xl font-bold">人員勞報請款</h2>
+                </div>
+            </div>
+            
+            <!-- 內容區域 -->
+            <div class="p-6">
+                <!-- 基本資訊與聯絡資訊 - 左右對稱 -->
+                <div class="mb-6">
+                    <div class="grid grid-cols-2 gap-6">
+                        <!-- 左側欄位 -->
+                        <div class="space-y-4">
+                            <div class="flex items-center">
+                                <label class="text-gray-700 mr-2 w-20">請款日期:</label>
+                                <input type="number" class="date-input" id="invoiceYear" min="1" max="999">
+                                <span class="mx-1">年</span>
+                                <input type="number" class="date-input" id="invoiceMonth" min="1" max="12">
+                                <span class="mx-1">月</span>
+                                <input type="number" class="date-input" id="invoiceDay" min="1" max="31">
+                                <span class="mx-1">日</span>
+                            </div>
+                            <div class="flex items-center">
+                                <label class="text-gray-700 mr-2 w-20">廠商名稱:</label>
+                                <input type="text" id="vendorName" class="text-input flex-1" placeholder="">
+                            </div>
+                            <div class="flex items-center">
+                                <label class="text-gray-700 mr-2 w-20">活動地點:</label>
+                                <input type="text" id="eventLocation" class="text-input flex-1" placeholder="">
+                            </div>
+                        </div>
+                        
+                        <!-- 右側欄位 -->
+                        <div class="space-y-4">
+                            <div class="flex items-center">
+                                <label class="text-gray-700 mr-2 w-20">連絡電話:</label>
+                                <input type="text" id="contactPhone" class="text-input flex-1" value="0926169899">
+                            </div>
+                            <div class="flex items-center">
+                                <label class="text-gray-700 mr-2 w-20">負責人:</label>
+                                <input type="text" id="contactPerson" class="text-input flex-1" value="蘇裕庭">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 分隔線 -->
+                <div class="section-divider"></div>
+                
+                <!-- 費用統計 -->
+                <div class="mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-blue-700">費用統計</h3>
+                        <button id="addOtherBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-sm transition duration-200 no-print">+ 新增其他</button>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full border-collapse">
+                            <thead>
+                                <tr class="bg-blue-100">
+                                    <th class="px-4 py-2 text-left text-blue-800">品項</th>
+                                    <th class="px-4 py-2 text-center text-blue-800 w-20">數量</th>
+                                    <th class="px-4 py-2 text-center text-blue-800 w-28">單價 (NT$)</th>
+                                    <th class="px-4 py-2 text-left text-blue-800">工作內容</th>
+                                    <th class="px-4 py-2 text-center text-blue-800 w-28">小計 (NT$)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="supportItemsTable">
+                                <tr class="border-b border-gray-200">
+                                    <td class="px-4 py-3">人事支援</td>
+                                    <td class="px-4 py-3">
+                                        <input type="number" id="staffQty" class="w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" value="0" min="0" oninput="calculateAll()">
+                                    </td>
+                                    <td class="px-4 py-3 text-center">3000</td>
+                                    <td class="px-4 py-3">進場、演出、撤場</td>
+                                    <td class="px-4 py-3 text-center" id="staffSubtotal">0</td>
+                                </tr>
+                                <tr class="border-b border-gray-200">
+                                    <td class="px-4 py-3">燈/音/視控</td>
+                                    <td class="px-4 py-3">
+                                        <input type="number" id="techQty" class="w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" value="0" min="0" oninput="calculateAll()">
+                                    </td>
+                                    <td class="px-4 py-3 text-center">1,000</td>
+                                    <td class="px-4 py-3">演出前一日彩排，將視為一場演出，另行計費。</td>
+                                    <td class="px-4 py-3 text-center" id="techSubtotal">0</td>
+                                </tr>
+                                <tr class="border-b border-gray-200">
+                                    <td class="px-4 py-3">追光燈操作</td>
+                                    <td class="px-4 py-3">
+                                        <input type="number" id="spotlightQty" class="w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" value="0" min="0" oninput="calculateAll()">
+                                    </td>
+                                    <td class="px-4 py-3 text-center">1,000</td>
+                                    <td class="px-4 py-3">演出前一日彩排，將視為一場演出，另行計費。</td>
+                                    <td class="px-4 py-3 text-center" id="spotlightSubtotal">0</td>
+                                </tr>
+                                <tr class="border-b border-gray-200">
+                                    <td class="px-4 py-3">高空作業</td>
+                                    <td class="px-4 py-3">
+                                        <input type="number" id="heightQty" class="w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" value="0" min="0" oninput="calculateAll()">
+                                    </td>
+                                    <td class="px-4 py-3 text-center">1,000</td>
+                                    <td class="px-4 py-3">作業高度達layher第 6 格以上(約9米)</td>
+                                    <td class="px-4 py-3 text-center" id="heightSubtotal">0</td>
+                                </tr>
+                                <tr class="border-b border-gray-200">
+                                    <td class="px-4 py-3">加班費用</td>
+                                    <td class="px-4 py-3">
+                                        <input type="number" id="overtimeQty" class="w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" value="0" min="0" step="0.5" oninput="calculateAll()">
+                                    </td>
+                                    <td class="px-4 py-3 text-center">350</td>
+                                    <td class="px-4 py-3">依實際加班時數計算</td>
+                                    <td class="px-4 py-3 text-center" id="overtimeSubtotal">0</td>
+                                </tr>
+                                <tr class="border-b border-gray-200">
+                                    <td class="px-4 py-3">行政執行費</td>
+                                    <td class="px-4 py-3 text-center">一式</td>
+                                    <td class="px-4 py-3 text-center">10%</td>
+                                    <td class="px-4 py-3">人事支援 x 10%</td>
+                                    <td class="px-4 py-3 text-center" id="adminSubtotal">0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="mt-6 text-right">
+                        <p class="text-lg font-medium">未稅金額: <span id="subtotalAmount" class="text-blue-800">NT$0</span></p>
+                        <p class="text-xl font-bold mt-2">總計金額: <span id="totalAmount" class="text-blue-800">NT$0</span></p>
+                    </div>
+                </div>
+                
+                <!-- 分隔線 -->
+                <div class="section-divider"></div>
+                
+                <!-- 匯款資訊 -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold text-blue-700 mb-4">匯款資訊</h3>
+                    <div class="grid grid-cols-2 gap-6">
+                        <!-- 左側欄位 -->
+                        <div class="space-y-4">
+                            <div class="flex items-center">
+                                <label class="text-gray-700 mr-2 w-20">帳號戶名:</label>
+                                <input type="text" id="accountName" class="text-input flex-1" value="蘇裕庭">
+                            </div>
+                            <div class="flex items-center">
+                                <label class="text-gray-700 mr-2 w-20">匯款帳號:</label>
+                                 <input type="text" id="accountName" class="text-input flex-1" value="0842-979-176643">
+                            </div>
+                        </div>
+                        
+                        <!-- 右側欄位 -->
+                        <div class="space-y-4">
+                            <div class="flex items-center">
+                                <label class="text-gray-700 mr-2 w-20">匯款代碼:</label>
+                                <input type="text" id="bankCode" class="text-input flex-1" value="808(玉山銀行中路特區分行)">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 頁尾 -->
+                <div class="footer">
+                    LUMASONIX x PROFESSIONAL 專業技術支援 x 人力媒合行銷 | 聯絡電話: 0926169899
+                </div>
+            </div>
+        </div>
+        
+        <!-- 第二頁 A4 -->
+        <div id="page2" class="a4-page mb-8 print-break">
+            <!-- 黑底白字標題 -->
+            <div class="header">
+                <div class="header-left">
+                    <h1 class="text-2xl font-bold">LUMASONIX x PROFESSIONAL</h1>
+                    <p class="text-sm">專業技術支援 x 人力媒合行銷</p>
+                </div>
+                <div class="header-right">
+                    <h2 class="text-xl font-bold">人員勞報請款</h2>
+                </div>
+            </div>
+            
+            <!-- 內容區域 -->
+            <div class="p-6">
+                <!-- 時間資訊 -->
+                <div class="mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-blue-700">時間資訊</h3>
+                        <button id="addTimeDayBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-sm transition duration-200 no-print">+ 新增天數</button>
+                    </div>
+                    
+                    <div id="timeInfoContainer">
+                        <!-- 第一天時間 -->
+                        <div class="time-day mb-4 pb-4 border-b border-gray-200">
+                            <h4 class="font-medium text-blue-800 mb-3">第一天:</h4>
+                            <div class="flex items-center flex-wrap gap-1">
+                                <input type="number" class="time-input border rounded px-0 py-1 start-year" value="114">
+                                <span class="time-label">年</span>
+                                
+                                <input type="number" class="time-input border rounded px-1 py-1 start-month" min="1" max="12" value="06">
+                                <span class="time-label">月</span>
+                                
+                                <input type="number" class="time-input border rounded px-1 py-1 start-day" min="1" max="31" value="06">
+                                <span class="time-label">日</span>
+                                
+                                <input type="number" class="time-input border rounded px-1 py-1 start-hour" min="0" max="23" value="09">
+                                <span class="time-label">時</span>
+                                
+                                <input type="number" class="time-input border rounded px-1 py-1 start-minute" min="0" max="59" value="00">
+                                <span class="time-label">分</span>
+                                
+                                <span class="mx-2">至</span>
+                                
+                                <input type="number" class="time-input border rounded px-1 py-1 end-hour" min="0" max="23" value="18">
+                                <span class="time-label">時</span>
+                                
+                                <input type="number" class="time-input border rounded px-1 py-1 end-minute" min="0" max="59" value="00">
+                                <span class="time-label">分</span>
+                                
+                                <span class="mx-2">共計</span>
+                                <input type="number" class="time-input border rounded px-1 py-1 total-hours" readonly value="9">
+                                <span class="time-label">小時</span>
+                                
+                                <span class="mx-2">加班</span>
+                                <input type="number" class="time-input border rounded px-1 py-1 overtime-hours" readonly value="1">
+                                <span class="time-label">小時</span>
+                                
+                                <button class="calc-hours-btn ml-2 bg-gray-200 hover:bg-gray-300 text-gray-800 px-2 py-1 rounded text-xs no-print">計算</button>
+                            </div>
+                        </div>
+                        
+                        <!-- 第二天時間 -->
+                        <div class="time-day mb-4 pb-4 border-b border-gray-200">
+                            <h4 class="font-medium text-blue-800 mb-3">第二天:</h4>
+                            <div class="flex items-center flex-wrap gap-1">
+                                <input type="number" class="time-input border rounded px-0 py-1 start-year" value="">
+                                <span class="time-label">年</span>
+                                
+                                <input type="number" class="time-input border rounded px-1 py-1 start-month" min="1" max="12" value="">
+                                <span class="time-label">月</span>
+                                
+                                <input type="number" class="time-input border rounded px-1 py-1 start-day" min="1" max="31" value="">
+                                <span class="time-label">日</span>
+                                
+                                <input type="number" class="time-input border rounded px-1 py-1 start-hour" min="0" max="23" value="">
+                                <span class="time-label">時</span>
+                                
+                                <input type="number" class="time-input border rounded px-1 py-1 start-minute" min="0" max="59" value="">
+                                <span class="time-label">分</span>
+                                
+                                <span class="mx-2">至</span>
+                                
+                                <input type="number" class="time-input border rounded px-1 py-1 end-hour" min="0" max="23" value="">
+                                <span class="time-label">時</span>
+                                
+                                <input type="number" class="time-input border rounded px-1 py-1 end-minute" min="0" max="59" value="">
+                                <span class="time-label">分</span>
+                                
+                                <span class="mx-2">共計</span>
+                                <input type="number" class="time-input border rounded px-1 py-1 total-hours" readonly value="">
+                                <span class="time-label">小時</span>
+                                
+                                <span class="mx-2">加班</span>
+                                <input type="number" class="time-input border rounded px-1 py-1 overtime-hours" readonly value="">
+                                <span class="time-label">小時</span>
+                                
+                                <button class="calc-hours-btn ml-2 bg-gray-200 hover:bg-gray-300 text-gray-800 px-2 py-1 rounded text-xs no-print">計算</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 分隔線 -->
+                <div class="section-divider"></div>
+                
+                <!-- 勞報資料檢附 -->
+                <div id="laborReportSection" class="mb-8">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-blue-700">勞報附檢表</h3>
+                        <button id="addLaborPersonBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-sm transition duration-200 no-print">+ 新增人員</button>
+                    </div>
+                    
+                    <div id="laborReportContainer">
+                        <!-- 第一個人員 -->
+                        <div class="labor-person mb-6 p-4 bg-gray-50 rounded-lg">
+                            <div class="grid grid-cols-4 gap-4 mb-4">
+                                <div>
+                                    <label class="block text-gray-700 mb-1">姓名</label>
+                                    <input type="text" class="labor-name w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 mb-1">生日</label>
+                                    <input type="text" class="labor-birth w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 mb-1">身分證</label>
+                                    <input type="text" class="labor-id w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 mb-1">聯絡電話</label>
+                                    <input type="text" class="labor-phone w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="">
+                                </div>
+                            </div>
+                            <div class="flex items-center mb-2">
+                                <div class="flex-grow">
+                                    <label class="block text-gray-700 mb-1">戶籍地址</label>
+                                    <input type="text" class="labor-address w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="">
+                                </div>
+                                <div class="ml-4 w-32">
+                                    <label class="block text-gray-700 mb-1">勞報金額</label>
+                                    <div class="flex items-center">
+                                        <input type="number" class="labor-amount w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="">
+                                        <span class="ml-1">元</span>
+                                    </div>
+                                </div>
+                                <div class="ml-2 no-print">
+                                    <button class="remove-labor-btn bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-lg text-xs transition duration-200 mt-6">刪除</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 第二個人員 -->
+                        <div class="labor-person mb-6 p-4 bg-gray-50 rounded-lg">
+                            <div class="grid grid-cols-4 gap-4 mb-4">
+                                <div>
+                                    <label class="block text-gray-700 mb-1">姓名</label>
+                                    <input type="text" class="labor-name w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 mb-1">生日</label>
+                                    <input type="text" class="labor-birth w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 mb-1">身分證</label>
+                                    <input type="text" class="labor-id w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 mb-1">聯絡電話</label>
+                                    <input type="text" class="labor-phone w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="">
+                                </div>
+                            </div>
+                            <div class="flex items-center mb-2">
+                                <div class="flex-grow">
+                                    <label class="block text-gray-700 mb-1">戶籍地址</label>
+                                    <input type="text" class="labor-address w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="">
+                                </div>
+                                <div class="ml-4 w-32">
+                                    <label class="block text-gray-700 mb-1">勞報金額</label>
+                                    <div class="flex items-center">
+                                        <input type="number" class="labor-amount w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="">
+                                        <span class="ml-1">元</span>
+                                    </div>
+                                </div>
+                                <div class="ml-2 no-print">
+                                    <button class="remove-labor-btn bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-lg text-xs transition duration-200 mt-6">刪除</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 頁尾 -->
+                <div class="footer">
+                    LUMASONIX x PROFESSIONAL 專業技術支援 x 人力媒合行銷 | 聯絡電話: 0926169899
+                </div>
+            </div>
+        </div>
+        
+        <!-- 第三頁 A4 (動態生成) -->
+        <div id="page3Container"></div>
+    </div>
+
     <script>
+        // 全域變數
+        let otherItemCount = 0;
+        const MAX_TIME_DAYS_PER_PAGE = 7; // 每頁最多顯示7天
+        
+        // 頁面載入時執行
         document.addEventListener('DOMContentLoaded', function() {
-            // Add event listeners to all quantity inputs
-            document.querySelectorAll('.quantity').forEach(input => {
-                input.addEventListener('input', calculateTotals);
+            // 設置當前日期
+            setCurrentDate();
+            
+            // 初始化計算
+            calculateAllHours();
+            calculateAll();
+            
+            // 添加事件監聽器
+            addEventListeners();
+        });
+        
+        // 添加所有事件監聽器
+        function addEventListeners() {
+            // 主要按鈕
+            document.getElementById('printBtn').addEventListener('click', printForm);
+            document.getElementById('downloadPdfBtn').addEventListener('click', downloadPdf);
+            document.getElementById('resetBtn').addEventListener('click', resetForm);
+            document.getElementById('addOtherBtn').addEventListener('click', addOtherItem);
+            document.getElementById('addTimeDayBtn').addEventListener('click', addTimeDay);
+            document.getElementById('addLaborPersonBtn').addEventListener('click', addLaborPerson);
+            
+            // 計算時數按鈕
+            document.querySelectorAll('.calc-hours-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    calculateHours(this);
+                });
             });
             
-            // Add event listener to other price input
-            document.getElementById('otherPrice').addEventListener('input', calculateTotals);
-            
-            // Initial calculation
-            calculateTotals();
-        });
-
-   document.addEventListener('DOMContentLoaded', function() {
-            // Add event listeners to all quantity inputs
-            document.querySelectorAll('.quantity').forEach(input => {
-                input.addEventListener('input', calculateTotals);
+            // 刪除勞報人員按鈕
+            document.querySelectorAll('.remove-labor-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    removeLaborPerson(this);
+                });
             });
             
-            // Add event listener to other price input
-            document.getElementById('otherPrice').addEventListener('input', calculateTotals);
-            
-            // Initial calculation
-            calculateTotals();
-        });
-
-        function calculateTotals() {
-            let subtotal = 0;
-            let staffSupportTotal = 0;
-            
-            // Calculate subtotals for each line item
-            document.querySelectorAll('.quantity').forEach(input => {
-                const quantity = parseInt(input.value) || 0;
-                const price = parseInt(input.dataset.price);
-                const lineTotal = quantity * price;
-                
-                // Update subtotal display
-                const subtotalCell = input.closest('tr').querySelector('.subtotal');
-                subtotalCell.textContent = formatNumber(lineTotal);
-                
-                // Track staff support total separately
-                if (input.id === 'staffSupportQty') {
-                    staffSupportTotal = lineTotal;
+            // 時間輸入欄位變更事件 - 自動計算時數
+            document.querySelectorAll('.time-day input').forEach(input => {
+                if (!input.classList.contains('total-hours') && !input.classList.contains('overtime-hours')) {
+                    input.addEventListener('input', function() {
+                        const calcBtn = this.closest('.time-day').querySelector('.calc-hours-btn');
+                        calculateHours(calcBtn);
+                    });
                 }
-                
-                subtotal += lineTotal;
+            });
+        }
+        
+        // 設置當前日期
+        function setCurrentDate() {
+            const now = new Date();
+            // 設置民國年
+            const rocYear = now.getFullYear() - 1911;
+            document.getElementById('invoiceYear').value = rocYear;
+            document.getElementById('invoiceMonth').value = now.getMonth() + 1;
+            document.getElementById('invoiceDay').value = now.getDate();
+        }
+        
+        // 計算所有天數的工作時數
+        function calculateAllHours() {
+            document.querySelectorAll('.calc-hours-btn').forEach(button => {
+                calculateHours(button);
+            });
+        }
+        
+        // 計算工作時數和加班時數
+        function calculateHours(button) {
+            const dayDiv = button.closest('.time-day');
+            const startHour = parseInt(dayDiv.querySelector('.start-hour').value) || 0;
+            const startMinute = parseInt(dayDiv.querySelector('.start-minute').value) || 0;
+            const endHour = parseInt(dayDiv.querySelector('.end-hour').value) || 0;
+            const endMinute = parseInt(dayDiv.querySelector('.end-minute').value) || 0;
+            
+            // 計算總分鐘數
+            let totalMinutes = (endHour * 60 + endMinute) - (startHour * 60 + startMinute);
+            if (totalMinutes < 0) totalMinutes += 24 * 60; // 跨日處理
+            
+            // 轉換為小時，四捨五入到0.5小時
+            const totalHours = Math.round(totalMinutes / 30) / 2;
+            
+            // 計算加班時數 (超過8小時的部分)
+            const overtimeHours = Math.max(0, totalHours - 8);
+            
+            // 更新顯示
+            dayDiv.querySelector('.total-hours').value = totalHours;
+            dayDiv.querySelector('.overtime-hours').value = overtimeHours;
+            
+            // 更新加班總時數
+            updateOvertimeTotal();
+        }
+        
+        // 更新加班總時數
+        function updateOvertimeTotal() {
+            let totalOvertime = 0;
+            document.querySelectorAll('.overtime-hours').forEach(input => {
+                totalOvertime += parseFloat(input.value) || 0;
             });
             
-            // Calculate admin fee (10% of staff support quantity * 2500)
-            // This is specifically based on the staff support line item only
-            const staffSupportQty = parseInt(document.getElementById('staffSupportQty').value) || 0;
-            const adminFee = Math.round(staffSupportQty * 2500 * 0.1);
-            document.getElementById('adminFee').textContent = formatNumber(adminFee);
-            
-            // Add other fee
-            const otherFee = parseInt(document.getElementById('otherPrice').value) || 0;
-            document.getElementById('otherFee').textContent = formatNumber(otherFee);
-            
-            // Calculate total (all line items + admin fee + other fee)
-            const total = subtotal + adminFee + otherFee;
-            document.getElementById('totalAmount').textContent = formatNumber(total);
+            document.getElementById('overtimeQty').value = totalOvertime;
+            calculateAll();
         }
-
-        function formatNumber(number) {
-            return new Intl.NumberFormat('zh-TW').format(number);
+        
+        // 新增時間天數
+        function addTimeDay() {
+            // 獲取當前天數
+            const allTimeDays = document.querySelectorAll('.time-day');
+            const dayCount = allTimeDays.length + 1;
+            
+            // 決定添加到哪個容器
+            let container;
+            if (dayCount <= MAX_TIME_DAYS_PER_PAGE) {
+                container = document.getElementById('timeInfoContainer');
+            } else {
+                // 確保第三頁存在
+                ensurePage3Exists();
+                container = document.getElementById('timeInfoContainer3');
+            }
+            
+            const dayDiv = document.createElement('div');
+            dayDiv.className = 'time-day mb-4 pb-4 border-b border-gray-200';
+            
+            dayDiv.innerHTML = `
+                <div class="flex justify-between items-center mb-3">
+                    <h4 class="font-medium text-blue-800">第${dayCount}天:</h4>
+                    <button class="remove-time-btn bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-lg text-xs transition duration-200 no-print">刪除</button>
+                </div>
+                <div class="flex items-center flex-wrap gap-1">
+                    <input type="number" class="time-input border rounded px-1 py-1 start-year" value="114">
+                    <span class="time-label">年</span>
+                    
+                    <input type="number" class="time-input border rounded px-1 py-1 start-month" min="1" max="12" value="">
+                    <span class="time-label">月</span>
+                    
+                    <input type="number" class="time-input border rounded px-1 py-1 start-day" min="1" max="31" value="">
+                    <span class="time-label">日</span>
+                    
+                    <input type="number" class="time-input border rounded px-1 py-1 start-hour" min="0" max="23" value="">
+                    <span class="time-label">時</span>
+                    
+                    <input type="number" class="time-input border rounded px-1 py-1 start-minute" min="0" max="59" value="">
+                    <span class="time-label">分</span>
+                    
+                    <span class="mx-2">至</span>
+                    
+                    <input type="number" class="time-input border rounded px-1 py-1 end-hour" min="0" max="23" value="">
+                    <span class="time-label">時</span>
+                    
+                    <input type="number" class="time-input border rounded px-1 py-1 end-minute" min="0" max="59" value="">
+                    <span class="time-label">分</span>
+                    
+                    <span class="mx-2">共計</span>
+                    <input type="number" class="time-input border rounded px-1 py-1 total-hours" readonly value="">
+                    <span class="time-label">小時</span>
+                    
+                    <span class="mx-2">加班</span>
+                    <input type="number" class="time-input border rounded px-1 py-1 overtime-hours" readonly value="">
+                    <span class="time-label">小時</span>
+                    
+                    <button class="calc-hours-btn ml-2 bg-gray-200 hover:bg-gray-300 text-gray-800 px-2 py-1 rounded text-xs no-print">計算</button>
+                </div>
+            `;
+            
+            container.appendChild(dayDiv);
+            
+            // 添加事件監聽器
+            const calcBtn = dayDiv.querySelector('.calc-hours-btn');
+            calcBtn.addEventListener('click', function() {
+                calculateHours(this);
+            });
+            
+            const removeBtn = dayDiv.querySelector('.remove-time-btn');
+            removeBtn.addEventListener('click', function() {
+                removeTimeDay(this);
+            });
+            
+            // 時間輸入欄位變更事件 - 自動計算時數
+            dayDiv.querySelectorAll('input').forEach(input => {
+                if (!input.classList.contains('total-hours') && !input.classList.contains('overtime-hours')) {
+                    input.addEventListener('input', function() {
+                        calculateHours(calcBtn);
+                    });
+                }
+            });
+            
+            // 檢查是否需要移動勞報表到第三頁
+            checkLaborReportPlacement();
         }
-
-        function printQuote() {
+        
+        // 刪除時間天數
+        function removeTimeDay(button) {
+            const dayDiv = button.closest('.time-day');
+            const isPage3 = dayDiv.closest('#timeInfoContainer3') !== null;
+            dayDiv.remove();
+            
+            // 重新編號所有天數
+            renumberAllDays();
+            
+            // 檢查是否需要將第三頁的第一個時間項移回第二頁
+            reorganizeTimeDays();
+            
+            // 更新加班總時數
+            updateOvertimeTotal();
+            
+            // 檢查勞報表的位置
+            checkLaborReportPlacement();
+        }
+        
+        // 重新編號所有天數
+        function renumberAllDays() {
+            const allDays = document.querySelectorAll('.time-day');
+            allDays.forEach((day, index) => {
+                const heading = day.querySelector('h4');
+                if (heading) {
+                    heading.textContent = `第${index + 1}天:`;
+                }
+            });
+        }
+        
+        // 重新組織時間天數，確保第二頁有最多7個
+        function reorganizeTimeDays() {
+            const page2Days = document.querySelectorAll('#timeInfoContainer .time-day');
+            const page3Days = document.querySelectorAll('#timeInfoContainer3 .time-day');
+            
+            // 如果第二頁少於7個且第三頁有項目，則移動第三頁的第一個到第二頁
+            if (page2Days.length < MAX_TIME_DAYS_PER_PAGE && page3Days.length > 0) {
+                const firstPage3Day = page3Days[0];
+                document.getElementById('timeInfoContainer').appendChild(firstPage3Day);
+                
+                // 如果第三頁沒有更多項目，可以考慮移除第三頁
+                if (page3Days.length === 1) {
+                    // 檢查第三頁是否還有其他內容
+                    const laborContainer3 = document.getElementById('laborReportContainer3');
+                    if (!laborContainer3 || laborContainer3.children.length === 0) {
+                        document.getElementById('page3Container').innerHTML = '';
+                    }
+                }
+            }
+        }
+        
+        // 檢查勞報表的位置
+        function checkLaborReportPlacement() {
+            const timeDays = document.querySelectorAll('#timeInfoContainer .time-day');
+            
+            // 如果時間天數超過2天，將勞報表移至第三頁
+            if (timeDays.length > 2) {
+                moveLaborsToPage3();
+            } else {
+                // 否則，將勞報表移回第二頁
+                moveLaborsToPage2();
+            }
+        }
+        
+        // 將勞報表移至第三頁
+        function moveLaborsToPage3() {
+            ensurePage3Exists();
+            
+            const laborSection = document.getElementById('laborReportSection');
+            const laborContainer = document.getElementById('laborReportContainer');
+            const laborContainer3 = document.getElementById('laborReportContainer3');
+            
+            // 如果勞報表在第二頁，移至第三頁
+            if (laborSection && laborSection.parentNode.id !== 'page3Content') {
+                // 將所有勞報人員移至第三頁
+                const laborPersons = Array.from(laborContainer.querySelectorAll('.labor-person'));
+                
+                // 清空第三頁的勞報容器
+                laborContainer3.innerHTML = '';
+                
+                // 將所有人員移至第三頁
+                laborPersons.forEach(person => {
+                    const clonedPerson = person.cloneNode(true);
+                    laborContainer3.appendChild(clonedPerson);
+                    
+                    // 添加刪除按鈕事件監聽器
+                    const removeBtn = clonedPerson.querySelector('.remove-labor-btn');
+                    if (removeBtn) {
+                        removeBtn.addEventListener('click', function() {
+                            removeLaborPerson(this);
+                        });
+                    }
+                });
+                
+                // 隱藏第二頁的勞報區域
+                laborSection.style.display = 'none';
+            }
+        }
+        
+        // 將勞報表移回第二頁
+        function moveLaborsToPage2() {
+            const laborSection = document.getElementById('laborReportSection');
+            const laborContainer = document.getElementById('laborReportContainer');
+            const laborContainer3 = document.getElementById('laborReportContainer3');
+            
+            // 如果第三頁存在且有勞報表
+            if (laborContainer3 && laborContainer3.children.length > 0) {
+                // 將所有勞報人員移回第二頁
+                const laborPersons = Array.from(laborContainer3.querySelectorAll('.labor-person'));
+                
+                // 清空第二頁的勞報容器
+                laborContainer.innerHTML = '';
+                
+                // 將所有人員移回第二頁
+                laborPersons.forEach(person => {
+                    const clonedPerson = person.cloneNode(true);
+                    laborContainer.appendChild(clonedPerson);
+                    
+                    // 添加刪除按鈕事件監聽器
+                    const removeBtn = clonedPerson.querySelector('.remove-labor-btn');
+                    if (removeBtn) {
+                        removeBtn.addEventListener('click', function() {
+                            removeLaborPerson(this);
+                        });
+                    }
+                });
+                
+                // 顯示第二頁的勞報區域
+                if (laborSection) {
+                    laborSection.style.display = '';
+                }
+            }
+        }
+        
+        // 確保第三頁存在
+        function ensurePage3Exists() {
+            const container = document.getElementById('page3Container');
+            
+            // 檢查是否已經有第三頁
+            let page3 = document.getElementById('page3');
+            if (!page3) {
+                // 創建新的第三頁
+                container.innerHTML = `
+                    <div id="page3" class="a4-page mb-8 print-break">
+                        <!-- 黑底白字標題 -->
+                        <div class="header">
+                            <div class="header-left">
+                                <h1 class="text-2xl font-bold">LUMASONIX x PROFESSIONAL</h1>
+                                <p class="text-sm">專業技術支援 x 人力媒合行銷</p>
+                            </div>
+                            <div class="header-right">
+                                <h2 class="text-xl font-bold">人員勞報請款</h2>
+                            </div>
+                        </div>
+                        
+                        <!-- 內容區域 -->
+                        <div id="page3Content" class="p-6">
+                            <!-- 基本資訊與聯絡資訊 - 左右對稱 -->
+                            <div class="mb-6">
+                                <div class="grid grid-cols-2 gap-6">
+                                    <!-- 左側欄位 -->
+                                    <div class="space-y-4">
+                                        <div class="flex items-center">
+                                            <label class="text-gray-700 mr-2 w-20">請款日期:</label>
+                                            <input type="number" class="date-input" id="invoiceYear3" min="1" max="999">
+                                            <span class="mx-1">年</span>
+                                            <input type="number" class="date-input" id="invoiceMonth3" min="1" max="12">
+                                            <span class="mx-1">月</span>
+                                            <input type="number" class="date-input" id="invoiceDay3" min="1" max="31">
+                                            <span class="mx-1">日</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <label class="text-gray-700 mr-2 w-20">廠商名稱:</label>
+                                            <input type="text" id="vendorName3" class="text-input flex-1" placeholder="">
+                                        </div>
+                                        <div class="flex items-center">
+                                            <label class="text-gray-700 mr-2 w-20">活動地點:</label>
+                                            <input type="text" id="eventLocation3" class="text-input flex-1" placeholder="">
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 右側欄位 -->
+                                    <div class="space-y-4">
+                                        <div class="flex items-center">
+                                            <label class="text-gray-700 mr-2 w-20">連絡電話:</label>
+                                            <input type="text" id="contactPhone3" class="text-input flex-1" value="0926169899">
+                                        </div>
+                                        <div class="flex items-center">
+                                            <label class="text-gray-700 mr-2 w-20">負責人:</label>
+                                            <input type="text" id="contactPerson3" class="text-input flex-1" value="蘇裕庭">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 分隔線 -->
+                            <div class="section-divider"></div>
+                            
+                            <!-- 時間資訊 (續) -->
+                            <div id="timeInfoSection3" class="mb-6" style="display: none;">
+                                <h3 class="text-lg font-semibold text-blue-700 mb-4">時間資訊 (續)</h3>
+                                <div id="timeInfoContainer3"></div>
+                            </div>
+                            
+                            <!-- 分隔線 -->
+                            <div id="timeDivider3" class="section-divider" style="display: none;"></div>
+                            
+                            <!-- 勞報資料檢附 (續) -->
+                            <div id="laborReportSection3" class="mb-8">
+                                <div class="flex justify-between items-center mb-4">
+                                    <h3 class="text-lg font-semibold text-blue-700">勞報復檢表</h3>
+                                    <button id="addLaborPersonBtn3" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-sm transition duration-200 no-print">+ 新增人員</button>
+                                </div>
+                                
+                                <div id="laborReportContainer3">
+                                    <!-- 動態添加的人員將移至此處 -->
+                                </div>
+                            </div>
+                            
+                            <!-- 頁尾 -->
+                            <div class="footer">
+                                LUMASONIX x PROFESSIONAL 專業技術支援 x 人力媒合行銷 | 聯絡電話: 0926169899
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // 同步第一頁的基本資訊到第三頁
+                document.getElementById('invoiceYear3').value = document.getElementById('invoiceYear').value;
+                document.getElementById('invoiceMonth3').value = document.getElementById('invoiceMonth').value;
+                document.getElementById('invoiceDay3').value = document.getElementById('invoiceDay').value;
+                document.getElementById('vendorName3').value = document.getElementById('vendorName').value;
+                document.getElementById('eventLocation3').value = document.getElementById('eventLocation').value;
+                
+                // 添加第三頁的新增人員按鈕事件
+                document.getElementById('addLaborPersonBtn3').addEventListener('click', addLaborPersonToPage3);
+            }
+            
+            // 如果有超過7天的時間資訊，顯示第三頁的時間區域
+            const allTimeDays = document.querySelectorAll('.time-day');
+            if (allTimeDays.length > MAX_TIME_DAYS_PER_PAGE) {
+                document.getElementById('timeInfoSection3').style.display = '';
+                document.getElementById('timeDivider3').style.display = '';
+            }
+        }
+        
+        // 新增其他項目
+        function addOtherItem() {
+            otherItemCount++;
+            const table = document.getElementById('supportItemsTable');
+            const newRow = table.insertRow(table.rows.length - 1); // 在行政執行費前插入
+            newRow.className = 'border-b border-gray-200';
+            
+            const itemId = `other${otherItemCount}`;
+            
+            newRow.innerHTML = `
+                <td class="px-4 py-3">
+                    <input type="text" id="${itemId}Name" class="w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="項目名稱">
+                </td>
+                <td class="px-4 py-3">
+                    <input type="number" id="${itemId}Qty" class="w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" value="0" min="0" oninput="calculateAll()">
+                </td>
+                <td class="px-4 py-3">
+                    <input type="number" id="${itemId}Price" class="w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" value="0" min="0" oninput="calculateAll()">
+                </td>
+                <td class="px-4 py-3">
+                    <input type="text" id="${itemId}Desc" class="w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="工作內容描述">
+                </td>
+                <td class="px-4 py-3 text-center" id="${itemId}Subtotal">0</td>
+            `;
+            
+            calculateAll();
+        }
+        
+        // 計算所有金額
+        function calculateAll() {
+            // 計算各項小計
+            const staffQty = parseInt(document.getElementById('staffQty').value) || 0;
+            const techQty = parseInt(document.getElementById('techQty').value) || 0;
+            const spotlightQty = parseInt(document.getElementById('spotlightQty').value) || 0;
+            const heightQty = parseInt(document.getElementById('heightQty').value) || 0;
+            const overtimeQty = parseFloat(document.getElementById('overtimeQty').value) || 0;
+            
+            const staffSubtotal = staffQty * 3000;
+            const techSubtotal = techQty * 1000;
+            const spotlightSubtotal = spotlightQty * 1000;
+            const heightSubtotal = heightQty * 1000;
+            const overtimeSubtotal = overtimeQty * 350;
+            
+            // 更新小計顯示
+            document.getElementById('staffSubtotal').textContent = formatNumber(staffSubtotal);
+            document.getElementById('techSubtotal').textContent = formatNumber(techSubtotal);
+            document.getElementById('spotlightSubtotal').textContent = formatNumber(spotlightSubtotal);
+            document.getElementById('heightSubtotal').textContent = formatNumber(heightSubtotal);
+            document.getElementById('overtimeSubtotal').textContent = formatNumber(overtimeSubtotal);
+            
+            // 計算行政執行費 (人事支援 x 10%)
+            const adminFee = staffSubtotal * 0.1;
+            document.getElementById('adminSubtotal').textContent = formatNumber(adminFee);
+            
+            // 計算其他項目總額
+            let otherTotal = 0;
+            for (let i = 1; i <= otherItemCount; i++) {
+                const itemId = `other${i}`;
+                const qtyElement = document.getElementById(`${itemId}Qty`);
+                const priceElement = document.getElementById(`${itemId}Price`);
+                const subtotalElement = document.getElementById(`${itemId}Subtotal`);
+                
+                if (qtyElement && priceElement && subtotalElement) {
+                    const qty = parseInt(qtyElement.value) || 0;
+                    const price = parseInt(priceElement.value) || 0;
+                    const itemSubtotal = qty * price;
+                    subtotalElement.textContent = formatNumber(itemSubtotal);
+                    otherTotal += itemSubtotal;
+                }
+            }
+            
+            // 計算總金額
+            const subtotal = staffSubtotal + techSubtotal + spotlightSubtotal + heightSubtotal + overtimeSubtotal + adminFee + otherTotal;
+            document.getElementById('subtotalAmount').textContent = 'NT$' + formatNumber(subtotal);
+            document.getElementById('totalAmount').textContent = 'NT$' + formatNumber(subtotal);
+        }
+        
+        // 格式化數字為千分位
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        
+        // 新增勞報人員
+        function addLaborPerson() {
+            // 檢查勞報表應該在哪一頁
+            const timeDays = document.querySelectorAll('#timeInfoContainer .time-day');
+            
+            if (timeDays.length > 2) {
+                // 如果時間天數超過2天，勞報表應該在第三頁
+                addLaborPersonToPage3();
+            } else {
+                // 否則，勞報表在第二頁
+                addLaborPersonToPage2();
+            }
+        }
+        
+        // 新增勞報人員到第二頁
+        function addLaborPersonToPage2() {
+            const container = document.getElementById('laborReportContainer');
+            addLaborPersonToContainer(container);
+        }
+        
+        // 新增勞報人員到第三頁
+        function addLaborPersonToPage3() {
+            ensurePage3Exists();
+            const container = document.getElementById('laborReportContainer3');
+            addLaborPersonToContainer(container);
+        }
+        
+        // 新增勞報人員到指定容器
+        function addLaborPersonToContainer(container) {
+            const personDiv = document.createElement('div');
+            personDiv.className = 'labor-person mb-6 p-4 bg-gray-50 rounded-lg';
+            
+            personDiv.innerHTML = `
+                <div class="grid grid-cols-4 gap-4 mb-4">
+                    <div>
+                        <label class="block text-gray-700 mb-1">姓名</label>
+                        <input type="text" class="labor-name w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="請輸入姓名">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-1">生日</label>
+                        <input type="text" class="labor-birth w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="例：1990/01/01">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-1">身分證</label>
+                        <input type="text" class="labor-id w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="請輸入身分證字號">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-1">聯絡電話</label>
+                        <input type="text" class="labor-phone w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="請輸入電話">
+                    </div>
+                </div>
+                <div class="flex items-center mb-2">
+                    <div class="flex-grow">
+                        <label class="block text-gray-700 mb-1">戶籍地址</label>
+                        <input type="text" class="labor-address w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="戶籍地址">
+                    </div>
+                    <div class="ml-4 w-32">
+                        <label class="block text-gray-700 mb-1">勞報金額</label>
+                        <div class="flex items-center">
+                            <input type="number" class="labor-amount w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="金額">
+                            <span class="ml-1">元</span>
+                        </div>
+                    </div>
+                    <div class="ml-2 no-print">
+                        <button class="remove-labor-btn bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-lg text-xs transition duration-200 mt-6">刪除</button>
+                    </div>
+                </div>
+            `;
+            
+            container.appendChild(personDiv);
+            
+            // 添加刪除按鈕事件監聽器
+            const removeBtn = personDiv.querySelector('.remove-labor-btn');
+            removeBtn.addEventListener('click', function() {
+                removeLaborPerson(this);
+            });
+        }
+        
+        // 刪除勞報人員
+        function removeLaborPerson(button) {
+            const personDiv = button.closest('.labor-person');
+            personDiv.remove();
+        }
+        
+        // 列印表單
+        function printForm() {
+            // 同步第一頁的基本資訊到第三頁
+            if (document.getElementById('invoiceYear3')) {
+                document.getElementById('invoiceYear3').value = document.getElementById('invoiceYear').value;
+                document.getElementById('invoiceMonth3').value = document.getElementById('invoiceMonth').value;
+                document.getElementById('invoiceDay3').value = document.getElementById('invoiceDay').value;
+                document.getElementById('vendorName3').value = document.getElementById('vendorName').value;
+                document.getElementById('eventLocation3').value = document.getElementById('eventLocation').value;
+            }
+            
             window.print();
         }
-
-        function saveQuote() {
-            alert('報價單已儲存');
-        }
-
-        function downloadPDF() {
-            // Hide buttons for PDF generation
-            const actionButtons = document.querySelector('.action-buttons');
-            actionButtons.style.display = 'none';
+        
+        // 下載為PDF
+        function downloadPdf() {
+            // 同步第一頁的基本資訊到第三頁
+            if (document.getElementById('invoiceYear3')) {
+                document.getElementById('invoiceYear3').value = document.getElementById('invoiceYear').value;
+                document.getElementById('invoiceMonth3').value = document.getElementById('invoiceMonth').value;
+                document.getElementById('invoiceDay3').value = document.getElementById('invoiceDay').value;
+                document.getElementById('vendorName3').value = document.getElementById('vendorName').value;
+                document.getElementById('eventLocation3').value = document.getElementById('eventLocation').value;
+            }
             
-            // Generate optimized PDF (150-300 KB)
-            const element = document.getElementById('quotation');
+            // 暫時隱藏按鈕
+            const buttons = document.querySelectorAll('.no-print');
+            buttons.forEach(button => {
+                button.style.display = 'none';
+            });
+            
+            const element = document.getElementById('invoice-content');
             const opt = {
                 margin: 0,
-                filename: 'LUMASONIX_報價單_' + new Date().toISOString().slice(0,10) + '.pdf',
-                image: { type: 'jpeg', quality: 0.7 }, // Lower quality for smaller file size
-                html2canvas: { 
-                    scale: 1.5, // Reduced scale for smaller file size
-                    useCORS: true,
-                    letterRendering: false,
-                    logging: false
-                },
-                jsPDF: { 
-                    unit: 'mm', 
-                    format: 'a3', // A3 format
-                    orientation: 'portrait',
-                    compress: true, // Enable compression
-                    precision: 2 // Lower precision for smaller file size
-                }
+                filename: 'LUMASONIX人員勞報請款單.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
             
-            html2pdf()
-                .set(opt)
-                .from(element)
-                .toPdf()
-                .output('datauristring')
-                .then(function(pdfAsString) {
-                    // Check file size
-                    const byteSize = Math.round((pdfAsString.length * 3) / 4);
-                    const kbSize = Math.round(byteSize / 1024);
-                    console.log("PDF size: " + kbSize + " KB");
-                    
-                    // Save the PDF
-                    html2pdf().set(opt).from(element).save().then(() => {
-                        // Show buttons again after PDF is generated
-                        actionButtons.style.display = 'flex';
-                    });
+            // 生成PDF
+            html2pdf().set(opt).from(element).save().then(() => {
+                // 恢復按鈕顯示
+                buttons.forEach(button => {
+                    button.style.display = '';
                 });
+            });
+        }
+        
+        // 重置表單
+        function resetForm() {
+            if (confirm('確定要重置表單嗎？所有已輸入的資料將被清除。')) {
+                location.reload();
+            }
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'94899a9d25e9f06f',t:'MTc0ODcyNzM1Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;"></iframe><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;"></iframe>
-
-</body></html>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'94b33bfe96ecf05b',t:'MTc0OTE2Mzg4My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
