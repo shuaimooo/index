@@ -1,1647 +1,1160 @@
+1141022_045081_OLDIIMN001
+
+
+
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>生鮮雞肉供應商</title>
+    <title>LUMASONIX 人員勞報請款單</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
-        
-        * {
-            font-family: 'Poppins', sans-serif;
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
         }
-        
-        .category-card {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            position: relative;
+        .a4-page {
+            width: 210mm;
+            height: 297mm;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
             overflow: hidden;
-        }
-        
-        .category-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-        
-        .category-card:hover::before {
-            left: 100%;
-        }
-        
-        .category-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
-        }
-        
-        .product-item {
-            border-radius: 20px;
-            transition: all 0.3s ease;
-            background: linear-gradient(145deg, #ffffff, #f8fafc);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             position: relative;
-            overflow: hidden;
+            padding-bottom: 20mm; /* Space for footer */
         }
-        
-        .product-item::before {
-            content: '';
+        .header {
+            background-color: #000;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .header-left {
+            text-align: left;
+        }
+        .header-right {
+            text-align: right;
+        }
+        .section-divider {
+            height: 1px;
+            background-color: #ccc;
+            margin: 15px 0;
+        }
+        .footer {
             position: absolute;
-            top: 0;
+            bottom: 0;
             left: 0;
             right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
+            padding: 10px 20px;
+            background-color: #f8f8f8;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
         }
-        
-        .product-item:hover::before {
-            transform: scaleX(1);
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
         }
-        
-        .product-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.2);
+        input[type=number] {
+            -moz-appearance: textfield;
         }
-        
-        .glass-effect {
-            backdrop-filter: blur(20px);
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        .time-input {
+            width: 40px;
+            text-align: center;
         }
-        
-        .gradient-text {
-            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .time-label {
+            margin: 0 2px;
         }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            transition: all 0.3s ease;
-            border-radius: 15px;
-            position: relative;
-            overflow: hidden;
+        .date-input {
+            width: 40px;
+            text-align: center;
+            border: none;
+            border-bottom: 1px solid #999;
+            outline: none;
+            background: transparent;
         }
-        
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.5s;
+        .text-input {
+            border: none;
+            border-bottom: 1px solid #999;
+            outline: none;
+            background: transparent;
         }
-        
-        .btn-primary:hover::before {
-            left: 100%;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
-        }
-        
-        .floating-animation {
-            animation: float 6s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            33% { transform: translateY(-10px) rotate(2deg); }
-            66% { transform: translateY(5px) rotate(-1deg); }
-        }
-        
-        .pulse-glow {
-            animation: pulse-glow 2s ease-in-out infinite alternate;
-        }
-        
-        @keyframes pulse-glow {
-            from { box-shadow: 0 0 20px rgba(102, 126, 234, 0.3); }
-            to { box-shadow: 0 0 30px rgba(102, 126, 234, 0.6), 0 0 40px rgba(118, 75, 162, 0.3); }
-        }
-        
-        .modal-backdrop {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-            backdrop-filter: blur(10px);
-        }
-        
-        .modal-content {
-            background: linear-gradient(145deg, #ffffff, #f8fafc);
-            border-radius: 25px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-        
-        .step-indicator {
-            transition: all 0.4s ease;
-        }
-        
-        .step-indicator.active .step-circle {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            transform: scale(1.1);
-        }
-        
-        .step-indicator.completed .step-circle {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-        }
-        
-        .progress-bar {
-            background: linear-gradient(90deg, #e5e7eb, #d1d5db);
-            height: 3px;
-            border-radius: 2px;
-            overflow: hidden;
-        }
-        
-        .progress-fill {
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            height: 100%;
-            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-        
-        .card-hover:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-        }
-        
-        .neon-border {
-            position: relative;
-        }
-        
-        .neon-border::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            padding: 2px;
-            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #667eea);
-            border-radius: inherit;
-            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            mask-composite: exclude;
-        }
-        
-        .slide-in {
-            animation: slideIn 0.5s ease-out;
-        }
-        
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
+        @media print {
+            body {
+                background-color: white;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+            .no-print {
+                display: none;
+            }
+            .print-break {
+                page-break-before: always;
+            }
+            .a4-page {
+                box-shadow: none;
+                margin: 0;
+                width: 100%;
+                height: 100%;
             }
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 min-h-screen">
-    <!-- 頁首 -->
-    <header class="relative overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600"></div>
-        <div class="absolute inset-0 bg-black opacity-20"></div>
-        <div class="relative container mx-auto px-4 py-12">
-            <div class="text-center text-white">
-                <div class="flex justify-center items-center space-x-4 mb-6">
-                    <div class="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-4xl floating-animation">🐔</div>
-                    <h1 class="text-5xl font-black">生鮮雞肉供應商</h1>
-                </div>
-                <p class="text-xl text-blue-100 max-w-2xl mx-auto mb-6">專業雞肉供應 • 品質保證 • </p>
-                <div class="flex justify-center space-x-8 text-sm">
-                    <span class="flex items-center glass-effect px-4 py-2 rounded-full">
-                        <span class="w-3 h-3 bg-green-400 rounded-full mr-2 animate-pulse"></span>頂級品質
-                  
-                    </span>
-                    <span class="flex items-center glass-effect px-4 py-2 rounded-full">
-                        <span class="w-3 h-3 bg-purple-400 rounded-full mr-2 animate-pulse"></span>專業服務
-                    </span>
-                </div>
-            </div>
+<body class="bg-gray-100">
+    <div class="py-8 no-print">
+        <div class="container mx-auto px-4 flex justify-end gap-3 mb-4">
+            <button id="printBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm transition duration-200">列印表單</button>
+            <button id="downloadPdfBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm transition duration-200">下載 PDF</button>
+            <button id="resetBtn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm transition duration-200">重置表單</button>
         </div>
-    </header>
+    </div>
 
-    <!-- 雞種介紹 -->
-    <section class="py-20 relative">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-5xl font-black mb-6 gradient-text">🐓 精選雞種介紹</h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">嚴選優質品種，每一隻都經過精心飼養，確保最佳品質與口感</p>
-            </div>
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-                <div class="product-item p-8 neon-border">
-                    <div class="flex items-center mb-6">
-                        <div class="text-6xl mr-4 floating-animation">🐔</div>
-                        <h3 class="font-bold text-3xl bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">紅羽土雞</h3>
-                    </div>
-                    <div class="text-left space-y-4">
-                        <p class="text-gray-700 leading-relaxed text-lg"><strong class="text-amber-700">品種特色：</strong>紅羽土雞，紅色單冠，嘴腳黑色</p>
-                        <div class="inline-block bg-gradient-to-r from-amber-100 to-orange-100 text-amber-800 px-4 py-2 rounded-full text-sm font-bold shadow-md">經典品種</div>
-                    </div>
+    <div id="invoice-content">
+        <!-- 第一頁 A4 -->
+        <div id="page1" class="a4-page mb-8">
+            <!-- 黑底白字標題 -->
+            <div class="header">
+                <div class="header-left">
+                    <h1 class="text-2xl font-bold">LUMASONIX x PROFESSIONAL</h1>
+                    <p class="text-sm">專業技術支援 x 人力媒合行銷</p>
                 </div>
-                <div class="product-item p-8 neon-border">
-                    <div class="flex items-center mb-6">
-                        <div class="text-6xl mr-4 floating-animation" style="animation-delay: -1s;">🖤</div>
-                        <h3 class="font-bold text-3xl bg-gradient-to-r from-slate-600 to-gray-600 bg-clip-text text-transparent">烏骨雞</h3>
-                    </div>
-                    <div class="text-left space-y-4">
-                        <p class="text-gray-700 leading-relaxed text-lg"><strong class="text-slate-700">品種特色：</strong>白色絲毛，皮膚灰黑，骨骼黑色</p>
-                        <div class="inline-block bg-gradient-to-r from-slate-100 to-gray-100 text-slate-800 px-4 py-2 rounded-full text-sm font-bold shadow-md">營養珍品</div>
-                    </div>
-                </div>
-                <div class="product-item p-8 neon-border">
-                    <div class="flex items-center mb-6">
-                        <div class="text-6xl mr-4 floating-animation" style="animation-delay: -2s;">🐓</div>
-                        <h3 class="font-bold text-3xl bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent">文昌雞</h3>
-                    </div>
-                    <div class="text-left space-y-4">
-                        <p class="text-gray-700 leading-relaxed text-lg"><strong class="text-rose-700">品種特色：</strong>免疫力強，放山舍飼皆宜</p>
-                        <div class="inline-block bg-gradient-to-r from-rose-100 to-pink-100 text-rose-800 px-4 py-2 rounded-full text-sm font-bold shadow-md">適應性強</div>
-                    </div>
-                </div>
-                <div class="product-item p-8 neon-border">
-                    <div class="flex items-center mb-6">
-                        <div class="text-6xl mr-4 floating-animation" style="animation-delay: -3s;">🏡</div>
-                        <h3 class="font-bold text-3xl bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">古早雞</h3>
-                    </div>
-                    <div class="text-left space-y-4">
-                        <p class="text-gray-700 leading-relaxed text-lg"><strong class="text-emerald-700">品種特色：</strong>傳統品種，公雞需野放飼養</p>
-                        <div class="inline-block bg-gradient-to-r from-emerald-100 to-green-100 text-emerald-800 px-4 py-2 rounded-full text-sm font-bold shadow-md">傳統風味</div>
-                    </div>
-                </div>
-                <div class="product-item p-8 neon-border">
-                    <div class="flex items-center mb-6">
-                        <div class="text-6xl mr-4 floating-animation" style="animation-delay: -4s;">💎</div>
-                        <h3 class="font-bold text-3xl bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent">珍珠雞</h3>
-                    </div>
-                    <div class="text-left space-y-4">
-                        <p class="text-gray-700 leading-relaxed text-lg"><strong class="text-violet-700">品種特色：</strong>營養豐富，肉質細緻</p>
-                        <div class="inline-block bg-gradient-to-r from-violet-100 to-purple-100 text-violet-800 px-4 py-2 rounded-full text-sm font-bold shadow-md">高級選擇</div>
-                    </div>
-                </div>
-                <div class="product-item p-8 neon-border">
-                    <div class="flex items-center mb-6">
-                        <div class="text-6xl mr-4 floating-animation" style="animation-delay: -5s;">🏔️</div>
-                        <h3 class="font-bold text-3xl bg-gradient-to-r from-sky-600 to-blue-600 bg-clip-text text-transparent">放山土雞</h3>
-                    </div>
-                    <div class="text-left space-y-4">
-                        <p class="text-gray-700 leading-relaxed text-lg"><strong class="text-sky-700">品種特色：</strong>自然放養，運動量充足</p>
-                        <div class="inline-block bg-gradient-to-r from-sky-100 to-blue-100 text-sky-800 px-4 py-2 rounded-full text-sm font-bold shadow-md">自然健康</div>
-                    </div>
+                <div class="header-right">
+                    <h2 class="text-xl font-bold">人員勞報請款</h2>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- 產品分類導引 -->
-    <section class="py-20 relative">
-        <div class="absolute inset-0 bg-gradient-to-r from-blue-100 via-purple-50 to-pink-100"></div>
-        <div class="relative container mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-black text-gray-800 mb-6">產品分類選擇</h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">三大主要分類，滿足不同需求，從新鮮現宰到精緻熟食，應有盡有</p>
-            </div>
-            <div class="grid md:grid-cols-3 gap-10 max-w-5xl mx-auto">
-                <div class="category-card p-10 text-center cursor-pointer text-white" onclick="showCategory('fresh')">
-                    <div class="w-24 h-24 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-5xl mx-auto mb-8 floating-animation">🥩</div>
-                    <h3 class="text-2xl font-bold mb-6">生鮮雞肉</h3>
-                    <p class="text-blue-100 leading-relaxed mb-6">新鮮現宰，整隻供應<br>保證品質</p>
-                
-                    </div>
-                </div>
-                <div class="category-card p-10 text-center cursor-pointer text-white" onclick="showCategory('cooked')">
-                    <div class="w-24 h-24 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-5xl mx-auto mb-8 floating-animation" style="animation-delay: -2s;">🍗</div>
-                    <h3 class="text-2xl font-bold mb-6">熟食雞肉</h3>
-                    <p class="text-blue-100 leading-relaxed mb-6">即食美味，多種口味<br>傳統工藝，精心調製</p>
-                    <div class="inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-bold">
-                        即食美味
-                    </div>
-                </div>
-                <div class="category-card p-10 text-center cursor-pointer text-white" onclick="showCategory('frozen')">
-                    <div class="w-24 h-24 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-5xl mx-auto mb-8 floating-animation" style="animation-delay: -4s;">❄️</div>
-                    <h3 class="text-2xl font-bold mb-6">冷凍分切</h3>
-                    <p class="text-blue-100 leading-relaxed mb-6">精準分切，規格齊全<br>專業處理，品質保證</p>
-                    <div class="inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-bold">
-                        精準規格
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 生鮮雞肉 -->
-    <section id="fresh" class="py-16">
-        <div class="container mx-auto px-4">
-            <h2 class="text-4xl font-black mb-12 bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">🥩 生鮮雞肉 - 整隻規格</h2>
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="product-item p-8 card-hover">
-                    <!-- 圖片區域 -->
-                    <div class="w-full h-48 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl mb-6 flex items-center justify-center">
-                        <span class="text-gray-500 text-lg">產品圖片</span>
-                    </div>
-                    <div class="flex items-center mb-6">
-                        <div class="text-4xl mr-4">🐔</div>
-                        <h3 class="text-2xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">紅羽土雞</h3>
-                    </div>
-                    <p class="text-gray-700 mb-3 text-lg"><strong>重量規格：</strong>2.1公斤 ~ 3.6公斤 </p>
-                    <p class="text-gray-600 mb-4 leading-relaxed"><strong>肉質特色：</strong>肉質鮮嫩，口感佳，湯頭清甜，膠質豐富</p>
-                    <p class="text-sm text-green-600 font-bold mb-6">適合料理：白切雞、雞湯、燉補、滷雞</p>
-                    <!-- 數量選擇 -->
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between">
-                            <span class="text-gray-700 font-bold">數量：</span>
-                            <div class="flex items-center space-x-4">
-                                <button onclick="changeQuantity(this, -1)" class="btn-primary w-10 h-10 text-white rounded-full flex items-center justify-center font-bold text-xl">-</button>
-                                <span class="quantity-display w-16 text-center font-bold text-2xl bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">0</span>
-                                <button onclick="changeQuantity(this, 1)" class="btn-primary w-10 h-10 text-white rounded-full flex items-center justify-center font-bold text-xl">+</button>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-gray-700 font-bold">指定重量：</span>
-                            <div class="flex items-center space-x-3">
-                                <input type="number" step="0.1" min="0" placeholder="0.0" class="w-20 px-3 py-2 border-2 border-purple-200 rounded-xl text-center font-bold focus:border-purple-500 focus:outline-none transition-colors">
-                                <span class="text-gray-600 font-bold">公斤</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="product-item p-8 card-hover">
-                    <!-- 圖片區域 -->
-                    <div class="w-full h-48 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl mb-6 flex items-center justify-center">
-                        <span class="text-gray-500 text-lg">產品圖片</span>
-                    </div>
-                    <div class="flex items-center mb-6">
-                        <div class="text-4xl mr-4">🖤</div>
-                        <h3 class="text-2xl font-bold bg-gradient-to-r from-slate-600 to-gray-600 bg-clip-text text-transparent">烏骨雞</h3>
-                    </div>
-                    <p class="text-gray-700 mb-3 text-lg"><strong>重量規格：</strong>0.9公斤 ~ 1.5公斤</p>
-                    <p class="text-gray-600 mb-4 leading-relaxed"><strong>肉質特色：</strong>營養價值高，肉質細嫩，藥膳聖品</p>
-                    <p class="text-sm text-green-600 font-bold mb-6">適合料理：四物雞湯、人參雞湯、燉全雞、藥膳補品</p>
-                    <!-- 數量選擇 -->
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between">
-                            <span class="text-gray-700 font-bold">數量：</span>
-                            <div class="flex items-center space-x-4">
-                                <button onclick="changeQuantity(this, -1)" class="btn-primary w-10 h-10 text-white rounded-full flex items-center justify-center font-bold text-xl">-</button>
-                                <span class="quantity-display w-16 text-center font-bold text-2xl bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">0</span>
-                                <button onclick="changeQuantity(this, 1)" class="btn-primary w-10 h-10 text-white rounded-full flex items-center justify-center font-bold text-xl">+</button>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-gray-700 font-bold">指定重量：</span>
-                            <div class="flex items-center space-x-3">
-                                <input type="number" step="0.1" min="0" placeholder="0.0" class="w-20 px-3 py-2 border-2 border-purple-200 rounded-xl text-center font-bold focus:border-purple-500 focus:outline-none transition-colors">
-                                <span class="text-gray-600 font-bold">公斤</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="product-item p-8 card-hover">
-                    <!-- 圖片區域 -->
-                    <div class="w-full h-48 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl mb-6 flex items-center justify-center">
-                        <span class="text-gray-500 text-lg">產品圖片</span>
-                    </div>
-                    <div class="flex items-center mb-6">
-                        <div class="text-4xl mr-4">🐓</div>
-                        <h3 class="text-2xl font-bold bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent">文昌雞</h3>
-                    </div>
-                    <p class="text-gray-700 mb-3 text-lg"><strong>重量規格：</strong>2.7公斤 ~ 3.6公斤</p>
-                    <p class="text-gray-600 mb-4 leading-relaxed"><strong>肉質特色：</strong>皮薄肉嫩，肉質細緻，口感滑嫩</p>
-                    <p class="text-sm text-green-600 font-bold mb-6">適合料理：海南雞飯、白切雞、口水雞、蒸雞</p>
-                    <!-- 數量選擇 -->
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between">
-                            <span class="text-gray-700 font-bold">數量：</span>
-                            <div class="flex items-center space-x-4">
-                                <button onclick="changeQuantity(this, -1)" class="btn-primary w-10 h-10 text-white rounded-full flex items-center justify-center font-bold text-xl">-</button>
-                                <span class="quantity-display w-16 text-center font-bold text-2xl bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">0</span>
-                                <button onclick="changeQuantity(this, 1)" class="btn-primary w-10 h-10 text-white rounded-full flex items-center justify-center font-bold text-xl">+</button>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-gray-700 font-bold">指定重量：</span>
-                            <div class="flex items-center space-x-3">
-                                <input type="number" step="0.1" min="0" placeholder="0.0" class="w-20 px-3 py-2 border-2 border-purple-200 rounded-xl text-center font-bold focus:border-purple-500 focus:outline-none transition-colors">
-                                <span class="text-gray-600 font-bold">公斤</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="product-item p-8 card-hover">
-                    <!-- 圖片區域 -->
-                    <div class="w-full h-48 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl mb-6 flex items-center justify-center">
-                        <span class="text-gray-500 text-lg">產品圖片</span>
-                    </div>
-                    <div class="flex items-center mb-6">
-                        <div class="text-4xl mr-4">🏡</div>
-                        <h3 class="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">古早雞</h3>
-                    </div>
-                    <p class="text-gray-700 mb-3 text-lg"><strong>重量規格：</strong>1.2公斤 ~ 4公斤</p>
-                    <p class="text-gray-600 mb-4 leading-relaxed"><strong>肉質特色：</strong>肉質鮮美滑口帶甜味，傳統風味濃郁</p>
-                    <p class="text-sm text-green-600 font-bold mb-6">適合料理：白斬雞、燉補湯品、傳統料理、補身燉品</p>
-                    <!-- 數量選擇 -->
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between">
-                            <span class="text-gray-700 font-bold">數量：</span>
-                            <div class="flex items-center space-x-4">
-                                <button onclick="changeQuantity(this, -1)" class="btn-primary w-10 h-10 text-white rounded-full flex items-center justify-center font-bold text-xl">-</button>
-                                <span class="quantity-display w-16 text-center font-bold text-2xl bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">0</span>
-                                <button onclick="changeQuantity(this, 1)" class="btn-primary w-10 h-10 text-white rounded-full flex items-center justify-center font-bold text-xl">+</button>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-gray-700 font-bold">指定重量：</span>
-                            <div class="flex items-center space-x-3">
-                                <input type="number" step="0.1" min="0" placeholder="0.0" class="w-20 px-3 py-2 border-2 border-purple-200 rounded-xl text-center font-bold focus:border-purple-500 focus:outline-none transition-colors">
-                                <span class="text-gray-600 font-bold">公斤</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="product-item p-8 card-hover">
-                    <!-- 圖片區域 -->
-                    <div class="w-full h-48 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl mb-6 flex items-center justify-center">
-                        <span class="text-gray-500 text-lg">產品圖片</span>
-                    </div>
-                    <div class="flex items-center mb-6">
-                        <div class="text-4xl mr-4">💎</div>
-                        <h3 class="text-2xl font-bold bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent">珍珠雞</h3>
-                    </div>
-                    <p class="text-gray-700 mb-3 text-lg"><strong>重量規格：</strong>3公斤 ~ 4.5公斤</p>
-                    <p class="text-gray-600 mb-4 leading-relaxed"><strong>肉質特色：</strong>肉質細緻，營養價值高，口感鮮美</p>
-                    <p class="text-sm text-green-600 font-bold mb-6">適合料理：精緻料理、燉湯、烤雞、高級宴席</p>
-                    <!-- 數量選擇 -->
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between">
-                            <span class="text-gray-700 font-bold">數量：</span>
-                            <div class="flex items-center space-x-4">
-                                <button onclick="changeQuantity(this, -1)" class="btn-primary w-10 h-10 text-white rounded-full flex items-center justify-center font-bold text-xl">-</button>
-                                <span class="quantity-display w-16 text-center font-bold text-2xl bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">0</span>
-                                <button onclick="changeQuantity(this, 1)" class="btn-primary w-10 h-10 text-white rounded-full flex items-center justify-center font-bold text-xl">+</button>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-gray-700 font-bold">指定重量：</span>
-                            <div class="flex items-center space-x-3">
-                                <input type="number" step="0.1" min="0" placeholder="0.0" class="w-20 px-3 py-2 border-2 border-purple-200 rounded-xl text-center font-bold focus:border-purple-500 focus:outline-none transition-colors">
-                                <span class="text-gray-600 font-bold">公斤</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="product-item p-8 card-hover">
-                    <!-- 圖片區域 -->
-                    <div class="w-full h-48 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl mb-6 flex items-center justify-center">
-                        <span class="text-gray-500 text-lg">產品圖片</span>
-                    </div>
-                    <div class="flex items-center mb-6">
-                        <div class="text-4xl mr-4">🏔️</div>
-                        <h3 class="text-2xl font-bold bg-gradient-to-r from-sky-600 to-blue-600 bg-clip-text text-transparent">放山土雞</h3>
-                    </div>
-                    <p class="text-gray-700 mb-3 text-lg"><strong>重量規格：</strong>2.1公斤 ~ 3公斤</p>
-                    <p class="text-gray-600 mb-4 leading-relaxed"><strong>肉質特色：</strong>肉質結實有嚼勁，風味濃郁，運動量充足</p>
-                    <p class="text-sm text-green-600 font-bold mb-6">適合料理：土雞城料理、燒烤、紅燒、炒菜</p>
-                    <!-- 數量選擇 -->
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between">
-                            <span class="text-gray-700 font-bold">數量：</span>
-                            <div class="flex items-center space-x-4">
-                                <button onclick="changeQuantity(this, -1)" class="btn-primary w-10 h-10 text-white rounded-full flex items-center justify-center font-bold text-xl">-</button>
-                                <span class="quantity-display w-16 text-center font-bold text-2xl bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">0</span>
-                                <button onclick="changeQuantity(this, 1)" class="btn-primary w-10 h-10 text-white rounded-full flex items-center justify-center font-bold text-xl">+</button>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-gray-700 font-bold">指定重量：</span>
-                            <div class="flex items-center space-x-3">
-                                <input type="number" step="0.1" min="0" placeholder="0.0" class="w-20 px-3 py-2 border-2 border-purple-200 rounded-xl text-center font-bold focus:border-purple-500 focus:outline-none transition-colors">
-                                <span class="text-gray-600 font-bold">公斤</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- 熟食雞肉 -->
-    <section id="cooked" class="py-16 bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50">
-        <div class="container mx-auto px-4">
-            <h2 class="text-4xl font-black mb-12 bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">🍗 熟食雞肉 - 整隻規格</h2>
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="product-item p-8 card-hover">
-                    <!-- 圖片區域 -->
-                    <div class="w-full h-48 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl mb-6 flex items-center justify-center">
-                        <span class="text-gray-500 text-lg">產品圖片</span>
-                    </div>
-                    <div class="flex items-center mb-6">
-                        <div class="text-4xl mr-4">🎋</div>
-                        <h3 class="text-2xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">甘蔗雞</h3>
-                    </div>
-                    <p class="text-gray-700 mb-3 text-lg"><strong>規格重量：</strong>1.8公斤 ~ 2.7公斤</p>
-                    <p class="text-gray-600 mb-4 leading-relaxed">甘蔗燻製，香甜回甘</p>
-                    <p class="text-sm text-orange-600 font-bold mb-6">特色：天然甘蔗香氣，肉質香甜</p>
-                    <!-- 數量選擇 -->
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between">
-                            <span class="text-gray-700 font-bold">數量：</span>
-                            <div class="flex items-center space-x-4">
-                                <button onclick="changeQuantity(this, -1)" class="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white rounded-full flex items-center justify-center font-bold text-xl transition-all duration-300">-</button>
-                                <span class="quantity-display w-16 text-center font-bold text-2xl bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">0</span>
-                                <button onclick="changeQuantity(this, 1)" class="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white rounded-full flex items-center justify-center font-bold text-xl transition-all duration-300">+</button>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-gray-700 font-bold">指定重量：</span>
-                            <div class="flex items-center space-x-3">
-                                <input type="number" step="0.1" min="0" placeholder="0.0" class="w-20 px-3 py-2 border-2 border-orange-200 rounded-xl text-center font-bold focus:border-orange-500 focus:outline-none transition-colors">
-                                <span class="text-gray-600 font-bold">公斤</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="product-item p-8 card-hover">
-                    <!-- 圖片區域 -->
-                    <div class="w-full h-48 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl mb-6 flex items-center justify-center">
-                        <span class="text-gray-500 text-lg">產品圖片</span>
-                    </div>
-                    <div class="flex items-center mb-6">
-                        <div class="text-4xl mr-4">🧂</div>
-                        <h3 class="text-2xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">鹹水雞</h3>
-                    </div>
-                    <p class="text-gray-700 mb-3 text-lg"><strong>規格重量：</strong>1.8公斤 ~ 2.7公斤</p>
-                    <p class="text-gray-600 mb-4 leading-relaxed">傳統鹹水滷製，風味獨特</p>
-                    <p class="text-sm text-orange-600 font-bold mb-6">特色：鹹香入味，冷熱皆宜</p>
-                    <!-- 數量選擇 -->
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between">
-                            <span class="text-gray-700 font-bold">數量：</span>
-                            <div class="flex items-center space-x-4">
-                                <button onclick="changeQuantity(this, -1)" class="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white rounded-full flex items-center justify-center font-bold text-xl transition-all duration-300">-</button>
-                                <span class="quantity-display w-16 text-center font-bold text-2xl bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">0</span>
-                                <button onclick="changeQuantity(this, 1)" class="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white rounded-full flex items-center justify-center font-bold text-xl transition-all duration-300">+</button>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-gray-700 font-bold">指定重量：</span>
-                            <div class="flex items-center space-x-3">
-                                <input type="number" step="0.1" min="0" placeholder="0.0" class="w-20 px-3 py-2 border-2 border-orange-200 rounded-xl text-center font-bold focus:border-orange-500 focus:outline-none transition-colors">
-                                <span class="text-gray-600 font-bold">公斤</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="product-item p-8 card-hover">
-                    <!-- 圖片區域 -->
-                    <div class="w-full h-48 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl mb-6 flex items-center justify-center">
-                        <span class="text-gray-500 text-lg">產品圖片</span>
-                    </div>
-                    <div class="flex items-center mb-6">
-                        <div class="text-4xl mr-4">💨</div>
-                        <h3 class="text-2xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">煙燻雞</h3>
-                    </div>
-                    <p class="text-gray-700 mb-3 text-lg"><strong>規格重量：</strong>1.8公斤 ~ 2.7公斤</p>
-                    <p class="text-gray-600 mb-4 leading-relaxed">木材煙燻，香氣濃郁</p>
-                    <p class="text-sm text-orange-600 font-bold mb-6">特色：煙燻香氣，層次豐富</p>
-                    <!-- 數量選擇 -->
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between">
-                            <span class="text-gray-700 font-bold">數量：</span>
-                            <div class="flex items-center space-x-4">
-                                <button onclick="changeQuantity(this, -1)" class="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white rounded-full flex items-center justify-center font-bold text-xl transition-all duration-300">-</button>
-                                <span class="quantity-display w-16 text-center font-bold text-2xl bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">0</span>
-                                <button onclick="changeQuantity(this, 1)" class="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white rounded-full flex items-center justify-center font-bold text-xl transition-all duration-300">+</button>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-gray-700 font-bold">指定重量：</span>
-                            <div class="flex items-center space-x-3">
-                                <input type="number" step="0.1" min="0" placeholder="0.0" class="w-20 px-3 py-2 border-2 border-orange-200 rounded-xl text-center font-bold focus:border-orange-500 focus:outline-none transition-colors">
-                                <span class="text-gray-600 font-bold">公斤</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 冷凍分切 -->
-    <section id="frozen" class="py-16 bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50">
-        <div class="container mx-auto px-4">
-            <h2 class="text-4xl font-black mb-12 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">❄️ 冷凍分切 - 精準規格</h2>
             
-            <!-- 腿排規格 -->
-            <div class="mb-10">
-                <div class="product-item p-6 neon-border">
-                    <div class="flex flex-col lg:flex-row gap-6">
-                        <!-- 圖片區域 -->
-                        <div class="lg:w-1/3">
-                            <div class="w-full h-48 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center mb-4">
-                                <span class="text-gray-500 text-lg">腿排產品圖片</span>
+            <!-- 內容區域 -->
+            <div class="p-6">
+                <!-- 基本資訊與聯絡資訊 - 左右對稱 -->
+                <div class="mb-6">
+                    <div class="grid grid-cols-2 gap-6">
+                        <!-- 左側欄位 -->
+                        <div class="space-y-4">
+                            <div class="flex items-center">
+                                <label class="text-gray-700 mr-2 w-20">請款日期:</label>
+                                <input type="number" class="date-input" id="invoiceYear" min="1" max="999">
+                                <span class="mx-1">年</span>
+                                <input type="number" class="date-input" id="invoiceMonth" min="1" max="12">
+                                <span class="mx-1">月</span>
+                                <input type="number" class="date-input" id="invoiceDay" min="1" max="31">
+                                <span class="mx-1">日</span>
                             </div>
-                            <h3 class="text-2xl font-black text-center bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">🍖 腿排規格</h3>
-                            <p class="text-gray-600 text-center text-sm">(大腿與小腿連接部位)</p>
+                            <div class="flex items-center">
+                                <label class="text-gray-700 mr-2 w-20">廠商名稱:</label>
+                                <input type="text" id="vendorName" class="text-input flex-1" placeholder="">
+                            </div>
+                            <div class="flex items-center">
+                                <label class="text-gray-700 mr-2 w-20">活動地點:</label>
+                                <input type="text" id="eventLocation" class="text-input flex-1" placeholder="">
+                            </div>
                         </div>
-                        <!-- 規格細分 -->
-                        <div class="lg:w-2/3">
-                            <div class="grid md:grid-cols-3 gap-4">
-                                <div class="bg-gradient-to-br from-white to-blue-50 p-4 rounded-xl text-center card-hover border border-blue-100">
-                                    <h4 class="text-xl font-black text-blue-700 mb-2">TS3</h4>
-                                    <p class="text-gray-600 mb-3 text-sm">約300-350g</p>
-                                    <!-- 數量選擇 -->
-                                    <div class="flex items-center justify-center space-x-2">
-                                        <button onclick="changeQuantity(this, -1)" class="w-7 h-7 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-sm">-</button>
-                                        <span class="quantity-display w-10 text-center font-black text-lg bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">0</span>
-                                        <button onclick="changeQuantity(this, 1)" class="w-7 h-7 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-sm">+</button>
-                                        <span class="text-gray-600 font-bold ml-1 text-sm">斤</span>
-                                    </div>
-                                </div>
-                                <div class="bg-gradient-to-br from-white to-blue-50 p-4 rounded-xl text-center card-hover border border-blue-100">
-                                    <h4 class="text-xl font-black text-blue-700 mb-2">TS4</h4>
-                                    <p class="text-gray-600 mb-3 text-sm">約350-400g</p>
-                                    <!-- 數量選擇 -->
-                                    <div class="flex items-center justify-center space-x-2">
-                                        <button onclick="changeQuantity(this, -1)" class="w-7 h-7 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-sm">-</button>
-                                        <span class="quantity-display w-10 text-center font-black text-lg bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">0</span>
-                                        <button onclick="changeQuantity(this, 1)" class="w-7 h-7 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-sm">+</button>
-                                        <span class="text-gray-600 font-bold ml-1 text-sm">斤</span>
-                                    </div>
-                                </div>
-                                <div class="bg-gradient-to-br from-white to-blue-50 p-4 rounded-xl text-center card-hover border border-blue-100">
-                                    <h4 class="text-xl font-black text-blue-700 mb-2">TS5</h4>
-                                    <p class="text-gray-600 mb-3 text-sm">約400-450g</p>
-                                    <!-- 數量選擇 -->
-                                    <div class="flex items-center justify-center space-x-2">
-                                        <button onclick="changeQuantity(this, -1)" class="w-7 h-7 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-sm">-</button>
-                                        <span class="quantity-display w-10 text-center font-black text-lg bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">0</span>
-                                        <button onclick="changeQuantity(this, 1)" class="w-7 h-7 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-sm">+</button>
-                                        <span class="text-gray-600 font-bold ml-1 text-sm">斤</span>
-                                    </div>
-                                </div>
+                        
+                        <!-- 右側欄位 -->
+                        <div class="space-y-4">
+                            <div class="flex items-center">
+                                <label class="text-gray-700 mr-2 w-20">連絡電話:</label>
+                                <input type="text" id="contactPhone" class="text-input flex-1" value="0926169899">
+                            </div>
+                            <div class="flex items-center">
+                                <label class="text-gray-700 mr-2 w-20">負責人:</label>
+                                <input type="text" id="contactPerson" class="text-input flex-1" value="蘇裕庭">
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- 骨腿規格 -->
-            <div class="mb-10">
-                <div class="product-item p-6 neon-border">
-                    <div class="flex flex-col lg:flex-row gap-6">
-                        <!-- 圖片區域 -->
-                        <div class="lg:w-1/3">
-                            <div class="w-full h-48 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center mb-4">
-                                <span class="text-gray-500 text-lg">骨腿產品圖片</span>
-                            </div>
-                            <h3 class="text-2xl font-black text-center bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">🦴 骨腿規格</h3>
-                            <p class="text-gray-600 text-center text-sm">(雞大腿帶骨部位)</p>
-                        </div>
-                        <!-- 規格細分 -->
-                        <div class="lg:w-2/3">
-                            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                                <div class="bg-gradient-to-br from-white to-blue-50 p-4 rounded-xl text-center card-hover border border-blue-100">
-                                    <h4 class="text-xl font-black text-blue-700 mb-2">T5</h4>
-                                    <p class="text-gray-600 mb-3 text-sm">約180-220g</p>
-                                    <!-- 數量選擇 -->
-                                    <div class="flex items-center justify-center space-x-2">
-                                        <button onclick="changeQuantity(this, -1)" class="w-7 h-7 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-sm">-</button>
-                                        <span class="quantity-display w-10 text-center font-black text-lg bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">0</span>
-                                        <button onclick="changeQuantity(this, 1)" class="w-7 h-7 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-sm">+</button>
-                                        <span class="text-gray-600 font-bold ml-1 text-sm">斤</span>
-                                    </div>
-                                </div>
-                                <div class="bg-gradient-to-br from-white to-blue-50 p-4 rounded-xl text-center card-hover border border-blue-100">
-                                    <h4 class="text-xl font-black text-blue-700 mb-2">T6</h4>
-                                    <p class="text-gray-600 mb-3 text-sm">約220-260g</p>
-                                    <!-- 數量選擇 -->
-                                    <div class="flex items-center justify-center space-x-2">
-                                        <button onclick="changeQuantity(this, -1)" class="w-7 h-7 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-sm">-</button>
-                                        <span class="quantity-display w-10 text-center font-black text-lg bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">0</span>
-                                        <button onclick="changeQuantity(this, 1)" class="w-7 h-7 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-sm">+</button>
-                                        <span class="text-gray-600 font-bold ml-1 text-sm">斤</span>
-                                    </div>
-                                </div>
-                                <div class="bg-gradient-to-br from-white to-blue-50 p-4 rounded-xl text-center card-hover border border-blue-100">
-                                    <h4 class="text-xl font-black text-blue-700 mb-2">T7</h4>
-                                    <p class="text-gray-600 mb-3 text-sm">約260-300g</p>
-                                    <!-- 數量選擇 -->
-                                    <div class="flex items-center justify-center space-x-2">
-                                        <button onclick="changeQuantity(this, -1)" class="w-7 h-7 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-sm">-</button>
-                                        <span class="quantity-display w-10 text-center font-black text-lg bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">0</span>
-                                        <button onclick="changeQuantity(this, 1)" class="w-7 h-7 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-sm">+</button>
-                                        <span class="text-gray-600 font-bold ml-1 text-sm">斤</span>
-                                    </div>
-                                </div>
-                                <div class="bg-gradient-to-br from-white to-blue-50 p-4 rounded-xl text-center card-hover border border-blue-100">
-                                    <h4 class="text-xl font-black text-blue-700 mb-2">T8</h4>
-                                    <p class="text-gray-600 mb-3 text-sm">約300-350g</p>
-                                    <!-- 數量選擇 -->
-                                    <div class="flex items-center justify-center space-x-2">
-                                        <button onclick="changeQuantity(this, -1)" class="w-7 h-7 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-sm">-</button>
-                                        <span class="quantity-display w-10 text-center font-black text-lg bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">0</span>
-                                        <button onclick="changeQuantity(this, 1)" class="w-7 h-7 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-sm">+</button>
-                                        <span class="text-gray-600 font-bold ml-1 text-sm">斤</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 棒腿規格 -->
-            <div class="mb-16">
-                <div class="product-item p-10 neon-border">
-                    <div class="flex flex-col lg:flex-row gap-8">
-                        <!-- 圖片區域 -->
-                        <div class="lg:w-1/3">
-                            <div class="w-full h-64 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl flex items-center justify-center mb-6">
-                                <span class="text-gray-500 text-xl">棒腿產品圖片</span>
-                            </div>
-                            <h3 class="text-3xl font-black text-center bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">🍗 棒腿規格</h3>
-                            <p class="text-gray-600 text-center text-lg">(雞小腿部位)</p>
-                        </div>
-                        <!-- 規格細分 -->
-                        <div class="lg:w-2/3">
-                            <div class="grid md:grid-cols-3 gap-6">
-                                <div class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-2xl text-center card-hover border-2 border-blue-100">
-                                    <h4 class="text-2xl font-black text-blue-700 mb-3">D3</h4>
-                                    <p class="text-gray-600 mb-4 text-lg">約80-100g</p>
-                                    <!-- 數量選擇 -->
-                                    <div class="flex items-center justify-center space-x-2 mt-4">
-                                        <button onclick="changeQuantity(this, -1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">-</button>
-                                        <span class="quantity-display w-12 text-center font-black text-xl bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">0</span>
-                                        <button onclick="changeQuantity(this, 1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">+</button>
-                                        <span class="text-gray-600 font-bold ml-1">斤</span>
-                                    </div>
-                                </div>
-                                <div class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-2xl text-center card-hover border-2 border-blue-100">
-                                    <h4 class="text-2xl font-black text-blue-700 mb-3">D4</h4>
-                                    <p class="text-gray-600 mb-4 text-lg">約100-120g</p>
-                                    <!-- 數量選擇 -->
-                                    <div class="flex items-center justify-center space-x-2 mt-4">
-                                        <button onclick="changeQuantity(this, -1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">-</button>
-                                        <span class="quantity-display w-12 text-center font-black text-xl bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">0</span>
-                                        <button onclick="changeQuantity(this, 1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">+</button>
-                                        <span class="text-gray-600 font-bold ml-1">斤</span>
-                                    </div>
-                                </div>
-                                <div class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-2xl text-center card-hover border-2 border-blue-100">
-                                    <h4 class="text-2xl font-black text-blue-700 mb-3">腿仁</h4>
-                                    <p class="text-gray-600 mb-2 text-lg">約150-200g</p>
-                                    <p class="text-sm text-gray-500 mb-4">(去骨雞腿肉)</p>
-                                    <!-- 數量選擇 -->
-                                    <div class="flex items-center justify-center space-x-2 mt-4">
-                                        <button onclick="changeQuantity(this, -1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">-</button>
-                                        <span class="quantity-display w-12 text-center font-black text-xl bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">0</span>
-                                        <button onclick="changeQuantity(this, 1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">+</button>
-                                        <span class="text-gray-600 font-bold ml-1">斤</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 雞翅規格 -->
-            <div class="mb-16">
-                <div class="product-item p-10 neon-border">
-                    <div class="flex flex-col lg:flex-row gap-8">
-                        <!-- 圖片區域 -->
-                        <div class="lg:w-1/3">
-                            <div class="w-full h-64 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl flex items-center justify-center mb-6">
-                                <span class="text-gray-500 text-xl">雞翅產品圖片</span>
-                            </div>
-                            <h3 class="text-3xl font-black text-center bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">🪶 雞翅規格</h3>
-                            <p class="text-gray-600 text-center text-lg">(雞翅膀完整部位)</p>
-                        </div>
-                        <!-- 規格細分 -->
-                        <div class="lg:w-2/3">
-                            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                                <div class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-2xl text-center card-hover border-2 border-blue-100">
-                                    <h4 class="text-2xl font-black text-blue-700 mb-3">W6</h4>
-                                    <p class="text-gray-600 mb-4 text-lg">約45-55g</p>
-                                    <!-- 數量選擇 -->
-                                    <div class="flex items-center justify-center space-x-2 mt-4">
-                                        <button onclick="changeQuantity(this, -1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">-</button>
-                                        <span class="quantity-display w-12 text-center font-black text-xl bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">0</span>
-                                        <button onclick="changeQuantity(this, 1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">+</button>
-                                        <span class="text-gray-600 font-bold ml-1">斤</span>
-                                    </div>
-                                </div>
-                                <div class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-2xl text-center card-hover border-2 border-blue-100">
-                                    <h4 class="text-2xl font-black text-blue-700 mb-3">W7</h4>
-                                    <p class="text-gray-600 mb-4 text-lg">約55-65g</p>
-                                    <!-- 數量選擇 -->
-                                    <div class="flex items-center justify-center space-x-2 mt-4">
-                                        <button onclick="changeQuantity(this, -1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">-</button>
-                                        <span class="quantity-display w-12 text-center font-black text-xl bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">0</span>
-                                        <button onclick="changeQuantity(this, 1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">+</button>
-                                        <span class="text-gray-600 font-bold ml-1">斤</span>
-                                    </div>
-                                </div>
-                                <div class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-2xl text-center card-hover border-2 border-blue-100">
-                                    <h4 class="text-2xl font-black text-blue-700 mb-3">W8</h4>
-                                    <p class="text-gray-600 mb-4 text-lg">約65-75g</p>
-                                    <!-- 數量選擇 -->
-                                    <div class="flex items-center justify-center space-x-2 mt-4">
-                                        <button onclick="changeQuantity(this, -1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">-</button>
-                                        <span class="quantity-display w-12 text-center font-black text-xl bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">0</span>
-                                        <button onclick="changeQuantity(this, 1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">+</button>
-                                        <span class="text-gray-600 font-bold ml-1">斤</span>
-                                    </div>
-                                </div>
-                                <div class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-2xl text-center card-hover border-2 border-blue-100">
-                                    <h4 class="text-2xl font-black text-blue-700 mb-3">二節翅</h4>
-                                    <p class="text-gray-600 mb-2 text-lg">約25-35g</p>
-                                    <p class="text-sm text-gray-500 mb-4">(雞翅中段部位)</p>
-                                    <!-- 數量選擇 -->
-                                    <div class="flex items-center justify-center space-x-2 mt-4">
-                                        <button onclick="changeQuantity(this, -1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">-</button>
-                                        <span class="quantity-display w-12 text-center font-black text-xl bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">0</span>
-                                        <button onclick="changeQuantity(this, 1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">+</button>
-                                        <span class="text-gray-600 font-bold ml-1">斤</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 雞胸規格 -->
-            <div class="mb-16">
-                <div class="product-item p-10 neon-border">
-                    <div class="flex flex-col lg:flex-row gap-8">
-                        <!-- 圖片區域 -->
-                        <div class="lg:w-1/3">
-                            <div class="w-full h-64 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl flex items-center justify-center mb-6">
-                                <span class="text-gray-500 text-xl">雞胸產品圖片</span>
-                            </div>
-                            <h3 class="text-3xl font-black text-center bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">🥩 雞胸規格</h3>
-                            <p class="text-gray-600 text-center text-lg">(雞胸肉部位)</p>
-                        </div>
-                        <!-- 規格細分 -->
-                        <div class="lg:w-2/3">
-                            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                <div class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-2xl text-center card-hover border-2 border-blue-100">
-                                    <h4 class="text-xl font-black text-blue-700 mb-3">原胸</h4>
-                                    <p class="text-gray-600 mb-2 text-lg">約400-500g</p>
-                                    <p class="text-sm text-gray-500 mb-4">(完整雞胸肉帶骨)</p>
-                                    <!-- 數量選擇 -->
-                                    <div class="flex items-center justify-center space-x-2 mt-4">
-                                        <button onclick="changeQuantity(this, -1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">-</button>
-                                        <span class="quantity-display w-12 text-center font-black text-xl bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">0</span>
-                                        <button onclick="changeQuantity(this, 1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">+</button>
-                                        <span class="text-gray-600 font-bold ml-1">斤</span>
-                                    </div>
-                                </div>
-                                <div class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-2xl text-center card-hover border-2 border-blue-100">
-                                    <h4 class="text-xl font-black text-blue-700 mb-3">清胸</h4>
-                                    <p class="text-gray-600 mb-2 text-lg">約250-350g</p>
-                                    <p class="text-sm text-gray-500 mb-4">(去骨雞胸肉)</p>
-                                    <!-- 數量選擇 -->
-                                    <div class="flex items-center justify-center space-x-2 mt-4">
-                                        <button onclick="changeQuantity(this, -1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">-</button>
-                                        <span class="quantity-display w-12 text-center font-black text-xl bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">0</span>
-                                        <button onclick="changeQuantity(this, 1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">+</button>
-                                        <span class="text-gray-600 font-bold ml-1">斤</span>
-                                    </div>
-                                </div>
-                                <div class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-2xl text-center card-hover border-2 border-blue-100">
-                                    <h4 class="text-xl font-black text-blue-700 mb-3">清肉</h4>
-                                    <p class="text-gray-600 mb-2 text-lg">約200-300g</p>
-                                    <p class="text-sm text-gray-500 mb-4">(雞胸肉片)</p>
-                                    <!-- 數量選擇 -->
-                                    <div class="flex items-center justify-center space-x-2 mt-4">
-                                        <button onclick="changeQuantity(this, -1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">-</button>
-                                        <span class="quantity-display w-12 text-center font-black text-xl bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">0</span>
-                                        <button onclick="changeQuantity(this, 1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">+</button>
-                                        <span class="text-gray-600 font-bold ml-1">斤</span>
-                                    </div>
-                                </div>
-                                <div class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-2xl text-center card-hover border-2 border-blue-100">
-                                    <h4 class="text-xl font-black text-blue-700 mb-3">清肉丁</h4>
-                                    <p class="text-gray-600 mb-2 text-lg">約200-250g</p>
-                                    <p class="text-sm text-gray-500 mb-4">(雞胸肉丁)</p>
-                                    <!-- 數量選擇 -->
-                                    <div class="flex items-center justify-center space-x-2 mt-4">
-                                        <button onclick="changeQuantity(this, -1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">-</button>
-                                        <span class="quantity-display w-12 text-center font-black text-xl bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">0</span>
-                                        <button onclick="changeQuantity(this, 1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">+</button>
-                                        <span class="text-gray-600 font-bold ml-1">斤</span>
-                                    </div>
-                                </div>
-                                <div class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-2xl text-center card-hover border-2 border-blue-100">
-                                    <h4 class="text-xl font-black text-blue-700 mb-3">里肌肉</h4>
-                                    <p class="text-gray-600 mb-2 text-lg">約80-120g</p>
-                                    <p class="text-sm text-gray-500 mb-4">(雞胸內側嫩肉)</p>
-                                    <!-- 數量選擇 -->
-                                    <div class="flex items-center justify-center space-x-2 mt-4">
-                                        <button onclick="changeQuantity(this, -1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">-</button>
-                                        <span class="quantity-display w-12 text-center font-black text-xl bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">0</span>
-                                        <button onclick="changeQuantity(this, 1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">+</button>
-                                        <span class="text-gray-600 font-bold ml-1">斤</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 其他規格 -->
-            <div class="mb-16">
-                <div class="product-item p-10 neon-border">
-                    <div class="flex flex-col lg:flex-row gap-8">
-                        <!-- 圖片區域 -->
-                        <div class="lg:w-1/3">
-                            <div class="w-full h-64 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl flex items-center justify-center mb-6">
-                                <span class="text-gray-500 text-xl">其他部位產品圖片</span>
-                            </div>
-                            <h3 class="text-3xl font-black text-center bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">🫀 其他規格</h3>
-                            <p class="text-gray-600 text-center text-lg">(雞內臟及特殊部位)</p>
-                        </div>
-                        <!-- 規格細分 -->
-                        <div class="lg:w-2/3">
-                            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                <div class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-2xl text-center card-hover border-2 border-blue-100">
-                                    <h4 class="text-xl font-black text-blue-700 mb-3">雞心</h4>
-                                    <p class="text-gray-700 mb-2 text-lg"><strong>部位：</strong>雞心臟</p>
-                                    <p class="text-sm text-blue-600 font-bold mb-4">重量：約8-12g</p>
-                                    <!-- 數量選擇 -->
-                                    <div class="flex items-center justify-center space-x-2 mt-4">
-                                        <button onclick="changeQuantity(this, -1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">-</button>
-                                        <span class="quantity-display w-12 text-center font-black text-xl bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">0</span>
-                                        <button onclick="changeQuantity(this, 1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">+</button>
-                                        <span class="text-gray-600 font-bold ml-1">斤</span>
-                                    </div>
-                                </div>
-                                <div class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-2xl text-center card-hover border-2 border-blue-100">
-                                    <h4 class="text-xl font-black text-blue-700 mb-3">雞胗</h4>
-                                    <p class="text-gray-700 mb-2 text-lg"><strong>部位：</strong>雞胃部</p>
-                                    <p class="text-sm text-blue-600 font-bold mb-4">重量：約15-25g</p>
-                                    <!-- 數量選擇 -->
-                                    <div class="flex items-center justify-center space-x-2 mt-4">
-                                        <button onclick="changeQuantity(this, -1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">-</button>
-                                        <span class="quantity-display w-12 text-center font-black text-xl bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">0</span>
-                                        <button onclick="changeQuantity(this, 1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">+</button>
-                                        <span class="text-gray-600 font-bold ml-1">斤</span>
-                                    </div>
-                                </div>
-                                <div class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-2xl text-center card-hover border-2 border-blue-100">
-                                    <h4 class="text-xl font-black text-blue-700 mb-3">雞尾椎</h4>
-                                    <p class="text-gray-700 mb-2 text-lg"><strong>部位：</strong>雞尾巴部位</p>
-                                    <p class="text-sm text-blue-600 font-bold mb-4">重量：約20-30g</p>
-                                    <!-- 數量選擇 -->
-                                    <div class="flex items-center justify-center space-x-2 mt-4">
-                                        <button onclick="changeQuantity(this, -1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">-</button>
-                                        <span class="quantity-display w-12 text-center font-black text-xl bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">0</span>
-                                        <button onclick="changeQuantity(this, 1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">+</button>
-                                        <span class="text-gray-600 font-bold ml-1">斤</span>
-                                    </div>
-                                </div>
-                                <div class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-2xl text-center card-hover border-2 border-blue-100">
-                                    <h4 class="text-xl font-black text-blue-700 mb-3">頸背排</h4>
-                                    <p class="text-gray-700 mb-2 text-lg"><strong>部位：</strong>雞脖子背部</p>
-                                    <p class="text-sm text-blue-600 font-bold mb-4">重量：約30-50g</p>
-                                    <!-- 數量選擇 -->
-                                    <div class="flex items-center justify-center space-x-2 mt-4">
-                                        <button onclick="changeQuantity(this, -1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">-</button>
-                                        <span class="quantity-display w-12 text-center font-black text-xl bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">0</span>
-                                        <button onclick="changeQuantity(this, 1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">+</button>
-                                        <span class="text-gray-600 font-bold ml-1">斤</span>
-                                    </div>
-                                </div>
-                                <div class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-2xl text-center card-hover border-2 border-blue-100">
-                                    <h4 class="text-xl font-black text-blue-700 mb-3">三角骨</h4>
-                                    <p class="text-gray-700 mb-2 text-lg"><strong>部位：</strong>雞翅根部三角骨</p>
-                                    <p class="text-sm text-blue-600 font-bold mb-4">重量：約15-25g</p>
-                                    <!-- 數量選擇 -->
-                                    <div class="flex items-center justify-center space-x-2 mt-4">
-                                        <button onclick="changeQuantity(this, -1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">-</button>
-                                        <span class="quantity-display w-12 text-center font-black text-xl bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">0</span>
-                                        <button onclick="changeQuantity(this, 1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">+</button>
-                                        <span class="text-gray-600 font-bold ml-1">斤</span>
-                                    </div>
-                                </div>
-                                <div class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-2xl text-center card-hover border-2 border-blue-100">
-                                    <h4 class="text-xl font-black text-blue-700 mb-3">雞皮</h4>
-                                    <p class="text-gray-700 mb-2 text-lg"><strong>部位：</strong>雞皮部分</p>
-                                    <p class="text-sm text-blue-600 font-bold mb-4">重量：約50-100g</p>
-                                    <!-- 數量選擇 -->
-                                    <div class="flex items-center justify-center space-x-2 mt-4">
-                                        <button onclick="changeQuantity(this, -1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">-</button>
-                                        <span class="quantity-display w-12 text-center font-black text-xl bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">0</span>
-                                        <button onclick="changeQuantity(this, 1)" class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-300 text-lg">+</button>
-                                        <span class="text-gray-600 font-bold ml-1">斤</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 確認按鈕 -->
-    <div class="fixed bottom-8 right-8 z-50">
-        <button onclick="showOrderSummary()" class="btn-primary text-white px-12 py-6 rounded-3xl shadow-2xl text-2xl font-black pulse-glow">
-            📋 確認訂單
-        </button>
-    </div>
-
-    <!-- 訂單確認彈窗 - 極簡現代風格 -->
-    <div id="orderModal" class="fixed inset-0 z-50 hidden">
-        <!-- 背景遮罩 -->
-        <div class="absolute inset-0 bg-gradient-to-br from-black/70 via-purple-900/30 to-blue-900/30 backdrop-blur-xl"></div>
-        
-        <!-- 彈窗主體 -->
-        <div class="relative h-full flex items-center justify-center p-4">
-            <div class="bg-white/95 backdrop-blur-2xl rounded-[2rem] shadow-[0_25px_50px_rgba(0,0,0,0.25)] max-w-5xl w-full max-h-[90vh] overflow-hidden transform transition-all duration-700 scale-95 opacity-0 border border-white/20" id="modalContent">
                 
-                <!-- 標題區域 - 極簡設計 -->
-                <div class="relative px-10 py-8 bg-gradient-to-r from-slate-900 via-gray-900 to-black">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-5">
-                            <div class="relative">
-                                <div class="w-16 h-16 bg-gradient-to-br from-emerald-400 via-cyan-400 to-blue-500 rounded-full flex items-center justify-center text-2xl shadow-2xl floating-animation">
-                                    📋
-                                </div>
-                                <div class="absolute -inset-2 bg-gradient-to-r from-emerald-400 to-blue-500 rounded-full blur opacity-20 animate-pulse"></div>
-                            </div>
-                            <div>
-                                <h2 class="text-3xl font-black text-white tracking-tight">訂單確認</h2>
-                                <p class="text-gray-300 text-sm font-medium mt-1">Order Confirmation</p>
-                            </div>
-                        </div>
-                        <button onclick="closeOrderModal()" class="group w-12 h-12 bg-white/10 hover:bg-red-500/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white/70 hover:text-red-400 text-xl transition-all duration-300 border border-white/10 hover:border-red-400/30">
-                            <span class="group-hover:rotate-90 transition-transform duration-300">×</span>
-                        </button>
+                <!-- 分隔線 -->
+                <div class="section-divider"></div>
+                
+                <!-- 費用統計 -->
+                <div class="mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-blue-700">費用統計</h3>
+                        <button id="addOtherBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-sm transition duration-200 no-print">+ 新增其他</button>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full border-collapse">
+                            <thead>
+                                <tr class="bg-blue-100">
+                                    <th class="px-4 py-2 text-left text-blue-800">品項</th>
+                                    <th class="px-4 py-2 text-center text-blue-800 w-20">數量</th>
+                                    <th class="px-4 py-2 text-center text-blue-800 w-28">單價 (NT$)</th>
+                                    <th class="px-4 py-2 text-left text-blue-800">工作內容</th>
+                                    <th class="px-4 py-2 text-center text-blue-800 w-28">小計 (NT$)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="supportItemsTable">
+                                <tr class="border-b border-gray-200">
+                                    <td class="px-4 py-3">人事支援</td>
+                                    <td class="px-4 py-3">
+                                        <input type="number" id="staffQty" class="w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" value="0" min="0" oninput="calculateAll()">
+                                    </td>
+                                    <td class="px-4 py-3 text-center">3000</td>
+                                    <td class="px-4 py-3">進場、演出、撤場</td>
+                                    <td class="px-4 py-3 text-center" id="staffSubtotal">0</td>
+                                </tr>
+                                <tr class="border-b border-gray-200">
+                                    <td class="px-4 py-3">燈/音/視控</td>
+                                    <td class="px-4 py-3">
+                                        <input type="number" id="techQty" class="w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" value="0" min="0" oninput="calculateAll()">
+                                    </td>
+                                    <td class="px-4 py-3 text-center">1,000</td>
+                                    <td class="px-4 py-3">演出前一日彩排，將視為一場演出，另行計費。</td>
+                                    <td class="px-4 py-3 text-center" id="techSubtotal">0</td>
+                                </tr>
+                                <tr class="border-b border-gray-200">
+                                    <td class="px-4 py-3">追光燈操作</td>
+                                    <td class="px-4 py-3">
+                                        <input type="number" id="spotlightQty" class="w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" value="0" min="0" oninput="calculateAll()">
+                                    </td>
+                                    <td class="px-4 py-3 text-center">1,000</td>
+                                    <td class="px-4 py-3">演出前一日彩排，將視為一場演出，另行計費。</td>
+                                    <td class="px-4 py-3 text-center" id="spotlightSubtotal">0</td>
+                                </tr>
+                                <tr class="border-b border-gray-200">
+                                    <td class="px-4 py-3">高空作業</td>
+                                    <td class="px-4 py-3">
+                                        <input type="number" id="heightQty" class="w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" value="0" min="0" oninput="calculateAll()">
+                                    </td>
+                                    <td class="px-4 py-3 text-center">1,000</td>
+                                    <td class="px-4 py-3">作業高度達layher第 6 格以上(約9米)</td>
+                                    <td class="px-4 py-3 text-center" id="heightSubtotal">0</td>
+                                </tr>
+                                <tr class="border-b border-gray-200">
+                                    <td class="px-4 py-3">加班費用</td>
+                                    <td class="px-4 py-3">
+                                        <input type="number" id="overtimeQty" class="w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" value="0" min="0" step="0.5" oninput="calculateAll()">
+                                    </td>
+                                    <td class="px-4 py-3 text-center">350</td>
+                                    <td class="px-4 py-3">依實際加班時數計算</td>
+                                    <td class="px-4 py-3 text-center" id="overtimeSubtotal">0</td>
+                                </tr>
+                                <tr class="border-b border-gray-200">
+                                    <td class="px-4 py-3">行政執行費</td>
+                                    <td class="px-4 py-3 text-center">一式</td>
+                                    <td class="px-4 py-3 text-center">10%</td>
+                                    <td class="px-4 py-3">人事支援 x 10%</td>
+                                    <td class="px-4 py-3 text-center" id="adminSubtotal">0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="mt-6 text-right">
+                        <p class="text-lg font-medium">未稅金額: <span id="subtotalAmount" class="text-blue-800">NT$0</span></p>
+                        <p class="text-xl font-bold mt-2">總計金額: <span id="totalAmount" class="text-blue-800">NT$0</span></p>
                     </div>
                 </div>
-
-                <!-- 進度指示器 - 線性極簡設計 -->
-                <div class="px-10 py-6 bg-white/50 backdrop-blur-sm border-b border-gray-200/50">
-                    <div class="flex items-center justify-between max-w-xl mx-auto">
-                        <div id="step1" class="flex items-center space-x-3 step-indicator active">
-                            <div class="step-circle w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white flex items-center justify-center font-bold text-sm shadow-lg">
-                                1
+                
+                <!-- 分隔線 -->
+                <div class="section-divider"></div>
+                
+                <!-- 匯款資訊 -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold text-blue-700 mb-4">匯款資訊</h3>
+                    <div class="grid grid-cols-2 gap-6">
+                        <!-- 左側欄位 -->
+                        <div class="space-y-4">
+                            <div class="flex items-center">
+                                <label class="text-gray-700 mr-2 w-20">帳號戶名:</label>
+                                <input type="text" id="accountName" class="text-input flex-1" value="蘇裕庭">
                             </div>
-                            <span class="font-bold text-gray-800 text-sm">確認商品</span>
-                        </div>
-                        
-                        <div class="flex-1 mx-6 h-0.5 bg-gray-200 rounded-full overflow-hidden">
-                            <div id="progress1" class="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full transition-all duration-700 w-0"></div>
-                        </div>
-                        
-                        <div id="step2" class="flex items-center space-x-3 step-indicator">
-                            <div class="step-circle w-10 h-10 rounded-full bg-gray-200 text-gray-400 flex items-center justify-center font-bold text-sm">
-                                2
-                            </div>
-                            <span class="font-bold text-gray-400 text-sm">填寫資訊</span>
-                        </div>
-                        
-                        <div class="flex-1 mx-6 h-0.5 bg-gray-200 rounded-full overflow-hidden">
-                            <div id="progress2" class="h-full bg-gradient-to-r from-green-500 to-emerald-600 rounded-full transition-all duration-700 w-0"></div>
-                        </div>
-                        
-                        <div id="step3" class="flex items-center space-x-3 step-indicator">
-                            <div class="step-circle w-10 h-10 rounded-full bg-gray-200 text-gray-400 flex items-center justify-center font-bold text-sm">
-                                3
-                            </div>
-                            <span class="font-bold text-gray-400 text-sm">完成</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 內容區域 -->
-                <div class="flex-1 overflow-y-auto max-h-[50vh] bg-gradient-to-br from-gray-50/80 to-white/80 backdrop-blur-sm">
-                    <!-- 商品清單 -->
-                    <div id="orderContent" class="p-10">
-                        <!-- 訂單內容將在這裡動態生成 -->
-                    </div>
-
-                    <!-- 聯絡資訊表單 -->
-                    <div id="contactForm" class="hidden p-10">
-                        <div class="max-w-3xl mx-auto">
-                            <div class="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-gray-200/50 overflow-hidden">
-                                <!-- 表單標題 -->
-                                <div class="bg-gradient-to-r from-gray-800 to-gray-900 px-8 py-6">
-                                    <div class="flex items-center space-x-4">
-                                        <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center text-2xl">
-                                            👤
-                                        </div>
-                                        <div class="text-white">
-                                            <h3 class="text-xl font-black">聯絡資訊</h3>
-                                            <p class="text-gray-300 text-sm">請填寫完整資訊</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- 表單內容 -->
-                                <div class="p-8">
-                                    <div class="grid md:grid-cols-2 gap-6">
-                                        <div class="space-y-2">
-                                            <label class="text-gray-700 font-bold text-sm">聯絡人 <span class="text-red-500">*</span></label>
-                                            <input type="text" id="contactName" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 text-sm bg-white/70 backdrop-blur-sm" placeholder="請輸入您的姓名">
-                                        </div>
-                                        <div class="space-y-2">
-                                            <label class="text-gray-700 font-bold text-sm">聯絡電話 <span class="text-red-500">*</span></label>
-                                            <input type="tel" id="contactPhone" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 text-sm bg-white/70 backdrop-blur-sm" placeholder="請輸入聯絡電話">
-                                        </div>
-                                        <div class="md:col-span-2 space-y-2">
-                                            <label class="text-gray-700 font-bold text-sm">地址 <span class="text-red-500">*</span></label>
-                                            <input type="text" id="contactAddress" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 text-sm bg-white/70 backdrop-blur-sm" placeholder="請輸入完整配送地址">
-                                        </div>
-                                        <div class="md:col-span-2 space-y-3">
-                                            <label class="text-gray-700 font-bold text-sm">可聯繫時間 <span class="text-red-500">*</span></label>
-                                            <div class="space-y-3">
-                                                <label class="flex items-center space-x-3 cursor-pointer group">
-                                                    <input type="checkbox" id="weekdayTime" class="w-5 h-5 text-blue-600 bg-white border-2 border-gray-300 rounded focus:ring-blue-500 focus:ring-2 transition-all duration-300">
-                                                    <span class="text-gray-700 font-medium group-hover:text-blue-600 transition-colors duration-300">平日 09:00-18:00</span>
-                                                </label>
-                                                <label class="flex items-center space-x-3 cursor-pointer group">
-                                                    <input type="checkbox" id="holidayTime" class="w-5 h-5 text-blue-600 bg-white border-2 border-gray-300 rounded focus:ring-blue-500 focus:ring-2 transition-all duration-300">
-                                                    <span class="text-gray-700 font-medium group-hover:text-blue-600 transition-colors duration-300">假日全天</span>
-                                                </label>
-                                                <label class="flex items-center space-x-3 cursor-pointer group">
-                                                    <input type="checkbox" id="anytimeTime" class="w-5 h-5 text-blue-600 bg-white border-2 border-gray-300 rounded focus:ring-blue-500 focus:ring-2 transition-all duration-300">
-                                                    <span class="text-gray-700 font-medium group-hover:text-blue-600 transition-colors duration-300">隨時可聯繫</span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="flex items-center">
+                                <label class="text-gray-700 mr-2 w-20">匯款帳號:</label>
+                                 <input type="text" id="accountName" class="text-input flex-1" value="0842-979-176643">
                             </div>
                         </div>
-                    </div>
-
-                    <!-- 完成畫面 -->
-                    <div id="orderComplete" class="hidden p-10">
-                        <div class="max-w-4xl mx-auto">
-                            <div class="bg-white/90 backdrop-blur-sm rounded-3xl shadow-xl border border-gray-200/50 overflow-hidden">
-                                <!-- 標題區域 -->
-                                <div class="bg-gradient-to-r from-green-500 to-emerald-600 px-8 py-6">
-                                    <div class="flex items-center space-x-4">
-                                        <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center text-2xl floating-animation">
-                                            ✓
-                                        </div>
-                                        <div class="text-white">
-                                            <h3 class="text-2xl font-black">訂單確認完成</h3>
-                                            <p class="text-green-100 text-sm">Order Confirmation Complete</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- 訂單摘要 -->
-                                <div class="p-8">
-                                    <div id="finalOrderSummary" class="mb-8">
-                                        <!-- 這裡會顯示最終的訂單摘要 -->
-                                    </div>
-                                    
-                                    <!-- 重要提醒 -->
-                                    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border-2 border-blue-200 mb-6">
-                                        <div class="flex items-start space-x-4">
-                                            <div class="text-3xl">📸</div>
-                                            <div>
-                                                <h4 class="text-xl font-black text-gray-900 mb-3">重要提醒</h4>
-                                                <p class="text-gray-700 text-lg leading-relaxed mb-4">
-                                                    <strong class="text-blue-700">確認商品後請截圖/錄影清單傳送到店家的LINE，將由專人為您確認商品及報價</strong>，如有其他問題請直接撥打電話由專人為您服務。
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- 聯絡方式 -->
-                                    <div class="grid md:grid-cols-2 gap-6">
-                                        <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 border border-green-200 hover:shadow-lg transition-all duration-300 cursor-pointer group">
-                                            <div class="flex items-center space-x-4">
-                                                <div class="text-3xl group-hover:scale-110 transition-transform duration-300">💬</div>
-                                                <div>
-                                                    <p class="font-black text-gray-900 text-lg mb-1">LINE官方帳號</p>
-                                                    <p class="text-green-600 font-bold text-xl">@330kxatg</p>
-                                                    <p class="text-sm text-gray-600">請將截圖傳送至此帳號</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="bg-gradient-to-br from-blue-50 to-sky-50 rounded-2xl p-6 border border-blue-200 hover:shadow-lg transition-all duration-300 cursor-pointer group">
-                                            <div class="flex items-center space-x-4">
-                                                <div class="text-3xl group-hover:scale-110 transition-transform duration-300">📞</div>
-                                                <div>
-                                                    <p class="font-black text-gray-900 text-lg mb-1">客服專線</p>
-                                                    <p class="text-blue-600 font-bold text-xl">0926169899</p>
-                                                    <p class="text-sm text-gray-600">專人服務，歡迎來電詢問</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                        
+                        <!-- 右側欄位 -->
+                        <div class="space-y-4">
+                            <div class="flex items-center">
+                                <label class="text-gray-700 mr-2 w-20">匯款代碼:</label>
+                                <input type="text" id="bankCode" class="text-input flex-1" value="808(玉山銀行中路特區分行)">
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- 底部操作區 -->
-                <div class="bg-white/90 backdrop-blur-sm border-t border-gray-200/50 px-10 py-6">
-                    <div class="flex justify-between items-center">
-                        <button onclick="closeOrderModal()" class="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-bold text-sm transition-all duration-300 border border-gray-200">
-                            返回購物
-                        </button>
-                        
-                        <div class="flex space-x-3">
-                            <button id="confirmOrderBtn" onclick="confirmOrder()" class="px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-xl font-bold text-sm transition-all duration-300 shadow-lg hover:shadow-xl">
-                                確認商品
-                            </button>
-                            
-                            <button id="confirmContactBtn" onclick="confirmContact()" class="hidden px-8 py-3 bg-gradient-to-r from-indigo-500 to-pink-600 hover:from-indigo-600 hover:to-pink-700 text-white rounded-xl font-bold text-sm transition-all duration-300 shadow-lg hover:shadow-xl">
-                                填寫完成
-                            </button>
-                            
-                            <button id="completeOrderBtn" onclick="completeOrder()" class="hidden px-8 py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-xl font-bold text-sm transition-all duration-300 shadow-lg hover:shadow-xl">
-                                送出訂單
-                            </button>
-                        </div>
-                    </div>
+                
+                <!-- 頁尾 -->
+                <div class="footer">
+                    LUMASONIX x PROFESSIONAL 專業技術支援 x 人力媒合行銷 | 聯絡電話: 0926169899
                 </div>
             </div>
         </div>
+        
+        <!-- 第二頁 A4 -->
+        <div id="page2" class="a4-page mb-8 print-break">
+            <!-- 黑底白字標題 -->
+            <div class="header">
+                <div class="header-left">
+                    <h1 class="text-2xl font-bold">LUMASONIX x PROFESSIONAL</h1>
+                    <p class="text-sm">專業技術支援 x 人力媒合行銷</p>
+                </div>
+                <div class="header-right">
+                    <h2 class="text-xl font-bold">人員勞報請款</h2>
+                </div>
+            </div>
+            
+            <!-- 內容區域 -->
+            <div class="p-6">
+                <!-- 時間資訊 -->
+                <div class="mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-blue-700">時間資訊</h3>
+                        <button id="addTimeDayBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-sm transition duration-200 no-print">+ 新增天數</button>
+                    </div>
+                    
+                    <div id="timeInfoContainer">
+                        <!-- 第一天時間 -->
+                        <div class="time-day mb-4 pb-4 border-b border-gray-200">
+                            <h4 class="font-medium text-blue-800 mb-3">第一天:</h4>
+                            <div class="flex items-center flex-wrap gap-1">
+                                <input type="number" class="time-input border rounded px-0 py-1 start-year" value="114">
+                                <span class="time-label">年</span>
+                                
+                                <input type="number" class="time-input border rounded px-1 py-1 start-month" min="1" max="12" value="06">
+                                <span class="time-label">月</span>
+                                
+                                <input type="number" class="time-input border rounded px-1 py-1 start-day" min="1" max="31" value="06">
+                                <span class="time-label">日</span>
+                                
+                                <input type="number" class="time-input border rounded px-1 py-1 start-hour" min="0" max="23" value="09">
+                                <span class="time-label">時</span>
+                                
+                                <input type="number" class="time-input border rounded px-1 py-1 start-minute" min="0" max="59" value="00">
+                                <span class="time-label">分</span>
+                                
+                                <span class="mx-2">至</span>
+                                
+                                <input type="number" class="time-input border rounded px-1 py-1 end-hour" min="0" max="23" value="18">
+                                <span class="time-label">時</span>
+                                
+                                <input type="number" class="time-input border rounded px-1 py-1 end-minute" min="0" max="59" value="00">
+                                <span class="time-label">分</span>
+                                
+                                <span class="mx-2">共計</span>
+                                <input type="number" class="time-input border rounded px-1 py-1 total-hours" readonly value="9">
+                                <span class="time-label">小時</span>
+                                
+                                <span class="mx-2">加班</span>
+                                <input type="number" class="time-input border rounded px-1 py-1 overtime-hours" readonly value="1">
+                                <span class="time-label">小時</span>
+                                
+                                <button class="calc-hours-btn ml-2 bg-gray-200 hover:bg-gray-300 text-gray-800 px-2 py-1 rounded text-xs no-print">計算</button>
+                            </div>
+                        </div>
+                        
+                        <!-- 第二天時間 -->
+                        <div class="time-day mb-4 pb-4 border-b border-gray-200">
+                            <h4 class="font-medium text-blue-800 mb-3">第二天:</h4>
+                            <div class="flex items-center flex-wrap gap-1">
+                                <input type="number" class="time-input border rounded px-0 py-1 start-year" value="">
+                                <span class="time-label">年</span>
+                                
+                                <input type="number" class="time-input border rounded px-1 py-1 start-month" min="1" max="12" value="">
+                                <span class="time-label">月</span>
+                                
+                                <input type="number" class="time-input border rounded px-1 py-1 start-day" min="1" max="31" value="">
+                                <span class="time-label">日</span>
+                                
+                                <input type="number" class="time-input border rounded px-1 py-1 start-hour" min="0" max="23" value="">
+                                <span class="time-label">時</span>
+                                
+                                <input type="number" class="time-input border rounded px-1 py-1 start-minute" min="0" max="59" value="">
+                                <span class="time-label">分</span>
+                                
+                                <span class="mx-2">至</span>
+                                
+                                <input type="number" class="time-input border rounded px-1 py-1 end-hour" min="0" max="23" value="">
+                                <span class="time-label">時</span>
+                                
+                                <input type="number" class="time-input border rounded px-1 py-1 end-minute" min="0" max="59" value="">
+                                <span class="time-label">分</span>
+                                
+                                <span class="mx-2">共計</span>
+                                <input type="number" class="time-input border rounded px-1 py-1 total-hours" readonly value="">
+                                <span class="time-label">小時</span>
+                                
+                                <span class="mx-2">加班</span>
+                                <input type="number" class="time-input border rounded px-1 py-1 overtime-hours" readonly value="">
+                                <span class="time-label">小時</span>
+                                
+                                <button class="calc-hours-btn ml-2 bg-gray-200 hover:bg-gray-300 text-gray-800 px-2 py-1 rounded text-xs no-print">計算</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 分隔線 -->
+                <div class="section-divider"></div>
+                
+                <!-- 勞報資料檢附 -->
+                <div id="laborReportSection" class="mb-8">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-blue-700">勞報附檢表</h3>
+                        <button id="addLaborPersonBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-sm transition duration-200 no-print">+ 新增人員</button>
+                    </div>
+                    
+                    <div id="laborReportContainer">
+                        <!-- 第一個人員 -->
+                        <div class="labor-person mb-6 p-4 bg-gray-50 rounded-lg">
+                            <div class="grid grid-cols-4 gap-4 mb-4">
+                                <div>
+                                    <label class="block text-gray-700 mb-1">姓名</label>
+                                    <input type="text" class="labor-name w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 mb-1">生日</label>
+                                    <input type="text" class="labor-birth w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 mb-1">身分證</label>
+                                    <input type="text" class="labor-id w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 mb-1">聯絡電話</label>
+                                    <input type="text" class="labor-phone w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="">
+                                </div>
+                            </div>
+                            <div class="flex items-center mb-2">
+                                <div class="flex-grow">
+                                    <label class="block text-gray-700 mb-1">戶籍地址</label>
+                                    <input type="text" class="labor-address w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="">
+                                </div>
+                                <div class="ml-4 w-32">
+                                    <label class="block text-gray-700 mb-1">勞報金額</label>
+                                    <div class="flex items-center">
+                                        <input type="number" class="labor-amount w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="">
+                                        <span class="ml-1">元</span>
+                                    </div>
+                                </div>
+                                <div class="ml-2 no-print">
+                                    <button class="remove-labor-btn bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-lg text-xs transition duration-200 mt-6">刪除</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 第二個人員 -->
+                        <div class="labor-person mb-6 p-4 bg-gray-50 rounded-lg">
+                            <div class="grid grid-cols-4 gap-4 mb-4">
+                                <div>
+                                    <label class="block text-gray-700 mb-1">姓名</label>
+                                    <input type="text" class="labor-name w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 mb-1">生日</label>
+                                    <input type="text" class="labor-birth w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 mb-1">身分證</label>
+                                    <input type="text" class="labor-id w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 mb-1">聯絡電話</label>
+                                    <input type="text" class="labor-phone w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="">
+                                </div>
+                            </div>
+                            <div class="flex items-center mb-2">
+                                <div class="flex-grow">
+                                    <label class="block text-gray-700 mb-1">戶籍地址</label>
+                                    <input type="text" class="labor-address w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="">
+                                </div>
+                                <div class="ml-4 w-32">
+                                    <label class="block text-gray-700 mb-1">勞報金額</label>
+                                    <div class="flex items-center">
+                                        <input type="number" class="labor-amount w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="">
+                                        <span class="ml-1">元</span>
+                                    </div>
+                                </div>
+                                <div class="ml-2 no-print">
+                                    <button class="remove-labor-btn bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-lg text-xs transition duration-200 mt-6">刪除</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 頁尾 -->
+                <div class="footer">
+                    LUMASONIX x PROFESSIONAL 專業技術支援 x 人力媒合行銷 | 聯絡電話: 0926169899
+                </div>
+            </div>
+        </div>
+        
+        <!-- 第三頁 A4 (動態生成) -->
+        <div id="page3Container"></div>
     </div>
-
-    <!-- 頁尾聯絡資訊 -->
-    <footer class="relative overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-indigo-900"></div>
-        <div class="absolute inset-0 opacity-20">
-            <div class="floating-animation absolute top-10 left-10 text-5xl opacity-40">🐔</div>
-            <div class="floating-animation absolute bottom-10 right-10 text-4xl opacity-30" style="animation-delay: -3s;">🍗</div>
-            <div class="floating-animation absolute top-1/2 left-1/4 text-3xl opacity-20" style="animation-delay: -6s;">❄️</div>
-        </div>
-        <div class="relative container mx-auto px-4 py-20">
-            <div class="text-center mb-16">
-                <h3 class="text-4xl font-black mb-8 text-white">聯絡我們</h3>
-                <div class="glass-effect rounded-3xl p-10 max-w-5xl mx-auto border border-white/20">
-                    <div class="flex flex-wrap justify-center items-center gap-10 text-xl">
-                        <div class="flex items-center bg-white/10 backdrop-blur-sm rounded-2xl px-6 py-4">
-                            <div class="text-3xl mr-4">💬</div>
-                            <div>
-                                <p class="text-white font-bold">LINE官方帳號</p>
-                                <p class="text-blue-200">@330kxatg</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center bg-white/10 backdrop-blur-sm rounded-2xl px-6 py-4">
-                            <div class="text-3xl mr-4">📞</div>
-                            <div>
-                                <p class="text-white font-bold">聯絡電話</p>
-                                <p class="text-green-200">0926169899</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center bg-white/10 backdrop-blur-sm rounded-2xl px-6 py-4">
-                            <div class="text-3xl mr-4">⏰</div>
-                            <div>
-                                <p class="text-white font-bold">營業時間</p>
-                                <p class="text-yellow-200">週一至週日 8:00-20:00</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
 
     <script>
-        function showCategory(category) {
-            // 滾動到對應分類
-            document.getElementById(category).scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function changeQuantity(button, change) {
-            const quantityDisplay = button.parentElement.querySelector('.quantity-display');
-            let currentQuantity = parseInt(quantityDisplay.textContent);
-            currentQuantity = Math.max(0, currentQuantity + change);
-            quantityDisplay.textContent = currentQuantity;
-        }
-
-        function showOrderSummary() {
-            const modal = document.getElementById('orderModal');
-            const modalContent = document.getElementById('modalContent');
+        // 全域變數
+        let otherItemCount = 0;
+        const MAX_TIME_DAYS_PER_PAGE = 7; // 每頁最多顯示7天
+        
+        // 頁面載入時執行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 設置當前日期
+            setCurrentDate();
             
-            // 收集所有有數量的商品
-            const orderItems = [];
-            const quantityDisplays = document.querySelectorAll('.quantity-display');
+            // 初始化計算
+            calculateAllHours();
+            calculateAll();
             
-            quantityDisplays.forEach((display, index) => {
-                const quantity = parseInt(display.textContent);
-                if (quantity > 0) {
-                    const productCard = display.closest('.product-item, .bg-gradient-to-br');
-                    let productName = '';
-                    let specifiedWeight = 0;
-                    
-                    // 處理不同類型的產品卡片
-                    if (productCard) {
-                        const nameElement = productCard.querySelector('h3, h4');
-                        if (nameElement) {
-                            productName = nameElement.textContent.trim();
-                        }
-                        
-                        const weightInput = productCard.querySelector('input[type="number"]');
-                        if (weightInput) {
-                            specifiedWeight = parseFloat(weightInput.value) || 0;
-                        }
-                    }
-                    
-                    if (productName) {
-                        orderItems.push({
-                            name: productName,
-                            quantity: quantity,
-                            specifiedWeight: specifiedWeight
-                        });
-                    }
+            // 添加事件監聽器
+            addEventListeners();
+        });
+        
+        // 添加所有事件監聽器
+        function addEventListeners() {
+            // 主要按鈕
+            document.getElementById('printBtn').addEventListener('click', printForm);
+            document.getElementById('downloadPdfBtn').addEventListener('click', downloadPdf);
+            document.getElementById('resetBtn').addEventListener('click', resetForm);
+            document.getElementById('addOtherBtn').addEventListener('click', addOtherItem);
+            document.getElementById('addTimeDayBtn').addEventListener('click', addTimeDay);
+            document.getElementById('addLaborPersonBtn').addEventListener('click', addLaborPerson);
+            
+            // 計算時數按鈕
+            document.querySelectorAll('.calc-hours-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    calculateHours(this);
+                });
+            });
+            
+            // 刪除勞報人員按鈕
+            document.querySelectorAll('.remove-labor-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    removeLaborPerson(this);
+                });
+            });
+            
+            // 時間輸入欄位變更事件 - 自動計算時數
+            document.querySelectorAll('.time-day input').forEach(input => {
+                if (!input.classList.contains('total-hours') && !input.classList.contains('overtime-hours')) {
+                    input.addEventListener('input', function() {
+                        const calcBtn = this.closest('.time-day').querySelector('.calc-hours-btn');
+                        calculateHours(calcBtn);
+                    });
                 }
             });
-
-            if (orderItems.length === 0) {
-                alert('請先選擇商品數量！');
-                return;
-            }
-
-            // 生成訂單內容
-            let orderHTML = '<div class="space-y-6">';
-            orderHTML += '<h3 class="text-2xl font-bold text-gray-800 mb-6">📋 您的訂單內容</h3>';
+        }
+        
+        // 設置當前日期
+        function setCurrentDate() {
+            const now = new Date();
+            // 設置民國年
+            const rocYear = now.getFullYear() - 1911;
+            document.getElementById('invoiceYear').value = rocYear;
+            document.getElementById('invoiceMonth').value = now.getMonth() + 1;
+            document.getElementById('invoiceDay').value = now.getDate();
+        }
+        
+        // 計算所有天數的工作時數
+        function calculateAllHours() {
+            document.querySelectorAll('.calc-hours-btn').forEach(button => {
+                calculateHours(button);
+            });
+        }
+        
+        // 計算工作時數和加班時數
+        function calculateHours(button) {
+            const dayDiv = button.closest('.time-day');
+            const startHour = parseInt(dayDiv.querySelector('.start-hour').value) || 0;
+            const startMinute = parseInt(dayDiv.querySelector('.start-minute').value) || 0;
+            const endHour = parseInt(dayDiv.querySelector('.end-hour').value) || 0;
+            const endMinute = parseInt(dayDiv.querySelector('.end-minute').value) || 0;
             
-            orderItems.forEach(item => {
-                const unit = getProductUnit(item.name);
-                orderHTML += `
-                    <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 shadow-lg">
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <h4 class="text-xl font-bold text-gray-800">${item.name}</h4>
-                                <p class="text-gray-600">數量: ${item.quantity} ${unit}</p>
-                                ${item.specifiedWeight > 0 ? `<p class="text-blue-600 font-bold">指定重量: ${item.specifiedWeight} 公斤</p>` : ''}
-                            </div>
-                            <div class="text-2xl">${getProductEmoji(item.name)}</div>
-                        </div>
-                    </div>
-                `;
+            // 計算總分鐘數
+            let totalMinutes = (endHour * 60 + endMinute) - (startHour * 60 + startMinute);
+            if (totalMinutes < 0) totalMinutes += 24 * 60; // 跨日處理
+            
+            // 轉換為小時，四捨五入到0.5小時
+            const totalHours = Math.round(totalMinutes / 30) / 2;
+            
+            // 計算加班時數 (超過8小時的部分)
+            const overtimeHours = Math.max(0, totalHours - 8);
+            
+            // 更新顯示
+            dayDiv.querySelector('.total-hours').value = totalHours;
+            dayDiv.querySelector('.overtime-hours').value = overtimeHours;
+            
+            // 更新加班總時數
+            updateOvertimeTotal();
+        }
+        
+        // 更新加班總時數
+        function updateOvertimeTotal() {
+            let totalOvertime = 0;
+            document.querySelectorAll('.overtime-hours').forEach(input => {
+                totalOvertime += parseFloat(input.value) || 0;
             });
             
-            orderHTML += '</div>';
-            
-            document.getElementById('orderContent').innerHTML = orderHTML;
-            
-            // 顯示彈窗
-            modal.classList.remove('hidden');
-            setTimeout(() => {
-                modalContent.classList.remove('scale-95', 'opacity-0');
-                modalContent.classList.add('scale-100', 'opacity-100');
-            }, 50);
+            document.getElementById('overtimeQty').value = totalOvertime;
+            calculateAll();
         }
-
-        function getProductUnit(productName) {
-            // 冷凍分切商品使用"斤"
-            if (productName.includes('TS') || productName.includes('T5') || productName.includes('T6') || 
-                productName.includes('T7') || productName.includes('T8') || productName.includes('D3') || 
-                productName.includes('D4') || productName.includes('W6') || productName.includes('W7') || 
-                productName.includes('W8') || productName.includes('腿仁') || productName.includes('二節翅') ||
-                productName.includes('原胸') || productName.includes('清胸') || productName.includes('清肉') ||
-                productName.includes('清肉丁') || productName.includes('里肌肉') || productName.includes('雞心') ||
-                productName.includes('雞胗') || productName.includes('雞尾椎') || productName.includes('頸背排') ||
-                productName.includes('三角骨') || productName.includes('雞皮')) {
-                return '斤';
-            }
-            // 其他商品使用"隻"
-            return '隻';
-        }
-
-        function getProductEmoji(productName) {
-            if (productName.includes('紅羽土雞')) return '🐔';
-            if (productName.includes('烏骨雞')) return '🖤';
-            if (productName.includes('文昌雞')) return '🐓';
-            if (productName.includes('古早雞')) return '🏡';
-            if (productName.includes('珍珠雞')) return '💎';
-            if (productName.includes('放山土雞')) return '🏔️';
-            if (productName.includes('甘蔗雞')) return '🎋';
-            if (productName.includes('鹹水雞')) return '🧂';
-            if (productName.includes('煙燻雞')) return '💨';
-            if (productName.includes('TS') || productName.includes('腿排')) return '🍖';
-            if (productName.includes('T5') || productName.includes('T6') || productName.includes('T7') || productName.includes('T8') || productName.includes('骨腿')) return '🦴';
-            if (productName.includes('D3') || productName.includes('D4') || productName.includes('棒腿') || productName.includes('腿仁')) return '🍗';
-            if (productName.includes('W6') || productName.includes('W7') || productName.includes('W8') || productName.includes('二節翅') || productName.includes('雞翅')) return '🪶';
-            if (productName.includes('原胸') || productName.includes('清胸') || productName.includes('清肉') || productName.includes('里肌肉') || productName.includes('雞胸')) return '🥩';
-            if (productName.includes('雞心')) return '❤️';
-            if (productName.includes('雞胗')) return '🫀';
-            if (productName.includes('雞尾椎')) return '🦴';
-            if (productName.includes('頸背排')) return '🍖';
-            if (productName.includes('三角骨')) return '🦴';
-            if (productName.includes('雞皮')) return '🥩';
-            return '🐔';
-        }
-
-        function closeOrderModal() {
-            const modal = document.getElementById('orderModal');
-            const modalContent = document.getElementById('modalContent');
+        
+        // 新增時間天數
+        function addTimeDay() {
+            // 獲取當前天數
+            const allTimeDays = document.querySelectorAll('.time-day');
+            const dayCount = allTimeDays.length + 1;
             
-            modalContent.classList.remove('scale-100', 'opacity-100');
-            modalContent.classList.add('scale-95', 'opacity-0');
-            
-            setTimeout(() => {
-                modal.classList.add('hidden');
-                // 重置到第一步
-                resetModalToStep1();
-            }, 300);
-        }
-
-        function confirmOrder() {
-            // 進入第二步
-            document.getElementById('orderContent').classList.add('hidden');
-            document.getElementById('contactForm').classList.remove('hidden');
-            
-            // 更新步驟指示器
-            document.getElementById('step1').classList.remove('active');
-            document.getElementById('step1').classList.add('completed');
-            document.getElementById('step2').classList.add('active');
-            document.getElementById('progress1').style.width = '100%';
-            
-            // 更新按鈕
-            document.getElementById('confirmOrderBtn').classList.add('hidden');
-            document.getElementById('confirmContactBtn').classList.remove('hidden');
-        }
-
-        function confirmContact() {
-            // 驗證表單
-            const name = document.getElementById('contactName').value.trim();
-            const phone = document.getElementById('contactPhone').value.trim();
-            const address = document.getElementById('contactAddress').value.trim();
-            
-            // 檢查可聯繫時間選項
-            const weekdayChecked = document.getElementById('weekdayTime').checked;
-            const holidayChecked = document.getElementById('holidayTime').checked;
-            const anytimeChecked = document.getElementById('anytimeTime').checked;
-            
-            if (!name || !phone || !address || (!weekdayChecked && !holidayChecked && !anytimeChecked)) {
-                alert('請填寫完整的聯絡資訊並至少選擇一個可聯繫時間！');
-                return;
+            // 決定添加到哪個容器
+            let container;
+            if (dayCount <= MAX_TIME_DAYS_PER_PAGE) {
+                container = document.getElementById('timeInfoContainer');
+            } else {
+                // 確保第三頁存在
+                ensurePage3Exists();
+                container = document.getElementById('timeInfoContainer3');
             }
             
-            // 組合可聯繫時間文字
-            const timeOptions = [];
-            if (weekdayChecked) timeOptions.push('平日 09:00-18:00');
-            if (holidayChecked) timeOptions.push('假日全天');
-            if (anytimeChecked) timeOptions.push('隨時可聯繫');
-            const time = timeOptions.join(' / ');
+            const dayDiv = document.createElement('div');
+            dayDiv.className = 'time-day mb-4 pb-4 border-b border-gray-200';
             
-            // 生成最終訂單摘要
-            generateFinalOrderSummary(name, phone, address, time);
-            
-            // 進入第三步
-            document.getElementById('contactForm').classList.add('hidden');
-            document.getElementById('orderComplete').classList.remove('hidden');
-            
-            // 更新步驟指示器
-            document.getElementById('step2').classList.remove('active');
-            document.getElementById('step2').classList.add('completed');
-            document.getElementById('step3').classList.add('active');
-            document.getElementById('progress2').style.width = '100%';
-            
-            // 更新按鈕
-            document.getElementById('confirmContactBtn').classList.add('hidden');
-            document.getElementById('completeOrderBtn').classList.remove('hidden');
-        }
-
-        function generateFinalOrderSummary(name, phone, address, time) {
-            // 收集所有有數量的商品
-            const orderItems = [];
-            const quantityDisplays = document.querySelectorAll('.quantity-display');
-            
-            quantityDisplays.forEach((display, index) => {
-                const quantity = parseInt(display.textContent);
-                if (quantity > 0) {
-                    const productCard = display.closest('.product-item, .bg-gradient-to-br');
-                    let productName = '';
-                    let specifiedWeight = 0;
+            dayDiv.innerHTML = `
+                <div class="flex justify-between items-center mb-3">
+                    <h4 class="font-medium text-blue-800">第${dayCount}天:</h4>
+                    <button class="remove-time-btn bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-lg text-xs transition duration-200 no-print">刪除</button>
+                </div>
+                <div class="flex items-center flex-wrap gap-1">
+                    <input type="number" class="time-input border rounded px-1 py-1 start-year" value="114">
+                    <span class="time-label">年</span>
                     
-                    if (productCard) {
-                        const nameElement = productCard.querySelector('h3, h4');
-                        if (nameElement) {
-                            productName = nameElement.textContent.trim();
-                        }
-                        
-                        const weightInput = productCard.querySelector('input[type="number"]');
-                        if (weightInput) {
-                            specifiedWeight = parseFloat(weightInput.value) || 0;
-                        }
-                    }
+                    <input type="number" class="time-input border rounded px-1 py-1 start-month" min="1" max="12" value="">
+                    <span class="time-label">月</span>
                     
-                    if (productName) {
-                        orderItems.push({
-                            name: productName,
-                            quantity: quantity,
-                            specifiedWeight: specifiedWeight
-                        });
-                    }
-                }
-            });
-
-            // 生成最終摘要HTML
-            let summaryHTML = `
-                <div class="space-y-6">
-                    <!-- 聯絡資訊 -->
-                    <div class="bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl p-6 border border-gray-200">
-                        <h4 class="text-xl font-black text-gray-900 mb-4 flex items-center">
-                            <span class="text-2xl mr-3">👤</span>聯絡資訊
-                        </h4>
-                        <div class="grid md:grid-cols-2 gap-4 text-sm">
-                            <div><strong class="text-gray-700">聯絡人：</strong><span class="text-gray-900">${name}</span></div>
-                            <div><strong class="text-gray-700">電話：</strong><span class="text-gray-900">${phone}</span></div>
-                            <div class="md:col-span-2"><strong class="text-gray-700">地址：</strong><span class="text-gray-900">${address}</span></div>
-                            <div class="md:col-span-2"><strong class="text-gray-700">可聯繫時間：</strong><span class="text-gray-900">${time}</span></div>
-                        </div>
-                    </div>
+                    <input type="number" class="time-input border rounded px-1 py-1 start-day" min="1" max="31" value="">
+                    <span class="time-label">日</span>
                     
-                    <!-- 訂購商品 -->
-                    <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 border border-green-200">
-                        <h4 class="text-xl font-black text-gray-900 mb-4 flex items-center">
-                            <span class="text-2xl mr-3">🛒</span>訂購商品
-                        </h4>
-                        <div class="space-y-3">
+                    <input type="number" class="time-input border rounded px-1 py-1 start-hour" min="0" max="23" value="">
+                    <span class="time-label">時</span>
+                    
+                    <input type="number" class="time-input border rounded px-1 py-1 start-minute" min="0" max="59" value="">
+                    <span class="time-label">分</span>
+                    
+                    <span class="mx-2">至</span>
+                    
+                    <input type="number" class="time-input border rounded px-1 py-1 end-hour" min="0" max="23" value="">
+                    <span class="time-label">時</span>
+                    
+                    <input type="number" class="time-input border rounded px-1 py-1 end-minute" min="0" max="59" value="">
+                    <span class="time-label">分</span>
+                    
+                    <span class="mx-2">共計</span>
+                    <input type="number" class="time-input border rounded px-1 py-1 total-hours" readonly value="">
+                    <span class="time-label">小時</span>
+                    
+                    <span class="mx-2">加班</span>
+                    <input type="number" class="time-input border rounded px-1 py-1 overtime-hours" readonly value="">
+                    <span class="time-label">小時</span>
+                    
+                    <button class="calc-hours-btn ml-2 bg-gray-200 hover:bg-gray-300 text-gray-800 px-2 py-1 rounded text-xs no-print">計算</button>
+                </div>
             `;
             
-            orderItems.forEach(item => {
-                const unit = getProductUnit(item.name);
-                const emoji = getProductEmoji(item.name);
-                summaryHTML += `
-                    <div class="bg-white/70 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50">
-                        <div class="flex justify-between items-center">
-                            <div class="flex items-center space-x-3">
-                                <span class="text-2xl">${emoji}</span>
-                                <div>
-                                    <h5 class="font-bold text-gray-900">${item.name}</h5>
-                                    <p class="text-gray-600 text-sm">數量: ${item.quantity} ${unit}</p>
-                                    ${item.specifiedWeight > 0 ? `<p class="text-blue-600 font-bold text-sm">指定重量: ${item.specifiedWeight} 公斤</p>` : ''}
+            container.appendChild(dayDiv);
+            
+            // 添加事件監聽器
+            const calcBtn = dayDiv.querySelector('.calc-hours-btn');
+            calcBtn.addEventListener('click', function() {
+                calculateHours(this);
+            });
+            
+            const removeBtn = dayDiv.querySelector('.remove-time-btn');
+            removeBtn.addEventListener('click', function() {
+                removeTimeDay(this);
+            });
+            
+            // 時間輸入欄位變更事件 - 自動計算時數
+            dayDiv.querySelectorAll('input').forEach(input => {
+                if (!input.classList.contains('total-hours') && !input.classList.contains('overtime-hours')) {
+                    input.addEventListener('input', function() {
+                        calculateHours(calcBtn);
+                    });
+                }
+            });
+            
+            // 檢查是否需要移動勞報表到第三頁
+            checkLaborReportPlacement();
+        }
+        
+        // 刪除時間天數
+        function removeTimeDay(button) {
+            const dayDiv = button.closest('.time-day');
+            const isPage3 = dayDiv.closest('#timeInfoContainer3') !== null;
+            dayDiv.remove();
+            
+            // 重新編號所有天數
+            renumberAllDays();
+            
+            // 檢查是否需要將第三頁的第一個時間項移回第二頁
+            reorganizeTimeDays();
+            
+            // 更新加班總時數
+            updateOvertimeTotal();
+            
+            // 檢查勞報表的位置
+            checkLaborReportPlacement();
+        }
+        
+        // 重新編號所有天數
+        function renumberAllDays() {
+            const allDays = document.querySelectorAll('.time-day');
+            allDays.forEach((day, index) => {
+                const heading = day.querySelector('h4');
+                if (heading) {
+                    heading.textContent = `第${index + 1}天:`;
+                }
+            });
+        }
+        
+        // 重新組織時間天數，確保第二頁有最多7個
+        function reorganizeTimeDays() {
+            const page2Days = document.querySelectorAll('#timeInfoContainer .time-day');
+            const page3Days = document.querySelectorAll('#timeInfoContainer3 .time-day');
+            
+            // 如果第二頁少於7個且第三頁有項目，則移動第三頁的第一個到第二頁
+            if (page2Days.length < MAX_TIME_DAYS_PER_PAGE && page3Days.length > 0) {
+                const firstPage3Day = page3Days[0];
+                document.getElementById('timeInfoContainer').appendChild(firstPage3Day);
+                
+                // 如果第三頁沒有更多項目，可以考慮移除第三頁
+                if (page3Days.length === 1) {
+                    // 檢查第三頁是否還有其他內容
+                    const laborContainer3 = document.getElementById('laborReportContainer3');
+                    if (!laborContainer3 || laborContainer3.children.length === 0) {
+                        document.getElementById('page3Container').innerHTML = '';
+                    }
+                }
+            }
+        }
+        
+        // 檢查勞報表的位置
+        function checkLaborReportPlacement() {
+            const timeDays = document.querySelectorAll('#timeInfoContainer .time-day');
+            
+            // 如果時間天數超過2天，將勞報表移至第三頁
+            if (timeDays.length > 2) {
+                moveLaborsToPage3();
+            } else {
+                // 否則，將勞報表移回第二頁
+                moveLaborsToPage2();
+            }
+        }
+        
+        // 將勞報表移至第三頁
+        function moveLaborsToPage3() {
+            ensurePage3Exists();
+            
+            const laborSection = document.getElementById('laborReportSection');
+            const laborContainer = document.getElementById('laborReportContainer');
+            const laborContainer3 = document.getElementById('laborReportContainer3');
+            
+            // 如果勞報表在第二頁，移至第三頁
+            if (laborSection && laborSection.parentNode.id !== 'page3Content') {
+                // 將所有勞報人員移至第三頁
+                const laborPersons = Array.from(laborContainer.querySelectorAll('.labor-person'));
+                
+                // 清空第三頁的勞報容器
+                laborContainer3.innerHTML = '';
+                
+                // 將所有人員移至第三頁
+                laborPersons.forEach(person => {
+                    const clonedPerson = person.cloneNode(true);
+                    laborContainer3.appendChild(clonedPerson);
+                    
+                    // 添加刪除按鈕事件監聽器
+                    const removeBtn = clonedPerson.querySelector('.remove-labor-btn');
+                    if (removeBtn) {
+                        removeBtn.addEventListener('click', function() {
+                            removeLaborPerson(this);
+                        });
+                    }
+                });
+                
+                // 隱藏第二頁的勞報區域
+                laborSection.style.display = 'none';
+            }
+        }
+        
+        // 將勞報表移回第二頁
+        function moveLaborsToPage2() {
+            const laborSection = document.getElementById('laborReportSection');
+            const laborContainer = document.getElementById('laborReportContainer');
+            const laborContainer3 = document.getElementById('laborReportContainer3');
+            
+            // 如果第三頁存在且有勞報表
+            if (laborContainer3 && laborContainer3.children.length > 0) {
+                // 將所有勞報人員移回第二頁
+                const laborPersons = Array.from(laborContainer3.querySelectorAll('.labor-person'));
+                
+                // 清空第二頁的勞報容器
+                laborContainer.innerHTML = '';
+                
+                // 將所有人員移回第二頁
+                laborPersons.forEach(person => {
+                    const clonedPerson = person.cloneNode(true);
+                    laborContainer.appendChild(clonedPerson);
+                    
+                    // 添加刪除按鈕事件監聽器
+                    const removeBtn = clonedPerson.querySelector('.remove-labor-btn');
+                    if (removeBtn) {
+                        removeBtn.addEventListener('click', function() {
+                            removeLaborPerson(this);
+                        });
+                    }
+                });
+                
+                // 顯示第二頁的勞報區域
+                if (laborSection) {
+                    laborSection.style.display = '';
+                }
+            }
+        }
+        
+        // 確保第三頁存在
+        function ensurePage3Exists() {
+            const container = document.getElementById('page3Container');
+            
+            // 檢查是否已經有第三頁
+            let page3 = document.getElementById('page3');
+            if (!page3) {
+                // 創建新的第三頁
+                container.innerHTML = `
+                    <div id="page3" class="a4-page mb-8 print-break">
+                        <!-- 黑底白字標題 -->
+                        <div class="header">
+                            <div class="header-left">
+                                <h1 class="text-2xl font-bold">LUMASONIX x PROFESSIONAL</h1>
+                                <p class="text-sm">專業技術支援 x 人力媒合行銷</p>
+                            </div>
+                            <div class="header-right">
+                                <h2 class="text-xl font-bold">人員勞報請款</h2>
+                            </div>
+                        </div>
+                        
+                        <!-- 內容區域 -->
+                        <div id="page3Content" class="p-6">
+                            <!-- 基本資訊與聯絡資訊 - 左右對稱 -->
+                            <div class="mb-6">
+                                <div class="grid grid-cols-2 gap-6">
+                                    <!-- 左側欄位 -->
+                                    <div class="space-y-4">
+                                        <div class="flex items-center">
+                                            <label class="text-gray-700 mr-2 w-20">請款日期:</label>
+                                            <input type="number" class="date-input" id="invoiceYear3" min="1" max="999">
+                                            <span class="mx-1">年</span>
+                                            <input type="number" class="date-input" id="invoiceMonth3" min="1" max="12">
+                                            <span class="mx-1">月</span>
+                                            <input type="number" class="date-input" id="invoiceDay3" min="1" max="31">
+                                            <span class="mx-1">日</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <label class="text-gray-700 mr-2 w-20">廠商名稱:</label>
+                                            <input type="text" id="vendorName3" class="text-input flex-1" placeholder="">
+                                        </div>
+                                        <div class="flex items-center">
+                                            <label class="text-gray-700 mr-2 w-20">活動地點:</label>
+                                            <input type="text" id="eventLocation3" class="text-input flex-1" placeholder="">
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 右側欄位 -->
+                                    <div class="space-y-4">
+                                        <div class="flex items-center">
+                                            <label class="text-gray-700 mr-2 w-20">連絡電話:</label>
+                                            <input type="text" id="contactPhone3" class="text-input flex-1" value="0926169899">
+                                        </div>
+                                        <div class="flex items-center">
+                                            <label class="text-gray-700 mr-2 w-20">負責人:</label>
+                                            <input type="text" id="contactPerson3" class="text-input flex-1" value="蘇裕庭">
+                                        </div>
+                                    </div>
                                 </div>
+                            </div>
+                            
+                            <!-- 分隔線 -->
+                            <div class="section-divider"></div>
+                            
+                            <!-- 時間資訊 (續) -->
+                            <div id="timeInfoSection3" class="mb-6" style="display: none;">
+                                <h3 class="text-lg font-semibold text-blue-700 mb-4">時間資訊 (續)</h3>
+                                <div id="timeInfoContainer3"></div>
+                            </div>
+                            
+                            <!-- 分隔線 -->
+                            <div id="timeDivider3" class="section-divider" style="display: none;"></div>
+                            
+                            <!-- 勞報資料檢附 (續) -->
+                            <div id="laborReportSection3" class="mb-8">
+                                <div class="flex justify-between items-center mb-4">
+                                    <h3 class="text-lg font-semibold text-blue-700">勞報復檢表</h3>
+                                    <button id="addLaborPersonBtn3" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-sm transition duration-200 no-print">+ 新增人員</button>
+                                </div>
+                                
+                                <div id="laborReportContainer3">
+                                    <!-- 動態添加的人員將移至此處 -->
+                                </div>
+                            </div>
+                            
+                            <!-- 頁尾 -->
+                            <div class="footer">
+                                LUMASONIX x PROFESSIONAL 專業技術支援 x 人力媒合行銷 | 聯絡電話: 0926169899
                             </div>
                         </div>
                     </div>
                 `;
-            });
+                
+                // 同步第一頁的基本資訊到第三頁
+                document.getElementById('invoiceYear3').value = document.getElementById('invoiceYear').value;
+                document.getElementById('invoiceMonth3').value = document.getElementById('invoiceMonth').value;
+                document.getElementById('invoiceDay3').value = document.getElementById('invoiceDay').value;
+                document.getElementById('vendorName3').value = document.getElementById('vendorName').value;
+                document.getElementById('eventLocation3').value = document.getElementById('eventLocation').value;
+                
+                // 添加第三頁的新增人員按鈕事件
+                document.getElementById('addLaborPersonBtn3').addEventListener('click', addLaborPersonToPage3);
+            }
             
-            summaryHTML += `
+            // 如果有超過7天的時間資訊，顯示第三頁的時間區域
+            const allTimeDays = document.querySelectorAll('.time-day');
+            if (allTimeDays.length > MAX_TIME_DAYS_PER_PAGE) {
+                document.getElementById('timeInfoSection3').style.display = '';
+                document.getElementById('timeDivider3').style.display = '';
+            }
+        }
+        
+        // 新增其他項目
+        function addOtherItem() {
+            otherItemCount++;
+            const table = document.getElementById('supportItemsTable');
+            const newRow = table.insertRow(table.rows.length - 1); // 在行政執行費前插入
+            newRow.className = 'border-b border-gray-200';
+            
+            const itemId = `other${otherItemCount}`;
+            
+            newRow.innerHTML = `
+                <td class="px-4 py-3">
+                    <input type="text" id="${itemId}Name" class="w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="項目名稱">
+                </td>
+                <td class="px-4 py-3">
+                    <input type="number" id="${itemId}Qty" class="w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" value="0" min="0" oninput="calculateAll()">
+                </td>
+                <td class="px-4 py-3">
+                    <input type="number" id="${itemId}Price" class="w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center" value="0" min="0" oninput="calculateAll()">
+                </td>
+                <td class="px-4 py-3">
+                    <input type="text" id="${itemId}Desc" class="w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="工作內容描述">
+                </td>
+                <td class="px-4 py-3 text-center" id="${itemId}Subtotal">0</td>
+            `;
+            
+            calculateAll();
+        }
+        
+        // 計算所有金額
+        function calculateAll() {
+            // 計算各項小計
+            const staffQty = parseInt(document.getElementById('staffQty').value) || 0;
+            const techQty = parseInt(document.getElementById('techQty').value) || 0;
+            const spotlightQty = parseInt(document.getElementById('spotlightQty').value) || 0;
+            const heightQty = parseInt(document.getElementById('heightQty').value) || 0;
+            const overtimeQty = parseFloat(document.getElementById('overtimeQty').value) || 0;
+            
+            const staffSubtotal = staffQty * 3000;
+            const techSubtotal = techQty * 1000;
+            const spotlightSubtotal = spotlightQty * 1000;
+            const heightSubtotal = heightQty * 1000;
+            const overtimeSubtotal = overtimeQty * 350;
+            
+            // 更新小計顯示
+            document.getElementById('staffSubtotal').textContent = formatNumber(staffSubtotal);
+            document.getElementById('techSubtotal').textContent = formatNumber(techSubtotal);
+            document.getElementById('spotlightSubtotal').textContent = formatNumber(spotlightSubtotal);
+            document.getElementById('heightSubtotal').textContent = formatNumber(heightSubtotal);
+            document.getElementById('overtimeSubtotal').textContent = formatNumber(overtimeSubtotal);
+            
+            // 計算行政執行費 (人事支援 x 10%)
+            const adminFee = staffSubtotal * 0.1;
+            document.getElementById('adminSubtotal').textContent = formatNumber(adminFee);
+            
+            // 計算其他項目總額
+            let otherTotal = 0;
+            for (let i = 1; i <= otherItemCount; i++) {
+                const itemId = `other${i}`;
+                const qtyElement = document.getElementById(`${itemId}Qty`);
+                const priceElement = document.getElementById(`${itemId}Price`);
+                const subtotalElement = document.getElementById(`${itemId}Subtotal`);
+                
+                if (qtyElement && priceElement && subtotalElement) {
+                    const qty = parseInt(qtyElement.value) || 0;
+                    const price = parseInt(priceElement.value) || 0;
+                    const itemSubtotal = qty * price;
+                    subtotalElement.textContent = formatNumber(itemSubtotal);
+                    otherTotal += itemSubtotal;
+                }
+            }
+            
+            // 計算總金額
+            const subtotal = staffSubtotal + techSubtotal + spotlightSubtotal + heightSubtotal + overtimeSubtotal + adminFee + otherTotal;
+            document.getElementById('subtotalAmount').textContent = 'NT$' + formatNumber(subtotal);
+            document.getElementById('totalAmount').textContent = 'NT$' + formatNumber(subtotal);
+        }
+        
+        // 格式化數字為千分位
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        
+        // 新增勞報人員
+        function addLaborPerson() {
+            // 檢查勞報表應該在哪一頁
+            const timeDays = document.querySelectorAll('#timeInfoContainer .time-day');
+            
+            if (timeDays.length > 2) {
+                // 如果時間天數超過2天，勞報表應該在第三頁
+                addLaborPersonToPage3();
+            } else {
+                // 否則，勞報表在第二頁
+                addLaborPersonToPage2();
+            }
+        }
+        
+        // 新增勞報人員到第二頁
+        function addLaborPersonToPage2() {
+            const container = document.getElementById('laborReportContainer');
+            addLaborPersonToContainer(container);
+        }
+        
+        // 新增勞報人員到第三頁
+        function addLaborPersonToPage3() {
+            ensurePage3Exists();
+            const container = document.getElementById('laborReportContainer3');
+            addLaborPersonToContainer(container);
+        }
+        
+        // 新增勞報人員到指定容器
+        function addLaborPersonToContainer(container) {
+            const personDiv = document.createElement('div');
+            personDiv.className = 'labor-person mb-6 p-4 bg-gray-50 rounded-lg';
+            
+            personDiv.innerHTML = `
+                <div class="grid grid-cols-4 gap-4 mb-4">
+                    <div>
+                        <label class="block text-gray-700 mb-1">姓名</label>
+                        <input type="text" class="labor-name w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="請輸入姓名">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-1">生日</label>
+                        <input type="text" class="labor-birth w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="例：1990/01/01">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-1">身分證</label>
+                        <input type="text" class="labor-id w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="請輸入身分證字號">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-1">聯絡電話</label>
+                        <input type="text" class="labor-phone w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="請輸入電話">
+                    </div>
+                </div>
+                <div class="flex items-center mb-2">
+                    <div class="flex-grow">
+                        <label class="block text-gray-700 mb-1">戶籍地址</label>
+                        <input type="text" class="labor-address w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="戶籍地址">
+                    </div>
+                    <div class="ml-4 w-32">
+                        <label class="block text-gray-700 mb-1">勞報金額</label>
+                        <div class="flex items-center">
+                            <input type="number" class="labor-amount w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="金額">
+                            <span class="ml-1">元</span>
                         </div>
+                    </div>
+                    <div class="ml-2 no-print">
+                        <button class="remove-labor-btn bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-lg text-xs transition duration-200 mt-6">刪除</button>
                     </div>
                 </div>
             `;
             
-            document.getElementById('finalOrderSummary').innerHTML = summaryHTML;
+            container.appendChild(personDiv);
+            
+            // 添加刪除按鈕事件監聽器
+            const removeBtn = personDiv.querySelector('.remove-labor-btn');
+            removeBtn.addEventListener('click', function() {
+                removeLaborPerson(this);
+            });
         }
-
-        function completeOrder() {
-            closeOrderModal();
+        
+        // 刪除勞報人員
+        function removeLaborPerson(button) {
+            const personDiv = button.closest('.labor-person');
+            personDiv.remove();
         }
-
-        function resetModalToStep1() {
-            // 重置內容顯示
-            document.getElementById('orderContent').classList.remove('hidden');
-            document.getElementById('contactForm').classList.add('hidden');
-            document.getElementById('orderComplete').classList.add('hidden');
+        
+        // 列印表單
+        function printForm() {
+            // 同步第一頁的基本資訊到第三頁
+            if (document.getElementById('invoiceYear3')) {
+                document.getElementById('invoiceYear3').value = document.getElementById('invoiceYear').value;
+                document.getElementById('invoiceMonth3').value = document.getElementById('invoiceMonth').value;
+                document.getElementById('invoiceDay3').value = document.getElementById('invoiceDay').value;
+                document.getElementById('vendorName3').value = document.getElementById('vendorName').value;
+                document.getElementById('eventLocation3').value = document.getElementById('eventLocation').value;
+            }
             
-            // 重置步驟指示器
-            document.getElementById('step1').classList.add('active');
-            document.getElementById('step1').classList.remove('completed');
-            document.getElementById('step2').classList.remove('active', 'completed');
-            document.getElementById('step3').classList.remove('active', 'completed');
-            document.getElementById('progress1').style.width = '0%';
-            document.getElementById('progress2').style.width = '0%';
+            window.print();
+        }
+        
+        // 下載為PDF
+        function downloadPdf() {
+            // 同步第一頁的基本資訊到第三頁
+            if (document.getElementById('invoiceYear3')) {
+                document.getElementById('invoiceYear3').value = document.getElementById('invoiceYear').value;
+                document.getElementById('invoiceMonth3').value = document.getElementById('invoiceMonth').value;
+                document.getElementById('invoiceDay3').value = document.getElementById('invoiceDay').value;
+                document.getElementById('vendorName3').value = document.getElementById('vendorName').value;
+                document.getElementById('eventLocation3').value = document.getElementById('eventLocation').value;
+            }
             
-            // 重置按鈕
-            document.getElementById('confirmOrderBtn').classList.remove('hidden');
-            document.getElementById('confirmContactBtn').classList.add('hidden');
-            document.getElementById('completeOrderBtn').classList.add('hidden');
+            // 暫時隱藏按鈕
+            const buttons = document.querySelectorAll('.no-print');
+            buttons.forEach(button => {
+                button.style.display = 'none';
+            });
             
-            // 清空表單
-            document.getElementById('contactName').value = '';
-            document.getElementById('contactPhone').value = '';
-            document.getElementById('contactAddress').value = '';
-            document.getElementById('weekdayTime').checked = false;
-            document.getElementById('holidayTime').checked = false;
-            document.getElementById('anytimeTime').checked = false;
+            const element = document.getElementById('invoice-content');
+            const opt = {
+                margin: 0,
+                filename: 'LUMASONIX人員勞報請款單.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            
+            // 生成PDF
+            html2pdf().set(opt).from(element).save().then(() => {
+                // 恢復按鈕顯示
+                buttons.forEach(button => {
+                    button.style.display = '';
+                });
+            });
+        }
+        
+        // 重置表單
+        function resetForm() {
+            if (confirm('確定要重置表單嗎？所有已輸入的資料將被清除。')) {
+                location.reload();
+            }
         }
     </script>
-
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'969c4396f58a8088',t:'MTc1NDI5MTczMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'94b33bfe96ecf05b',t:'MTc0OTE2Mzg4My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
