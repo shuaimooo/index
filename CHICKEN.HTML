@@ -7,143 +7,187 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="/_sdk/element_sdk.js"></script>
   <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap');
         body {
-            font-family: 'Noto Sans TC', sans-serif;
+            font-family: 'Noto Sans TC', 'Quicksand', sans-serif;
             box-sizing: border-box;
+        }
+        
+        .calculator-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .calculator-card:hover {
+            transform: translateY(-8px);
+        }
+        
+        input[type="number"], select {
+            transition: all 0.2s ease;
+        }
+        
+        input[type="number"]:focus, select:focus {
+            transform: translateY(-2px);
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f97316, #ec4899);
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+            transition: all 0.2s;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+            box-shadow: 0 6px 16px rgba(249, 115, 22, 0.6);
+        }
+        
+        input[type="range"]::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f97316, #ec4899);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+        }
+        
+        .result-display {
+            background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7));
+            backdrop-filter: blur(10px);
         }
     </style>
   <style>@view-transition { navigation: auto; }</style>
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
  </head>
  <body class="h-full overflow-auto">
-  <div class="w-full min-h-full p-4">
-   <div class="max-w-6xl mx-auto">
-    <h1 id="mainTitle" class="text-4xl font-bold text-center mb-8">重量換算與價格計算器</h1><!-- 第一排：原有三個計算器 -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"><!-- 1. 重量換算 -->
-     <div class="rounded-xl shadow-lg p-6 h-full">
-      <h3 id="converterTitle" class="text-xl font-semibold text-white mb-4 text-center">重量換算</h3>
-      <div class="space-y-4">
-       <div><label for="convertWeight" class="block text-sm font-medium text-white mb-2">重量</label>
-        <div class="relative"><input type="number" id="convertWeight" placeholder="重量" min="0" step="0.1" class="w-full px-4 py-2 pr-10 bg-opacity-30 bg-white text-white placeholder-gray-200 rounded-lg border border-white border-opacity-30 focus:border-opacity-60 focus:outline-none"> <button type="button" onclick="clearInput('convertWeight')" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-200 hover:text-white">✕</button>
+  <div class="w-full min-h-full p-8">
+   <div class="max-w-7xl mx-auto">
+    <h1 id="mainTitle" class="text-6xl font-bold text-center mb-14 bg-gradient-to-r from-orange-500 via-pink-500 to-purple-500 bg-clip-text text-transparent">重量換算與價格計算器</h1><!-- 第一排：原有三個計算器 -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-7 mb-10"><!-- 1. 重量換算 -->
+     <div class="calculator-card bg-white rounded-3xl shadow-xl p-8 h-full">
+      <h3 id="converterTitle" class="text-2xl font-bold text-gray-800 mb-6 text-center">重量換算</h3>
+      <div class="space-y-5">
+       <div><label for="convertWeight" class="block text-sm font-semibold text-gray-700 mb-2">重量</label>
+        <div class="relative"><input type="number" id="convertWeight" placeholder="輸入重量" min="0" step="0.1" class="w-full px-5 py-3 pr-12 bg-gray-50 text-gray-800 placeholder-gray-400 rounded-2xl border-2 border-gray-200 focus:border-orange-400 focus:bg-white focus:outline-none"> <button type="button" onclick="clearInput('convertWeight')" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors text-xl font-bold">✕</button>
         </div>
        </div>
-       <div><label for="convertUnit" class="block text-sm font-medium text-white mb-2">單位</label> <select id="convertUnit" class="w-full px-4 py-2 bg-opacity-30 bg-white text-white rounded-lg border border-white border-opacity-30 focus:border-opacity-60 focus:outline-none"> <option value="公斤">公斤</option> <option value="斤">斤</option> <option value="克">克</option> <option value="兩">兩</option> </select>
+       <div><label for="convertUnit" class="block text-sm font-semibold text-gray-700 mb-2">單位</label> <select id="convertUnit" class="w-full px-5 py-3 bg-gray-50 text-gray-800 rounded-2xl border-2 border-gray-200 focus:border-orange-400 focus:bg-white focus:outline-none"> <option value="公斤">公斤</option> <option value="斤">斤</option> <option value="克">克</option> <option value="兩">兩</option> </select>
        </div>
-       <div class="bg-white bg-opacity-20 rounded-lg p-3">
-        <div id="convertResult" class="text-white text-sm space-y-1">
-         <div>
-          公斤: <span id="resultKg">-</span>
+       <div class="result-display rounded-2xl p-5 border-2 border-gray-100">
+        <div id="convertResult" class="text-gray-700 text-sm space-y-2 font-medium">
+         <div class="flex justify-between">
+          <span>公斤:</span><span id="resultKg" class="font-bold text-gray-900">-</span>
          </div>
-         <div>
-          斤: <span id="resultJin">-</span>
+         <div class="flex justify-between">
+          <span>斤:</span><span id="resultJin" class="font-bold text-gray-900">-</span>
          </div>
-         <div>
-          克: <span id="resultGram">-</span>
+         <div class="flex justify-between">
+          <span>克:</span><span id="resultGram" class="font-bold text-gray-900">-</span>
          </div>
-         <div>
-          兩: <span id="resultLiang">-</span>
+         <div class="flex justify-between">
+          <span>兩:</span><span id="resultLiang" class="font-bold text-gray-900">-</span>
          </div>
         </div>
        </div>
       </div>
      </div><!-- 2. 設定基準價格 -->
-     <div class="rounded-xl shadow-lg p-6">
-      <h3 id="basePriceTitle" class="text-xl font-semibold text-white mb-4 text-center">設定基準價格</h3>
-      <div class="space-y-4">
-       <div><label for="baseWeight" class="block text-sm font-medium text-white mb-2">重量</label>
-        <div class="relative"><input type="number" id="baseWeight" placeholder="重量" min="0" step="0.1" class="w-full px-4 py-2 pr-10 bg-opacity-30 bg-white text-white placeholder-gray-200 rounded-lg border border-white border-opacity-30 focus:border-opacity-60 focus:outline-none"> <button type="button" onclick="clearInput('baseWeight')" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-200 hover:text-white">✕</button>
+     <div class="calculator-card bg-white rounded-3xl shadow-xl p-8 h-full">
+      <h3 id="basePriceTitle" class="text-2xl font-bold text-gray-800 mb-6 text-center">設定基準價格</h3>
+      <div class="space-y-5">
+       <div><label for="baseWeight" class="block text-sm font-semibold text-gray-700 mb-2">重量</label>
+        <div class="relative"><input type="number" id="baseWeight" placeholder="輸入重量" min="0" step="0.1" class="w-full px-5 py-3 pr-12 bg-gray-50 text-gray-800 placeholder-gray-400 rounded-2xl border-2 border-gray-200 focus:border-amber-400 focus:bg-white focus:outline-none"> <button type="button" onclick="clearInput('baseWeight')" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors text-xl font-bold">✕</button>
         </div>
        </div>
-       <div><label for="baseUnit" class="block text-sm font-medium text-white mb-2">單位</label> <select id="baseUnit" class="w-full px-4 py-2 bg-opacity-30 bg-white text-white rounded-lg border border-white border-opacity-30 focus:border-opacity-60 focus:outline-none"> <option value="公斤">公斤</option> <option value="斤">斤</option> <option value="克">克</option> <option value="兩">兩</option> </select>
+       <div><label for="baseUnit" class="block text-sm font-semibold text-gray-700 mb-2">單位</label> <select id="baseUnit" class="w-full px-5 py-3 bg-gray-50 text-gray-800 rounded-2xl border-2 border-gray-200 focus:border-amber-400 focus:bg-white focus:outline-none"> <option value="公斤">公斤</option> <option value="斤">斤</option> <option value="克">克</option> <option value="兩">兩</option> </select>
        </div>
-       <div><label for="basePrice" class="block text-sm font-medium text-white mb-2">價格 ($)</label>
-        <div class="relative"><input type="number" id="basePrice" placeholder="價格" min="0" step="0.01" class="w-full px-4 py-2 pr-10 bg-opacity-30 bg-white text-white placeholder-gray-200 rounded-lg border border-white border-opacity-30 focus:border-opacity-60 focus:outline-none"> <button type="button" onclick="clearInput('basePrice')" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-200 hover:text-white">✕</button>
+       <div><label for="basePrice" class="block text-sm font-semibold text-gray-700 mb-2">價格 ($)</label>
+        <div class="relative"><input type="number" id="basePrice" placeholder="輸入價格" min="0" step="0.01" class="w-full px-5 py-3 pr-12 bg-gray-50 text-gray-800 placeholder-gray-400 rounded-2xl border-2 border-gray-200 focus:border-amber-400 focus:bg-white focus:outline-none"> <button type="button" onclick="clearInput('basePrice')" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors text-xl font-bold">✕</button>
         </div>
        </div>
-       <div class="bg-white bg-opacity-20 rounded-lg p-3">
-        <div class="text-white text-sm">
-         <div>
-          每公斤: $<span id="pricePerKg">-</span>
-         </div>
+       <div class="result-display rounded-2xl p-5 border-2 border-gray-100">
+        <div class="text-gray-700 font-medium flex justify-between"><span>每公斤:</span> <span class="font-bold text-gray-900 text-lg">$<span id="pricePerKg">-</span></span>
         </div>
        </div>
       </div>
      </div><!-- 3. 計算價格 -->
-     <div class="rounded-xl shadow-lg p-6">
-      <h3 id="calculatePriceTitle" class="text-xl font-semibold text-white mb-4 text-center">計算價格</h3>
-      <div class="space-y-4">
-       <div><label for="calcWeight" class="block text-sm font-medium text-white mb-2">重量</label>
-        <div class="relative"><input type="number" id="calcWeight" placeholder="重量" min="0" step="0.1" class="w-full px-4 py-2 pr-10 bg-opacity-30 bg-white text-white placeholder-gray-200 rounded-lg border border-white border-opacity-30 focus:border-opacity-60 focus:outline-none"> <button type="button" onclick="clearInput('calcWeight')" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-200 hover:text-white">✕</button>
+     <div class="calculator-card bg-white rounded-3xl shadow-xl p-8 h-full">
+      <h3 id="calculatePriceTitle" class="text-2xl font-bold text-gray-800 mb-6 text-center">計算價格</h3>
+      <div class="space-y-5">
+       <div><label for="calcWeight" class="block text-sm font-semibold text-gray-700 mb-2">重量</label>
+        <div class="relative"><input type="number" id="calcWeight" placeholder="輸入重量" min="0" step="0.1" class="w-full px-5 py-3 pr-12 bg-gray-50 text-gray-800 placeholder-gray-400 rounded-2xl border-2 border-gray-200 focus:border-pink-400 focus:bg-white focus:outline-none"> <button type="button" onclick="clearInput('calcWeight')" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors text-xl font-bold">✕</button>
         </div>
        </div>
-       <div><label for="calcUnit" class="block text-sm font-medium text-white mb-2">單位</label> <select id="calcUnit" class="w-full px-4 py-2 bg-opacity-30 bg-white text-white rounded-lg border border-white border-opacity-30 focus:border-opacity-60 focus:outline-none"> <option value="公斤">公斤</option> <option value="斤">斤</option> <option value="克">克</option> <option value="兩">兩</option> </select>
+       <div><label for="calcUnit" class="block text-sm font-semibold text-gray-700 mb-2">單位</label> <select id="calcUnit" class="w-full px-5 py-3 bg-gray-50 text-gray-800 rounded-2xl border-2 border-gray-200 focus:border-pink-400 focus:bg-white focus:outline-none"> <option value="公斤">公斤</option> <option value="斤">斤</option> <option value="克">克</option> <option value="兩">兩</option> </select>
        </div>
-       <div class="bg-white bg-opacity-20 rounded-lg p-3">
-        <div class="text-white">
-         <div class="text-lg font-semibold">
-          總價: $<span id="totalPrice">-</span>
+       <div class="result-display rounded-2xl p-5 border-2 border-gray-100">
+        <div class="text-gray-800 text-center">
+         <div class="text-2xl font-bold">
+          總價: <span class="text-pink-600">$<span id="totalPrice">-</span></span>
          </div>
         </div>
        </div>
       </div>
      </div>
     </div><!-- 第二排：新增的三個計算器 -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"><!-- 4. 屠體計算 -->
-     <div class="bg-white rounded-xl shadow-lg p-6 h-full">
-      <h3 id="carcassTitle" class="text-xl font-semibold text-center mb-2">屠體計算金額</h3>
-      <div class="text-sm text-center mb-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-7 mb-10"><!-- 4. 屠體計算 -->
+     <div class="calculator-card bg-white rounded-3xl shadow-xl p-8 h-full">
+      <h3 id="carcassTitle" class="text-2xl font-bold text-gray-800 text-center mb-2">屠體計算金額</h3>
+      <div class="text-sm text-center mb-6 text-gray-500 font-medium">
        x × 3.6 + 30 × y = 金額
       </div>
-      <div class="space-y-4">
-       <div><label for="carcassX" class="block text-sm font-medium mb-2">斤 (單位)</label>
-        <div class="relative"><input type="number" id="carcassX" step="0.1" min="0" class="w-full px-4 py-2 pr-10 border rounded-lg focus:ring-2 focus:outline-none" placeholder=""> <button type="button" onclick="clearInput('carcassX')" class="absolute right-2 top-1/2 transform -translate-y-1/2 hover:text-gray-600">✕</button>
+      <div class="space-y-5">
+       <div><label for="carcassX" class="block text-sm font-semibold text-gray-700 mb-2">斤 (單位)</label>
+        <div class="relative"><input type="number" id="carcassX" step="0.1" min="0" class="w-full px-5 py-3 pr-12 bg-gray-50 text-gray-800 placeholder-gray-400 rounded-2xl border-2 border-gray-200 focus:border-emerald-400 focus:bg-white focus:outline-none" placeholder="輸入斤數"> <button type="button" onclick="clearInput('carcassX')" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors text-xl font-bold">✕</button>
         </div>
        </div>
-       <div><label for="carcassY" class="block text-sm font-medium mb-2">隻 (單位)</label>
-        <div class="relative"><input type="number" id="carcassY" step="0.1" min="0" class="w-full px-4 py-2 pr-10 border rounded-lg focus:ring-2 focus:outline-none" placeholder=""> <button type="button" onclick="clearInput('carcassY')" class="absolute right-2 top-1/2 transform -translate-y-1/2 hover:text-gray-600">✕</button>
+       <div><label for="carcassY" class="block text-sm font-semibold text-gray-700 mb-2">隻 (單位)</label>
+        <div class="relative"><input type="number" id="carcassY" step="0.1" min="0" class="w-full px-5 py-3 pr-12 bg-gray-50 text-gray-800 placeholder-gray-400 rounded-2xl border-2 border-gray-200 focus:border-emerald-400 focus:bg-white focus:outline-none" placeholder="輸入隻數"> <button type="button" onclick="clearInput('carcassY')" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors text-xl font-bold">✕</button>
         </div>
        </div>
-       <div class="rounded-lg p-3">
-        <div id="carcassResult" class="font-medium text-lg">
+       <div class="result-display rounded-2xl p-5 border-2 border-gray-100">
+        <div id="carcassResult" class="font-bold text-2xl text-center text-emerald-600">
          金額: $-
         </div>
        </div>
       </div>
      </div><!-- 5. 熟雞計算 -->
-     <div class="bg-white rounded-xl shadow-lg p-6">
-      <h3 id="cookedTitle" class="text-xl font-semibold text-center mb-2">熟雞計算金額</h3>
-      <div class="text-sm text-center mb-4">
+     <div class="calculator-card bg-white rounded-3xl shadow-xl p-8">
+      <h3 id="cookedTitle" class="text-2xl font-bold text-gray-800 text-center mb-2">熟雞計算金額</h3>
+      <div class="text-sm text-center mb-6 text-gray-500 font-medium">
        x × 4 + 60 × y = 金額
       </div>
-      <div class="space-y-4">
-       <div><label for="cookedX" class="block text-sm font-medium mb-2">斤 (單位)</label>
-        <div class="relative"><input type="number" id="cookedX" step="0.1" min="0" class="w-full px-4 py-2 pr-10 border rounded-lg focus:ring-2 focus:outline-none" placeholder=""> <button type="button" onclick="clearInput('cookedX')" class="absolute right-2 top-1/2 transform -translate-y-1/2 hover:text-gray-600">✕</button>
+      <div class="space-y-5">
+       <div><label for="cookedX" class="block text-sm font-semibold text-gray-700 mb-2">斤 (單位)</label>
+        <div class="relative"><input type="number" id="cookedX" step="0.1" min="0" class="w-full px-5 py-3 pr-12 bg-gray-50 text-gray-800 placeholder-gray-400 rounded-2xl border-2 border-gray-200 focus:border-sky-400 focus:bg-white focus:outline-none" placeholder="輸入斤數"> <button type="button" onclick="clearInput('cookedX')" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors text-xl font-bold">✕</button>
         </div>
        </div>
-       <div><label for="cookedY" class="block text-sm font-medium mb-2">隻 (單位)</label>
-        <div class="relative"><input type="number" id="cookedY" step="0.1" min="0" class="w-full px-4 py-2 pr-10 border rounded-lg focus:outline-none" placeholder=""> <button type="button" onclick="clearInput('cookedY')" class="absolute right-2 top-1/2 transform -translate-y-1/2 hover:text-gray-600">✕</button>
+       <div><label for="cookedY" class="block text-sm font-semibold text-gray-700 mb-2">隻 (單位)</label>
+        <div class="relative"><input type="number" id="cookedY" step="0.1" min="0" class="w-full px-5 py-3 pr-12 bg-gray-50 text-gray-800 placeholder-gray-400 rounded-2xl border-2 border-gray-200 focus:border-sky-400 focus:bg-white focus:outline-none" placeholder="輸入隻數"> <button type="button" onclick="clearInput('cookedY')" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors text-xl font-bold">✕</button>
         </div>
        </div>
-       <div class="rounded-lg p-3">
-        <div id="cookedResult" class="font-medium text-lg">
+       <div class="result-display rounded-2xl p-5 border-2 border-gray-100">
+        <div id="cookedResult" class="font-bold text-2xl text-center text-sky-600">
          金額: $-
         </div>
        </div>
       </div>
      </div><!-- 6. 雜雞換算 -->
-     <div class="bg-white rounded-xl shadow-lg p-6">
-      <h3 id="chickenYieldTitle" class="text-xl font-semibold text-center mb-4">雜雞換算</h3>
-      <div class="space-y-4">
-       <div><label for="carcassKg" class="block text-sm font-medium mb-2">屠體重量（kg）</label> <input type="number" id="carcassKg" step="0.01" min="0" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:outline-none" placeholder="">
+     <div class="calculator-card bg-white rounded-3xl shadow-xl p-8">
+      <h3 id="chickenYieldTitle" class="text-2xl font-bold text-gray-800 text-center mb-6">雜雞換算</h3>
+      <div class="space-y-5">
+       <div><label for="carcassKg" class="block text-sm font-semibold text-gray-700 mb-2">屠體重量（kg）</label> <input type="number" id="carcassKg" step="0.01" min="0" class="w-full px-5 py-3 bg-gray-50 text-gray-800 placeholder-gray-400 rounded-2xl border-2 border-gray-200 focus:border-orange-400 focus:bg-white focus:outline-none" placeholder="輸入屠體重量">
        </div>
-       <div><label for="livePrice" class="block text-sm font-medium mb-2">毛雞一斤價格（元/斤）</label> <input type="number" id="livePrice" step="0.1" min="0" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:outline-none" placeholder="">
+       <div><label for="livePrice" class="block text-sm font-semibold text-gray-700 mb-2">毛雞一斤價格（元/斤）</label> <input type="number" id="livePrice" step="0.1" min="0" class="w-full px-5 py-3 bg-gray-50 text-gray-800 placeholder-gray-400 rounded-2xl border-2 border-gray-200 focus:border-orange-400 focus:bg-white focus:outline-none" placeholder="輸入單價">
        </div>
-       <div><label class="block text-sm font-medium mb-2"> 屠宰率：<strong><span id="yieldLabel">72</span>%</strong> </label> <input type="range" id="yieldSlider" min="65" max="80" step="0.5" value="72" class="w-full h-2 rounded-lg appearance-none cursor-pointer" style="background: linear-gradient(to right, #3b82f6 0%, #3b82f6 50%, #d1d5db 50%, #d1d5db 100%);">
+       <div><label class="block text-sm font-semibold text-gray-700 mb-3"> 屠宰率：<strong class="text-orange-600"><span id="yieldLabel">72</span>%</strong> </label> <input type="range" id="yieldSlider" min="65" max="80" step="0.5" value="72" class="w-full h-2 rounded-full appearance-none cursor-pointer" style="background: linear-gradient(to right, #f97316 0%, #f97316 50%, #e5e7eb 50%, #e5e7eb 100%);">
        </div>
-       <div class="rounded-lg p-3 space-y-2">
-        <div id="liveKg" class="font-medium text-sm"></div>
-        <div id="carcassPrice" class="font-medium text-sm"></div>
+       <div class="result-display rounded-2xl p-5 border-2 border-gray-100 space-y-2">
+        <div id="liveKg" class="font-semibold text-sm text-gray-700"></div>
+        <div id="carcassPrice" class="font-semibold text-sm text-gray-700"></div>
        </div>
       </div>
      </div>
@@ -287,7 +331,7 @@
 
             const slider = document.getElementById("yieldSlider");
             const percentage = ((slider.value - slider.min) / (slider.max - slider.min)) * 100;
-            slider.style.background = `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${percentage}%, #d1d5db ${percentage}%, #d1d5db 100%)`;
+            slider.style.background = `linear-gradient(to right, #f97316 0%, #f97316 ${percentage}%, #e5e7eb ${percentage}%, #e5e7eb 100%)`;
 
             if (!carcassKg || !livePrice) {
                 document.getElementById("liveKg").innerText = "";
@@ -318,12 +362,12 @@
             carcass_title: '屠體計算金額',
             cooked_title: '熟雞計算金額',
             chicken_yield_title: '雜雞換算',
-            background_color: '#eff6ff',
-            card1_color: '#1e40af',
-            card2_color: '#059669',
-            card3_color: '#7c3aed',
-            card4_color: '#8b5cf6',
-            card5_color: '#10b981'
+            background_color: '#fef3c7',
+            card1_color: '#f97316',
+            card2_color: '#f59e0b',
+            card3_color: '#ec4899',
+            card4_color: '#10b981',
+            card5_color: '#0ea5e9'
         };
 
         async function onConfigChange(config) {
@@ -342,18 +386,26 @@
             const card4Color = config.card4_color || defaultConfig.card4_color;
             const card5Color = config.card5_color || defaultConfig.card5_color;
 
-            document.body.style.background = `linear-gradient(135deg, ${bgColor} 0%, ${card1Color}20 100%)`;
+            document.body.style.background = `linear-gradient(135deg, ${bgColor} 0%, #fce7f3 100%)`;
             
-            const cards = document.querySelectorAll('.rounded-xl');
-            if (cards[0]) cards[0].style.backgroundColor = card1Color;
-            if (cards[1]) cards[1].style.backgroundColor = card2Color;
-            if (cards[2]) cards[2].style.backgroundColor = card3Color;
-            if (cards[3]) cards[3].style.backgroundColor = card4Color;
-            if (cards[4]) cards[4].style.backgroundColor = card5Color;
+            const cards = document.querySelectorAll('.calculator-card');
+            if (cards[0]) {
+                cards[0].style.boxShadow = `0 10px 40px ${card1Color}40`;
+            }
+            if (cards[1]) {
+                cards[1].style.boxShadow = `0 10px 40px ${card2Color}40`;
+            }
+            if (cards[2]) {
+                cards[2].style.boxShadow = `0 10px 40px ${card3Color}40`;
+            }
+            if (cards[3]) {
+                cards[3].style.boxShadow = `0 10px 40px ${card4Color}40`;
+            }
+            if (cards[4]) {
+                cards[4].style.boxShadow = `0 10px 40px ${card5Color}40`;
+            }
             if (cards[5]) {
-                cards[5].style.backgroundColor = '#ffffff';
-                cards[5].style.borderColor = card1Color;
-                cards[5].style.borderWidth = '2px';
+                cards[5].style.boxShadow = `0 10px 40px ${card1Color}40`;
             }
         }
 
@@ -423,5 +475,5 @@
             });
         }
     </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9be190613237f06f',t:'MTc2ODQ0MDE2Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9be1ea2100bbf06f',t:'MTc2ODQ0Mzg0My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
