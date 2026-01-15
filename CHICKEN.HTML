@@ -135,81 +135,113 @@
 
         </div>
 
-        <!-- 第三排 - 新增輸入區域 -->
-        <div class="bg-yellow-100 rounded-xl shadow-lg p-6 mb-8">
-            <h3 class="text-xl font-semibold text-gray-700 mb-4 text-center">倍數計算輸入</h3>
-            <div class="flex justify-center items-center space-x-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-600 mb-2">數字輸入（元）</label>
-                    <input type="number" id="multiplierPrice" step="0.1" min="0" 
-                           class="w-32 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-center" 
-                           placeholder="輸入金額">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-600 mb-2">選擇（公斤/斤）</label>
-                    <select id="multiplierUnit" class="w-32 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-center">
-                        <option value="公斤">公斤</option>
-                        <option value="斤">斤</option>
-                    </select>
-                </div>
-            </div>
-        </div>
+      <html lang="zh-TW"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>文昌雞屠體換算器</title>
 
-        <!-- 第四排 - 倍數計算結果 -->
-        <div class="grid md:grid-cols-3 gap-6 mb-8">
-            <!-- 1.5-2.0倍 -->
-            <div class="bg-pink-100 rounded-xl shadow-lg p-6">
-                <h3 class="text-lg font-semibold text-gray-700 mb-4 text-center">1.5 - 2.0 倍數</h3>
-                <div id="multiplier15to20" class="space-y-2 text-sm">
-                    <div class="text-gray-500 text-center">請輸入金額</div>
-                </div>
-            </div>
+<style>
+body {
+  font-family: "Noto Sans TC", system-ui, sans-serif;
+  background: #f3f4f6;
+  padding: 30px;
+}
+.card {
+  max-width: 420px;
+  margin: auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(0,0,0,.1);
+}
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+label {
+  display: block;
+  margin-top: 14px;
+  font-size: 14px;
+}
+input[type="number"],
+input[type="range"] {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+}
+.result {
+  margin-top: 12px;
+  font-weight: 600;
+}
+.note {
+  margin-top: 12px;
+  font-size: 12px;
+  color: #555;
+}
+</style>
+</head>
 
-            <!-- 2.1-2.5倍 -->
-            <div class="bg-cyan-100 rounded-xl shadow-lg p-6">
-                <h3 class="text-lg font-semibold text-gray-700 mb-4 text-center">2.1 - 2.5 倍數</h3>
-                <div id="multiplier21to25" class="space-y-2 text-sm">
-                    <div class="text-gray-500 text-center">請輸入金額</div>
-                </div>
-            </div>
+<body>
 
-            <!-- 2.6-3.0倍 -->
-            <div class="bg-lime-100 rounded-xl shadow-lg p-6">
-                <h3 class="text-lg font-semibold text-gray-700 mb-4 text-center">2.6 - 3.0 倍數</h3>
-                <div id="multiplier26to30" class="space-y-2 text-sm">
-                    <div class="text-gray-500 text-center">請輸入金額</div>
-                </div>
-            </div>
-        </div>
+<div class="card">
+  <h2>雜雞換算</h2>
 
-        <!-- 第二排計算區域 -->
-        <div class="grid md:grid-cols-3 gap-6 mb-8">
-            <!-- 毛雞計算 -->
-            <div class="bg-white rounded-xl shadow-lg p-6">
-                <h3 class="text-xl font-semibold text-gray-700 mb-4 text-center">毛雞計算金額</h3>
-                <div class="text-sm text-gray-500 mb-4 text-center">x × 4.75 + 23 = y</div>
-                
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-2">斤 (單位)</label>
-                        <div class="relative">
-                            <input type="number" id="chickenX" step="0.1" min="0" class="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="">
-                            <button onclick="clearInput('chickenX')" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">✕</button>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-2">隻 (單位)</label>
-                        <div class="relative">
-                            <input type="number" id="chickenY" step="0.1" min="0" class="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="">
-                            <button onclick="clearInput('chickenY')" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">✕</button>
-                        </div>
-                    </div>
+  <label>
+    屠體重量（kg）
+    <input id="carcassKg" type="number" step="0.01" placeholder="">
+  </label>
 
-                    <div class="bg-orange-50 rounded-lg p-3">
-                        <div id="chickenResult" class="font-medium text-orange-600"></div>
-                    </div>
-                </div>
-            </div>
+  <label>
+    毛雞一斤價格（元/斤）
+    <input id="livePrice" type="number" step="0.1" placeholder="">
+  </label>
+
+  <label>
+    屠宰率：
+    <strong><span id="yieldLabel">68</span>%</strong>
+    <input id="yieldSlider" type="range" min="65" max="80" step="0.5" value="72">
+  </label>
+
+  <div class="result" id="liveKg"></div>
+  <div class="result" id="carcassPrice"></div>
+
+  
+  </div>
+
+
+<script>
+function calc() {
+  const carcassKg = parseFloat(document.getElementById("carcassKg").value);
+  const livePrice = parseFloat(document.getElementById("livePrice").value);
+  const yieldRate = parseFloat(document.getElementById("yieldSlider").value) / 100;
+
+  document.getElementById("yieldLabel").innerText =
+    (yieldRate * 100).toFixed(1).replace(".0","");
+
+  if (!carcassKg || !livePrice) {
+    document.getElementById("liveKg").innerText = "";
+    document.getElementById("carcassPrice").innerText = "";
+    return;
+  }
+
+  const liveKg = carcassKg / yieldRate;
+  const carcassJinPrice = livePrice / yieldRate;
+
+  document.getElementById("liveKg").innerText =
+    `推算活雞重量：約 ${liveKg.toFixed(2)} kg`;
+
+  document.getElementById("carcassPrice").innerText =
+    `屠體一斤成本：約 ${carcassJinPrice.toFixed(1)} 元`;
+}
+
+["input", "change"].forEach(evt => {
+  document.getElementById("carcassKg").addEventListener(evt, calc);
+  document.getElementById("livePrice").addEventListener(evt, calc);
+  document.getElementById("yieldSlider").addEventListener(evt, calc);
+});
+</script>
+
+
 
             <!-- 屠體計算 -->
             <div class="bg-white rounded-xl shadow-lg p-6">
@@ -481,66 +513,7 @@
             }
         }
 
-        // 倍數計算功能
-        function updateMultiplierCalculation() {
-            const priceValue = parseFloat(document.getElementById('multiplierPrice').value);
-            const unit = document.getElementById('multiplierUnit').value;
-            
-            if (isNaN(priceValue) || priceValue <= 0) {
-                // 清空所有結果
-                document.getElementById('multiplier15to20').innerHTML = '<div class="text-gray-500 text-center">請輸入數字</div>';
-                document.getElementById('multiplier21to25').innerHTML = '<div class="text-gray-500 text-center">請輸入數字</div>';
-                document.getElementById('multiplier26to30').innerHTML = '<div class="text-gray-500 text-center">請輸入數字</div>';
-                return;
-            }
-
-            // 根據單位換算成公斤價格
-            let pricePerKg = priceValue;
-            if (unit === '斤') {
-                pricePerKg = priceValue / 0.6; // 斤轉公斤：斤/0.6 = 公斤
-            }
-
-            // 1.5-2.0KG倍數計算
-            let html15to20 = '';
-            for (let i = 15; i <= 20; i++) {
-                const multiplier = i / 10;
-                const result = pricePerKg * multiplier;
-                html15to20 += `<div class="bg-white p-2 rounded border">
-                    $${priceValue}${unit === '斤' ? '斤' : ''} × ${multiplier.toFixed(1)}KG = <span class="font-semibold text-pink-600">$${result.toFixed(1)}</span>
-                </div>`;
-            }
-            document.getElementById('multiplier15to20').innerHTML = html15to20;
-
-            // 2.1-2.5KG倍數計算
-            let html21to25 = '';
-            for (let i = 21; i <= 25; i++) {
-                const multiplier = i / 10;
-                const result = pricePerKg * multiplier;
-                html21to25 += `<div class="bg-white p-2 rounded border">
-                    $${priceValue}${unit === '斤' ? '斤' : ''} × ${multiplier.toFixed(1)}KG = <span class="font-semibold text-cyan-600">$${result.toFixed(1)}</span>
-                </div>`;
-            }
-            document.getElementById('multiplier21to25').innerHTML = html21to25;
-
-            // 2.6-3.0KG倍數計算
-            let html26to30 = '';
-            for (let i = 26; i <= 30; i++) {
-                const multiplier = i / 10;
-                const result = pricePerKg * multiplier;
-                html26to30 += `<div class="bg-white p-2 rounded border">
-                    $${priceValue}${unit === '斤' ? '斤' : ''} × ${multiplier.toFixed(1)}KG = <span class="font-semibold text-lime-600">$${result.toFixed(1)}</span>
-                </div>`;
-            }
-            document.getElementById('multiplier26to30').innerHTML = html26to30;
-        }
-
-        // 清除輸入框功能
-        function clearInput(inputId) {
-            const input = document.getElementById(inputId);
-            input.value = '';
-            input.dispatchEvent(new Event('input'));
-        }
-
+       
         // 事件監聽器
         document.addEventListener('DOMContentLoaded', function() {
             // 重量換算事件
@@ -620,3 +593,4 @@
     </script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c56d0437dcf06f',t:'MTc1NzQwNzY5OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
+
