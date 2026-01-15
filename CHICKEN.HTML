@@ -137,14 +137,14 @@
      <div class="calculator-card bg-white rounded-3xl shadow-xl p-8 h-full">
       <h3 id="carcassTitle" class="text-2xl font-bold text-gray-800 text-center mb-2">屠體計算金額</h3>
       <div class="text-sm text-center mb-6 text-gray-500 font-medium">
-       x × 3.6 + 30 × y = 金額
+      
       </div>
       <div class="space-y-5">
-       <div><label for="carcassX" class="block text-sm font-semibold text-gray-700 mb-2">斤 (單位)</label>
+       <div><label for="carcassX" class="block text-sm font-semibold text-gray-700 mb-2">毛重/斤</label>
         <div class="relative"><input type="number" id="carcassX" step="0.1" min="0" class="w-full px-5 py-3 pr-12 bg-gray-50 text-gray-800 placeholder-gray-400 rounded-2xl border-2 border-gray-200 focus:border-emerald-400 focus:bg-white focus:outline-none" placeholder="輸入斤數"> <button type="button" onclick="clearInput('carcassX')" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors text-xl font-bold">✕</button>
         </div>
        </div>
-       <div><label for="carcassY" class="block text-sm font-semibold text-gray-700 mb-2">隻 (單位)</label>
+       <div><label for="carcassY" class="block text-sm font-semibold text-gray-700 mb-2">單價/隻</label>
         <div class="relative"><input type="number" id="carcassY" step="0.1" min="0" class="w-full px-5 py-3 pr-12 bg-gray-50 text-gray-800 placeholder-gray-400 rounded-2xl border-2 border-gray-200 focus:border-emerald-400 focus:bg-white focus:outline-none" placeholder="輸入隻數"> <button type="button" onclick="clearInput('carcassY')" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors text-xl font-bold">✕</button>
         </div>
        </div>
@@ -158,14 +158,14 @@
      <div class="calculator-card bg-white rounded-3xl shadow-xl p-8">
       <h3 id="cookedTitle" class="text-2xl font-bold text-gray-800 text-center mb-2">熟雞計算金額</h3>
       <div class="text-sm text-center mb-6 text-gray-500 font-medium">
-       x × 4 + 60 × y = 金額
+      
       </div>
       <div class="space-y-5">
-       <div><label for="cookedX" class="block text-sm font-semibold text-gray-700 mb-2">斤 (單位)</label>
+       <div><label for="cookedX" class="block text-sm font-semibold text-gray-700 mb-2">數量</label>
         <div class="relative"><input type="number" id="cookedX" step="0.1" min="0" class="w-full px-5 py-3 pr-12 bg-gray-50 text-gray-800 placeholder-gray-400 rounded-2xl border-2 border-gray-200 focus:border-sky-400 focus:bg-white focus:outline-none" placeholder="輸入斤數"> <button type="button" onclick="clearInput('cookedX')" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors text-xl font-bold">✕</button>
         </div>
        </div>
-       <div><label for="cookedY" class="block text-sm font-semibold text-gray-700 mb-2">隻 (單位)</label>
+       <div><label for="cookedY" class="block text-sm font-semibold text-gray-700 mb-2">單價</label>
         <div class="relative"><input type="number" id="cookedY" step="0.1" min="0" class="w-full px-5 py-3 pr-12 bg-gray-50 text-gray-800 placeholder-gray-400 rounded-2xl border-2 border-gray-200 focus:border-sky-400 focus:bg-white focus:outline-none" placeholder="輸入隻數"> <button type="button" onclick="clearInput('cookedY')" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors text-xl font-bold">✕</button>
         </div>
        </div>
@@ -288,7 +288,7 @@
                 return;
             }
 
-            const result = x * 3.6 + 30 * y;
+            const result = x * 4.75 + 20 * y;
             document.getElementById('carcassResult').textContent = `金額: $${result.toFixed(2)}`;
         }
 
@@ -301,7 +301,7 @@
                 return;
             }
 
-            const result = x * 4 + 60 * y;
+            const result = X * 4  ;
             document.getElementById('cookedResult').textContent = `金額: $${result.toFixed(2)}`;
         }
 
@@ -477,3 +477,4 @@
     </script>
  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9be1ea2100bbf06f',t:'MTc2ODQ0Mzg0My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
+
